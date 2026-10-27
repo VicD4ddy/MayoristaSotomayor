@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Repuestos Sotomayor, C.A. - Stealth Obsidian &amp; Emerald Luxe</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Plus Jakarta Sans & JetBrains Mono Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            obsidian: {
+              950: '#060709',
+              900: '#090A0D',
+              850: '#0D0F14',
+              800: '#12151B',
+              750: '#171B23',
+              700: '#1E232E',
+              600: '#2A3140'
+            },
+            emerald: {
+              950: '#022115',
+              900: '#064e3b',
+              800: '#065F46',
+              700: '#047857',
+              600: '#059669',
+              500: '#10B981',
+              400: '#34D399',
+              300: '#6EE7B7'
+            },
+            gold: {
+              500: '#F59E0B',
+              600: '#D97706',
+              950: '#261805'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: #090A0D;
+      color: #F9FAFB;
+    }
+    /* Minimal Terminal Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090A0D;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #171B23;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #065F46;
+    }
+    .glow-emerald {
+      box-shadow: 0 0 24px -4px rgba(16, 185, 129, 0.28);
+    }
+    .glow-pill {
+      box-shadow: 0 0 12px -2px rgba(16, 185, 129, 0.35);
+    }
+    .border-emerald-subtle {
+      border-color: rgba(6, 95, 70, 0.45);
+    }
+    @media print {
+      body * { visibility: hidden; }
+      .print-modal, .print-modal * { visibility: visible; }
+      .print-modal {
+        position: absolute; left: 0; top: 0; width: 100%;
+        background: white !important; color: black !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#090A0D] text-[#F9FAFB] min-h-screen flex selection:bg-emerald-500/30 selection:text-emerald-300">
+<!-- ==========================================
+       SIDEBAR IZQUIERDO (OBSIDIAN & EMERALD LUXE)
+  =========================================== -->
+<aside class="w-16 hover:w-64 fixed top-0 bottom-0 left-0 bg-[#0D0F14] border-r border-[#171B23] flex flex-col justify-between py-4 px-2 transition-all duration-300 z-40 group shadow-2xl" id="sidebar">
+<div class="flex flex-col gap-4 w-full">
+<!-- Logo Repuestos Sotomayor -->
+<div class="flex items-center gap-3 px-1.5 py-1 rounded-xl cursor-pointer hover:bg-[#12151B] transition">
+<div class="w-9 h-9 rounded-xl flex items-center justify-center bg-[#12151B] border border-emerald-900/40 relative shrink-0">
+<div class="w-6 h-6 rounded-full border-[2px] border-emerald-500 flex items-center justify-center shadow-sm shadow-emerald-500/40">
+<div class="w-2 h-2 rounded-full bg-emerald-300"></div>
+</div>
+<span class="absolute -bottom-0.5 right-1 w-2 h-2 rounded-full bg-emerald-400 animate-ping opacity-75"></span>
+</div>
+<div class="hidden group-hover:flex flex-col min-w-0 transition-opacity duration-200">
+<span class="font-extrabold text-xs text-[#F9FAFB] tracking-tight truncate">Repuestos Sotomayor</span>
+<span class="text-[10px] text-emerald-400 font-mono tracking-tight truncate flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Terminal Mayorista
+          </span>
+</div>
+</div>
+<!-- Botón Primario Esmeralda Acción Rápida -->
+<button class="w-10 group-hover:w-full h-10 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-obsidian-950 font-extrabold flex items-center justify-center group-hover:justify-start group-hover:px-3 gap-2.5 transition-all duration-200 glow-emerald cursor-pointer" onclick="openModal('newPartModal')" title="Nuevo Repuesto">
+<i class="w-4 h-4 shrink-0 text-obsidian-950 stroke-[2.5]" data-lucide="plus"></i>
+<span class="hidden group-hover:inline whitespace-nowrap text-xs font-bold text-obsidian-950">Nuevo Repuesto</span>
+</button>
+<!-- Navegación Primaria -->
+<nav class="flex flex-col gap-1.5 w-full mt-1">
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-between px-2.5 bg-[#12151B] text-[#F9FAFB] font-semibold border border-emerald-900/60 shadow-xs cursor-pointer" id="nav-inventory" onclick="switchTab('inventory')">
+<div class="flex items-center gap-3 min-w-0">
+<i class="w-4 h-4 text-emerald-400 shrink-0" data-lucide="package"></i>
+<span class="hidden group-hover:inline text-xs truncate">Inventario y Stock</span>
+</div>
+<span class="hidden group-hover:inline text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-md bg-[#090A0D] text-emerald-400 border border-emerald-900/50">5.396</span>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-between px-2.5 text-slate-400 hover:text-white hover:bg-[#12151B] transition cursor-pointer" id="nav-invoicing" onclick="switchTab('invoicing')">
+<div class="flex items-center gap-3 min-w-0">
+<i class="w-4 h-4 shrink-0" data-lucide="file-text"></i>
+<span class="hidden group-hover:inline text-xs truncate">Facturación Mayorista</span>
+</div>
+<span class="hidden group-hover:inline text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-emerald-950 text-emerald-400 border border-emerald-800/60">2 ítems</span>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-start px-2.5 text-slate-400 hover:text-white hover:bg-[#12151B] transition cursor-pointer" id="nav-receiving" onclick="switchTab('receiving')">
+<div class="flex items-center gap-3 min-w-0">
+<i class="w-4 h-4 shrink-0" data-lucide="truck"></i>
+<span class="hidden group-hover:inline text-xs truncate">Recepción de Lotes</span>
+</div>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-between px-2.5 text-slate-400 hover:text-white hover:bg-[#12151B] transition cursor-pointer relative" id="nav-cxc" onclick="switchTab('cxc')">
+<div class="flex items-center gap-3 min-w-0">
+<i class="w-4 h-4 text-emerald-400 shrink-0" data-lucide="shield-alert"></i>
+<span class="hidden group-hover:inline text-xs truncate">Cuentas por Cobrar</span>
+</div>
+<span class="hidden group-hover:inline text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-red-950/60 text-red-400 border border-red-900/60">3 pend.</span>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-start px-2.5 text-slate-400 hover:text-white hover:bg-[#12151B] transition cursor-pointer" id="nav-commissions" onclick="switchTab('commissions')">
+<div class="flex items-center gap-3 min-w-0">
+<i class="w-4 h-4 text-emerald-400/80 shrink-0" data-lucide="trending-up"></i>
+<span class="hidden group-hover:inline text-xs truncate">Comisiones Asesores</span>
+</div>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-start px-2.5 text-slate-400 hover:text-white hover:bg-[#12151B] transition cursor-pointer" id="nav-clients" onclick="switchTab('clients')">
+<div class="flex items-center gap-3 min-w-0">
+<i class="w-4 h-4 shrink-0" data-lucide="building-2"></i>
+<span class="hidden group-hover:inline text-xs truncate">Cartera de Clientes</span>
+</div>
+</button>
+</nav>
+</div>
+<!-- Opciones Inferiores Sidebar -->
+<div class="flex flex-col gap-2 w-full pt-3 border-t border-[#171B23]">
+<div class="w-10 group-hover:w-full h-10 rounded-xl text-emerald-400 bg-[#12151B] border border-emerald-900/40 flex items-center justify-center group-hover:justify-start group-hover:px-3 gap-2.5 transition" title="Tema Terminal Activo">
+<i class="w-4 h-4 shrink-0 text-emerald-400" data-lucide="shield-check"></i>
+<span class="hidden group-hover:inline text-xs font-semibold text-slate-300">Obsidian &amp; Emerald</span>
+</div>
+<div class="hidden group-hover:flex items-center justify-between px-2 pt-2 text-[10px] text-slate-500 font-mono border-t border-[#171B23]">
+<span class="tracking-wider">J-07590371-4</span>
+<span class="text-emerald-400 flex items-center gap-1 font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> En Línea</span>
+</div>
+</div>
+</aside>
+<!-- ==========================================
+       CONTENIDO PRINCIPAL (STEALTH BASALTO)
+  =========================================== -->
+<div class="flex-1 ml-16 flex flex-col min-w-0 bg-[#090A0D]">
+<!-- TOP HEADER BAR TERMINAL OSCURA -->
+<header class="h-14 border-b border-[#171B23] bg-[#0D0F14]/90 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
+<div class="flex items-center gap-2 text-xs">
+<span class="font-bold text-slate-200 tracking-tight">Repuestos Sotomayor, C.A.</span>
+<span class="text-slate-600">/</span>
+<span class="font-bold text-emerald-400 tracking-wide" id="current-module-title">Inventario Mayorista</span>
+<span class="hidden md:inline-block ml-2 text-[10px] text-slate-400 font-mono bg-[#12151B] border border-[#1E232E] px-2 py-0.5 rounded">
+          Sucursal Valencia • Michelena
+        </span>
+</div>
+<!-- Buscador Global Estilo Command Palette Financiero -->
+<div class="flex-1 max-w-md mx-6">
+<div class="relative flex items-center">
+<i class="w-4 h-4 text-slate-500 absolute left-3.5 pointer-events-none" data-lucide="search"></i>
+<input class="w-full bg-[#12151B] hover:bg-[#171B23] focus:bg-[#171B23] text-xs text-slate-200 placeholder-slate-500 pl-9 pr-8 py-2 rounded-full border border-[#1E232E] focus:border-emerald-500 focus:outline-none transition font-medium" id="global-search" oninput="handleSearch(this.value)" placeholder="Buscar repuesto, OEM, marca o presiona '/' para atajo..." type="text"/>
+<span class="absolute right-3 text-[10px] font-mono text-slate-500 bg-[#090A0D] px-1.5 py-0.5 rounded border border-[#1E232E]">/</span>
+</div>
+</div>
+<!-- Acciones Derechas: BCV Pill + Alertas + Avatar Terminal -->
+<div class="flex items-center gap-3">
+<!-- Píldora Tasa BCV Oficial en Vivo -->
+<div class="flex items-center gap-2 bg-[#12151B] border border-emerald-900/50 px-3 py-1 rounded-full text-xs shadow-xs">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="font-bold text-slate-300">BCV: <span class="text-emerald-400 font-mono font-bold" id="bcv-val">Bs. 886,22</span></span>
+<div class="w-px h-3 bg-[#1E232E]"></div>
+<button class="text-slate-400 hover:text-emerald-400 transition cursor-pointer" onclick="refreshBcv()" title="Actualizar Tasa BCV">
+<i class="w-3 h-3" data-lucide="refresh-cw" id="bcv-icon"></i>
+</button>
+</div>
+<button class="relative w-8 h-8 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] flex items-center justify-center text-slate-300 transition cursor-pointer" onclick="filterCriticalStock()" title="Alertas de Stock Crítico">
+<i class="w-4 h-4 text-slate-400 hover:text-slate-200" data-lucide="bell"></i>
+<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-gold-500 ring-2 ring-[#0D0F14]"></span>
+</button>
+<div class="h-4 w-px bg-[#171B23]"></div>
+<div class="flex items-center gap-2.5 pl-1 cursor-pointer">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-600 to-emerald-800 text-obsidian-950 font-black text-xs flex items-center justify-center shadow-md">
+            RS
+          </div>
+<div class="hidden lg:flex flex-col text-left">
+<span class="text-xs font-bold text-[#F9FAFB] leading-tight">Admin Sotomayor</span>
+<span class="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Master Mayorista
+            </span>
+</div>
+</div>
+</div>
+</header>
+<!-- ==========================================
+         MÓDULO: INVENTARIO MAYORISTA (TAB DEFAULT)
+    =========================================== -->
+<main class="tab-pane flex-1 p-6 flex flex-col gap-5 overflow-y-auto" id="tab-inventory">
+<!-- Header de Inventario + Conexión Supabase -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex flex-wrap items-center gap-3">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-xl bg-[#12151B] border border-emerald-900/60 flex items-center justify-center text-emerald-400 shadow-inner">
+<i class="w-4 h-4" data-lucide="boxes"></i>
+</div>
+<div>
+<h1 class="text-lg font-bold text-[#F9FAFB] tracking-tight">Catálogo e Inventario Mayorista</h1>
+<p class="text-xs text-slate-400">Control de existencias bicanal, precios al mayor en USD y equivalentes BCV</p>
+</div>
+</div>
+<!-- Badge Supabase Conectado Terminal Style -->
+<div class="px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-2 bg-[#0C1B14] text-emerald-400 border border-emerald-800/80 shadow-xs">
+<i class="w-3.5 h-3.5 text-emerald-400" data-lucide="database"></i>
+<span class="font-mono">Supabase Conectado • 5.396 repuestos</span>
+</div>
+<button class="px-2.5 py-1 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] text-emerald-400 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer" onclick="openModal('sqlModal')">
+<i class="w-3.5 h-3.5" data-lucide="code-2"></i>
+<span>Script SQL Mayorista</span>
+</button>
+</div>
+<div class="flex items-center gap-2.5">
+<button class="px-3.5 py-2 rounded-xl bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition cursor-pointer" onclick="switchTab('invoicing')">
+<i class="w-4 h-4 text-emerald-400" data-lucide="file-plus"></i>
+<span>Nueva Factura</span>
+</button>
+<button class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-obsidian-950 text-xs font-extrabold flex items-center gap-1.5 transition glow-emerald cursor-pointer" onclick="openModal('newPartModal')">
+<i class="w-4 h-4 stroke-[2.5]" data-lucide="plus"></i>
+<span>Ingresar Mercancía</span>
+</button>
+</div>
+</div>
+<!-- Segmento de Filtro Canal: Mayorista vs Todo -->
+<div class="flex flex-wrap items-center justify-between gap-3 bg-[#0D0F14] p-2 rounded-2xl border border-[#171B23]">
+<div class="flex items-center gap-1.5 bg-[#12151B] p-1 rounded-xl text-xs font-bold border border-[#1E232E]">
+<button class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer bg-emerald-600 text-obsidian-950 font-extrabold shadow-sm" id="filter-btn-wholesale" onclick="setCatalogMode('wholesale')">
+<i class="w-3.5 h-3.5 stroke-[2.5]" data-lucide="store"></i>
+<span>Disponibles en Mayorista</span>
+<span class="px-1.5 py-0.2 rounded-md bg-obsidian-950/40 text-obsidian-950 text-[10px] font-mono font-bold">1.240</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer text-slate-400 hover:text-white" id="filter-btn-all" onclick="setCatalogMode('all')">
+<i class="w-3.5 h-3.5 text-slate-400" data-lucide="layers"></i>
+<span>Catálogo General Sotomayor</span>
+<span class="px-1.5 py-0.2 rounded-md bg-[#171B23] text-slate-300 text-[10px] font-mono">5.396</span>
+</button>
+</div>
+<!-- Categorías Pills -->
+<div class="flex items-center gap-2 overflow-x-auto text-xs">
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-[#171B23] text-white font-semibold border border-emerald-900/60 text-emerald-300" onclick="filterCategory('Todos')">Todos</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] text-gold-500 font-semibold border border-gold-950/70 flex items-center gap-1" onclick="filterCategory('Stock Crítico')">
+<i class="w-3.5 h-3.5 text-gold-500" data-lucide="alert-triangle"></i>
+<span>Stock Crítico</span>
+<span class="bg-gold-950 text-gold-500 text-[10px] px-1.5 py-0.2 rounded-md font-mono border border-gold-600/30">4</span>
+</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] text-slate-300 border border-[#1E232E]" onclick="filterCategory('Tren Delantero')">Tren Delantero</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] text-slate-300 border border-[#1E232E]" onclick="filterCategory('Distribución')">Distribución</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] text-slate-300 border border-[#1E232E]" onclick="filterCategory('Motor y Enfriamiento')">Motor y Enfriamiento</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] text-slate-300 border border-[#1E232E]" onclick="filterCategory('Rodamientos')">Rodamientos</button>
+</div>
+</div>
+<!-- Barra de Filtros Secundaria -->
+<div class="flex flex-wrap items-center justify-between gap-3 text-xs">
+<div class="flex flex-wrap items-center gap-2">
+<!-- Dropdown Marca -->
+<select class="bg-[#12151B] border border-[#1E232E] text-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:border-emerald-500 cursor-pointer" id="supplier-select" onchange="filterSupplier(this.value)">
+<option value="Todos">Marca: Todas las Marcas</option>
+<option value="Cloyes USA">Cloyes USA</option>
+<option value="TRW Automotive">TRW Automotive</option>
+<option value="Timken Bearings">Timken Bearings</option>
+<option value="Monroe Shocks">Monroe Shocks</option>
+<option value="MOOG Chassis">MOOG Chassis</option>
+<option value="Denso Corp">Denso Corp</option>
+</select>
+<!-- Dropdown Nivel de Stock -->
+<select class="bg-[#12151B] border border-[#1E232E] text-slate-300 rounded-lg px-3 py-1.5 focus:outline-none focus:border-emerald-500 cursor-pointer" id="stock-level-select" onchange="filterStockLevel(this.value)">
+<option value="Todos">Nivel de Stock: Todos</option>
+<option value="Alto">Stock Óptimo (&gt; Min)</option>
+<option value="Bajo">Stock Bajo (Reordenar)</option>
+<option value="Agotado">Agotado (0 und)</option>
+</select>
+<span class="text-slate-500 font-mono text-[11px] ml-2">Mostrando <b class="text-emerald-400" id="results-count">12</b> de 5.396 repuestos</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] text-slate-300 font-semibold flex items-center gap-1.5 cursor-pointer" onclick="exportToCsv()">
+<i class="w-3.5 h-3.5 text-emerald-400" data-lucide="download"></i>
+<span>Exportar CSV</span>
+</button>
+</div>
+</div>
+<!-- TABLA PRINCIPAL DE INVENTARIO (OBSIDIANA & ESMERALDA) -->
+<div class="bg-[#0D0F14] border border-[#171B23] rounded-2xl overflow-hidden shadow-2xl">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="border-b border-[#171B23] bg-[#12151B] text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-mono">
+<th class="py-3 px-4">Repuesto / Descripción</th>
+<th class="py-3 px-3">SKU / OEM</th>
+<th class="py-3 px-3">Categoría</th>
+<th class="py-3 px-3">Marca</th>
+<th class="py-3 px-3 text-center">Canal Mayorista</th>
+<th class="py-3 px-3">Stock Mayorista</th>
+<th class="py-3 px-3">Costo Real</th>
+<th class="py-3 px-3 text-right">Precio Mayorista</th>
+<th class="py-3 pr-4 pl-2 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#171B23]" id="inventory-tbody">
+<!-- Fila 1 -->
+<tr class="hover:bg-[#12151B]/80 transition group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-[#12151B] border border-emerald-900/40 flex items-center justify-center font-mono font-bold text-emerald-400 text-xs shrink-0">
+                      CLO
+                    </div>
+<div>
+<div class="font-bold text-[#F9FAFB] group-hover:text-emerald-400 transition">Kit de Tiempo Corsa / Aveo 1.6 (Correa + Tensor)</div>
+<div class="text-[11px] text-slate-400">Pasillo A-04 • Distribución Motor</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-bold text-emerald-400">CLO-09485</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-md bg-[#12151B] text-slate-300 border border-[#1E232E] font-medium text-[11px]">Distribución</span>
+</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="font-semibold text-slate-200">Cloyes USA</span>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<button class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#0C1B14] text-emerald-300 border border-emerald-700/80 hover:bg-emerald-950 transition cursor-pointer" onclick="toggleRowWholesale(this)">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+<span>Mayorista</span>
+</button>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 font-mono font-bold text-xs text-gold-500">
+<i class="w-3 h-3 text-gold-500" data-lucide="boxes"></i> 20 unds. (Bajo)
+                    </span>
+<span class="text-[10px] text-slate-500">Detal: <b class="text-slate-300 font-mono">14</b> unds.</span>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-semibold text-slate-300">$18,50</td>
+<td class="py-3 px-3 text-right">
+<div class="font-extrabold text-[#F9FAFB] font-mono text-sm tracking-tight">$29,00</div>
+<div class="text-[10px] text-emerald-400 font-mono">Bs. 25.700,38</div>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-emerald-900/50 text-emerald-400 cursor-pointer" onclick="openConfigModal('CLO-09485', 'Kit de Tiempo Corsa / Aveo 1.6', 20, 18.5, 29, 14)" title="Configurar Parámetros Mayoristas">
+<i class="w-3.5 h-3.5" data-lucide="sliders"></i>
+</button>
+<button class="p-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] text-slate-300 hover:text-white cursor-pointer" onclick="openTransferModal('CLO-09485', 'Kit de Tiempo Corsa / Aveo 1.6', 20, 14)" title="Transferir Detal ↔ Mayorista">
+<i class="w-3.5 h-3.5" data-lucide="arrow-left-right"></i>
+</button>
+<button class="p-1.5 rounded-lg bg-[#0C1B14] hover:bg-emerald-950 border border-emerald-800 text-emerald-400 cursor-pointer" onclick="addPartToCart('CLO-09485', 'Kit de Tiempo Corsa / Aveo 1.6', 29.0)" title="Añadir a Factura">
+<i class="w-3.5 h-3.5" data-lucide="shopping-cart"></i>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 2 -->
+<tr class="hover:bg-[#12151B]/80 transition group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-[#12151B] border border-[#1E232E] flex items-center justify-center font-mono font-bold text-slate-300 text-xs shrink-0">
+                      TRW
+                    </div>
+<div>
+<div class="font-bold text-[#F9FAFB] group-hover:text-emerald-400 transition">Punta de Tripoide Exterior Zotye Nómada / Lancer</div>
+<div class="text-[11px] text-slate-400">Pasillo B-12 • Tren Delantero</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-bold text-emerald-400">TRW-09484</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-md bg-[#12151B] text-slate-300 border border-[#1E232E] font-medium text-[11px]">Tren Delantero</span>
+</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="font-semibold text-slate-200">TRW Auto</span>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<button class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#0C1B14] text-emerald-300 border border-emerald-700/80 hover:bg-emerald-950 transition cursor-pointer" onclick="toggleRowWholesale(this)">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+<span>Mayorista</span>
+</button>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 font-mono font-bold text-xs text-emerald-400">
+<i class="w-3 h-3 text-emerald-400" data-lucide="boxes"></i> 110 unds. (Óptimo)
+                    </span>
+<span class="text-[10px] text-slate-500">Detal: <b class="text-slate-300 font-mono">22</b> unds.</span>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-semibold text-slate-300">$14,00</td>
+<td class="py-3 px-3 text-right">
+<div class="font-extrabold text-[#F9FAFB] font-mono text-sm tracking-tight">$24,50</div>
+<div class="text-[10px] text-emerald-400 font-mono">Bs. 21.712,39</div>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-emerald-900/50 text-emerald-400 cursor-pointer" onclick="openConfigModal('TRW-09484', 'Punta de Tripoide Exterior Zotye Nómada', 110, 14, 24.5, 22)">
+<i class="w-3.5 h-3.5" data-lucide="sliders"></i>
+</button>
+<button class="p-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] text-slate-300 hover:text-white cursor-pointer" onclick="openTransferModal('TRW-09484', 'Punta de Tripoide Exterior Zotye Nómada', 110, 22)">
+<i class="w-3.5 h-3.5" data-lucide="arrow-left-right"></i>
+</button>
+<button class="p-1.5 rounded-lg bg-[#0C1B14] hover:bg-emerald-950 border border-emerald-800 text-emerald-400 cursor-pointer" onclick="addPartToCart('TRW-09484', 'Punta de Tripoide Exterior Zotye Nómada', 24.5)">
+<i class="w-3.5 h-3.5" data-lucide="shopping-cart"></i>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 3 -->
+<tr class="hover:bg-[#12151B]/80 transition group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-[#12151B] border border-[#1E232E] flex items-center justify-center font-mono font-bold text-gold-500 text-xs shrink-0">
+                      TIM
+                    </div>
+<div>
+<div class="font-bold text-[#F9FAFB] group-hover:text-emerald-400 transition">Mozo Rodamiento Delantero Explorer / Ranger 4x4</div>
+<div class="text-[11px] text-slate-400">Pasillo C-02 • Rodamientos Pesados</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-bold text-emerald-400">TIM-09431</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-md bg-[#12151B] text-slate-300 border border-[#1E232E] font-medium text-[11px]">Rodamientos</span>
+</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-gold-500"></span>
+<span class="font-semibold text-slate-200">Timken</span>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<button class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#0C1B14] text-emerald-300 border border-emerald-700/80 hover:bg-emerald-950 transition cursor-pointer" onclick="toggleRowWholesale(this)">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+<span>Mayorista</span>
+</button>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 font-mono font-bold text-xs text-gold-500">
+<i class="w-3 h-3 text-gold-500" data-lucide="boxes"></i> 18 unds. (Crítico)
+                    </span>
+<span class="text-[10px] text-slate-500">Detal: <b class="text-slate-300 font-mono">6</b> unds.</span>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-semibold text-slate-300">$42,00</td>
+<td class="py-3 px-3 text-right">
+<div class="font-extrabold text-[#F9FAFB] font-mono text-sm tracking-tight">$68,00</div>
+<div class="text-[10px] text-emerald-400 font-mono">Bs. 60.262,96</div>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-emerald-900/50 text-emerald-400 cursor-pointer" onclick="openConfigModal('TIM-09431', 'Mozo Rodamiento Delantero Explorer', 18, 42, 68, 6)">
+<i class="w-3.5 h-3.5" data-lucide="sliders"></i>
+</button>
+<button class="p-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] text-slate-300 hover:text-white cursor-pointer" onclick="openTransferModal('TIM-09431', 'Mozo Rodamiento Delantero Explorer', 18, 6)">
+<i class="w-3.5 h-3.5" data-lucide="arrow-left-right"></i>
+</button>
+<button class="p-1.5 rounded-lg bg-[#0C1B14] hover:bg-emerald-950 border border-emerald-800 text-emerald-400 cursor-pointer" onclick="addPartToCart('TIM-09431', 'Mozo Rodamiento Delantero Explorer', 68.0)">
+<i class="w-3.5 h-3.5" data-lucide="shopping-cart"></i>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 4 -->
+<tr class="hover:bg-[#12151B]/80 transition group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-[#12151B] border border-[#1E232E] flex items-center justify-center font-mono font-bold text-slate-400 text-xs shrink-0">
+                      SAB
+                    </div>
+<div>
+<div class="font-bold text-[#F9FAFB] group-hover:text-emerald-400 transition">Estopera Cigüeñal Trasera Silverado 5.3 Vortec</div>
+<div class="text-[11px] text-slate-400">Estante F-11 • Empacaduras Motor</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-bold text-slate-400">SAB-09477</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-md bg-[#12151B] text-slate-300 border border-[#1E232E] font-medium text-[11px]">Empacaduras</span>
+</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-slate-400"></span>
+<span class="font-semibold text-slate-200">Sabó Brasil</span>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<button class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#12151B] text-slate-400 border border-[#1E232E] hover:text-white transition cursor-pointer" onclick="toggleRowWholesale(this)">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+<span>Solo Detal</span>
+</button>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 font-mono font-bold text-xs text-slate-400">
+<i class="w-3 h-3 text-slate-500" data-lucide="alert-circle"></i> 0 unds. (Agotado)
+                    </span>
+<span class="text-[10px] text-slate-500">Detal: <b class="text-slate-300 font-mono">12</b> unds.</span>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-semibold text-slate-300">$9,80</td>
+<td class="py-3 px-3 text-right">
+<div class="font-extrabold text-[#F9FAFB] font-mono text-sm tracking-tight">$17,50</div>
+<div class="text-[10px] text-emerald-400 font-mono">Bs. 15.508,85</div>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-emerald-900/50 text-emerald-400 cursor-pointer" onclick="openConfigModal('SAB-09477', 'Estopera Cigüeñal Silverado 5.3', 0, 9.8, 17.5, 12)">
+<i class="w-3.5 h-3.5" data-lucide="sliders"></i>
+</button>
+<button class="p-1.5 rounded-lg bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] text-slate-300 hover:text-white cursor-pointer" onclick="openTransferModal('SAB-09477', 'Estopera Cigüeñal Silverado 5.3', 0, 12)">
+<i class="w-3.5 h-3.5" data-lucide="arrow-left-right"></i>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Paginación de Tabla -->
+<div class="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-t border-[#171B23] bg-[#12151B] text-xs text-slate-400">
+<div>Mostrando <b>1</b> a <b>4</b> de <b>5.396</b> repuestos sincronizados</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-[#090A0D] border border-[#1E232E] text-slate-500 cursor-not-allowed">Anterior</button>
+<span class="font-mono text-emerald-400 px-2 font-bold">Página 1 de 216</span>
+<button class="px-3 py-1.5 rounded-lg bg-[#090A0D] hover:bg-[#171B23] border border-[#1E232E] text-white font-semibold cursor-pointer">Siguiente</button>
+</div>
+</div>
+</div>
+</main>
+<!-- ==========================================
+         MÓDULO: FACTURACIÓN MAYORISTA (TAB)
+    =========================================== -->
+<main class="tab-pane hidden flex-1 p-6 flex flex-col gap-6 overflow-y-auto" id="tab-invoicing">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div>
+<h1 class="text-lg font-bold text-[#F9FAFB] tracking-tight">Emisión de Facturas y Notas de Entrega Mayorista</h1>
+<p class="text-xs text-slate-400">Cálculo de impuestos SENIAT o Notas Exentas, comisiones comerciales e inventario al día</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-2 rounded-xl bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] text-xs font-semibold text-slate-200 flex items-center gap-1.5 cursor-pointer" onclick="switchTab('cxc')">
+<i class="w-4 h-4 text-emerald-400" data-lucide="clipboard-list"></i>
+<span>Ver Cuentas por Cobrar</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Izquierda: Formulario + Items -->
+<div class="lg:col-span-2 space-y-5">
+<div class="bg-[#0D0F14] p-5 rounded-2xl border border-[#171B23] grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Cliente Mayorista</label>
+<select class="w-full bg-[#12151B] border border-[#1E232E] rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500" id="invoice-client">
+<option>Autorepuestos El Viñedo, C.A. (J-31294851-2) — Distribuidor (-10%)</option>
+<option>Inversiones Mecánica Carabobo, C.A. (J-40192837-9) — Mayorista Nivel 1 (-5%)</option>
+<option>Importadora Los Guayos Motor, C.A. (J-29847162-0) — Estándar</option>
+</select>
+</div>
+<div>
+<label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Asesor de Ventas (Comisión)</label>
+<select class="w-full bg-[#12151B] border border-[#1E232E] rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500" id="invoice-seller">
+<option>Víctor Reyes — Comisión: 5.0% (Valencia / Zona Norte)</option>
+<option>Gonzalo Sotomayor — Comisión: 4.5% (Cuentas Clave)</option>
+<option>Carlos Méndez — Comisión: 5.0% (Aragua / Maracay)</option>
+</select>
+</div>
+<div>
+<label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Condición Comercial</label>
+<select class="w-full bg-[#12151B] border border-[#1E232E] rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500" id="invoice-condition">
+<option>Contado (Divisas / Zelle)</option>
+<option>Pago Móvil / Transferencia (BCV)</option>
+<option>Crédito 15 Días</option>
+<option>Crédito 30 Días</option>
+</select>
+</div>
+<div>
+<label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tipo de Documento Legal</label>
+<select class="w-full bg-[#12151B] border border-[#1E232E] rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500" id="invoice-type">
+<option>Nota de Entrega Mayorista (Exenta)</option>
+<option>Factura Fiscal SENIAT (+16% IVA)</option>
+<option>Cotización Mayorista Proforma</option>
+</select>
+</div>
+</div>
+<!-- Carrito de Factura -->
+<div class="bg-[#0D0F14] p-5 rounded-2xl border border-[#171B23]">
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Líneas de Repuestos en Documento</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="border-b border-[#171B23] text-slate-500 uppercase font-mono font-semibold">
+<th class="py-2 px-2">SKU</th>
+<th class="py-2 px-2">Repuesto</th>
+<th class="py-2 px-2 text-center">Cant.</th>
+<th class="py-2 px-2 text-right">Precio ($)</th>
+<th class="py-2 px-2 text-right">Subtotal ($)</th>
+<th class="py-2 px-2 text-right"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#171B23]" id="invoice-cart-body">
+<tr>
+<td class="py-3 px-2 font-mono font-bold text-emerald-400">CLO-09485</td>
+<td class="py-3 px-2 text-[#F9FAFB] font-medium">Kit de Tiempo Corsa / Aveo 1.6</td>
+<td class="py-3 px-2 text-center font-bold">
+<input class="w-16 bg-[#12151B] border border-[#1E232E] rounded-md text-center text-white font-mono py-1 focus:border-emerald-500 focus:outline-none" min="1" type="number" value="6"/>
+</td>
+<td class="py-3 px-2 text-right font-mono text-slate-300">$29,00</td>
+<td class="py-3 px-2 text-right font-mono font-bold text-[#F9FAFB]">$174,00</td>
+<td class="py-3 px-2 text-right">
+<button class="text-slate-500 hover:text-red-400 transition cursor-pointer"><i class="w-4 h-4" data-lucide="trash-2"></i></button>
+</td>
+</tr>
+<tr>
+<td class="py-3 px-2 font-mono font-bold text-emerald-400">MON-09482</td>
+<td class="py-3 px-2 text-[#F9FAFB] font-medium">Amortiguador Delantero Gas Cherokee</td>
+<td class="py-3 px-2 text-center font-bold">
+<input class="w-16 bg-[#12151B] border border-[#1E232E] rounded-md text-center text-white font-mono py-1 focus:border-emerald-500 focus:outline-none" min="1" type="number" value="4"/>
+</td>
+<td class="py-3 px-2 text-right font-mono text-slate-300">$42,00</td>
+<td class="py-3 px-2 text-right font-mono font-bold text-[#F9FAFB]">$168,00</td>
+<td class="py-3 px-2 text-right">
+<button class="text-slate-500 hover:text-red-400 transition cursor-pointer"><i class="w-4 h-4" data-lucide="trash-2"></i></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Derecha: Resumen de Pago Bimoneda -->
+<div class="space-y-4">
+<div class="bg-[#0D0F14] p-5 rounded-2xl border border-[#171B23] shadow-xl space-y-4">
+<div class="flex items-center justify-between border-b border-[#171B23] pb-3">
+<span class="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">Liquidación y Totales</span>
+<span class="text-xs font-mono font-bold text-emerald-400">Tasa: Bs. 886,22</span>
+</div>
+<div class="space-y-2.5 text-xs">
+<div class="flex justify-between text-slate-400">
+<span>Subtotal Bruto:</span>
+<span class="font-mono font-bold text-[#F9FAFB]">$342,00 USD</span>
+</div>
+<div class="flex justify-between text-emerald-400 font-semibold">
+<span>Descuento Distribuidor (-10%):</span>
+<span class="font-mono">-$34,20 USD</span>
+</div>
+<div class="flex justify-between text-slate-400">
+<span>IVA (0% Exento):</span>
+<span class="font-mono text-slate-200">$0,00 USD</span>
+</div>
+<div class="pt-3 border-t border-[#171B23] flex justify-between items-baseline">
+<span class="text-sm font-bold text-[#F9FAFB]">TOTAL A PAGAR:</span>
+<span class="text-2xl font-black text-emerald-400 font-mono tracking-tight">$307,80</span>
+</div>
+<div class="bg-[#12151B] p-3 rounded-xl border border-emerald-900/40 flex justify-between items-center">
+<span class="text-[11px] text-slate-400 font-medium">Equivalente BCV:</span>
+<span class="font-mono font-bold text-emerald-400 text-sm">Bs. 272.778,51</span>
+</div>
+</div>
+<!-- Comisión Asesor -->
+<div class="bg-[#0C1B14] border border-emerald-800/60 rounded-xl p-3 text-xs space-y-1">
+<div class="flex justify-between font-bold text-emerald-300">
+<span>Comisión Asesor (Víctor Reyes)</span>
+<span class="font-mono">5.0%</span>
+</div>
+<div class="flex justify-between text-emerald-400/90 text-[11px]">
+<span>Acreditar a liquidación:</span>
+<span class="font-bold font-mono">+$15,39 USD (Bs. 13.638,92)</span>
+</div>
+</div>
+<button class="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-obsidian-950 py-3 rounded-xl font-extrabold text-xs glow-emerald flex items-center justify-center gap-2 cursor-pointer transition" onclick="openModal('invoicePreviewModal')">
+<i class="w-4 h-4 stroke-[2.5]" data-lucide="printer"></i>
+<span>Emitir e Imprimir Documento</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- ==========================================
+         MÓDULO: CUENTAS POR COBRAR (CxC) (TAB)
+    =========================================== -->
+<main class="tab-pane hidden flex-1 p-6 flex flex-col gap-6 overflow-y-auto" id="tab-cxc">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div>
+<h1 class="text-lg font-bold text-[#F9FAFB] tracking-tight">Cuentas por Cobrar (CxC) &amp; Gestión de Abonos</h1>
+<p class="text-xs text-slate-400">Seguimiento de crédito comercial, abonos en divisas o bolívares y cobranza por WhatsApp</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-2 rounded-xl bg-[#12151B] hover:bg-[#171B23] border border-[#1E232E] text-xs font-semibold text-slate-200 flex items-center gap-1.5 cursor-pointer" onclick="toast('Reporte consolidado de cartera enviado a cobranzas')">
+<i class="w-4 h-4 text-emerald-400" data-lucide="file-spreadsheet"></i>
+<span>Exportar Estado de Cartera</span>
+</button>
+</div>
+</div>
+<!-- KPI Cards CxC Terminal Financiero -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-[#0D0F14] p-4 rounded-2xl border border-emerald-900/40">
+<div class="flex items-center justify-between text-slate-400 mb-2">
+<span class="text-xs font-bold uppercase tracking-wider font-mono">Total por Cobrar</span>
+<i class="w-4 h-4 text-emerald-400" data-lucide="dollar-sign"></i>
+</div>
+<div class="text-2xl font-black text-[#F9FAFB] font-mono">$2.896,30</div>
+<div class="text-xs text-emerald-400 font-mono mt-1">Bs. 2.566.757,98</div>
+<div class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-[#171B23]">3 facturas con saldo activo</div>
+</div>
+<div class="bg-[#0D0F14] p-4 rounded-2xl border border-red-900/60 bg-gradient-to-br from-[#0D0F14] to-red-950/20">
+<div class="flex items-center justify-between text-red-400 mb-2">
+<span class="text-xs font-bold uppercase tracking-wider font-mono">Cartera Vencida</span>
+<i class="w-4 h-4 text-red-500" data-lucide="alert-triangle"></i>
+</div>
+<div class="text-2xl font-black text-red-400 font-mono">$882,00</div>
+<div class="text-xs text-red-400/80 font-mono mt-1">Bs. 781.646,04</div>
+<div class="text-[10px] text-red-400 font-semibold mt-2 pt-2 border-t border-red-900/50">⚠️ Requiere gestión de cobro inmediata</div>
+</div>
+<div class="bg-[#0D0F14] p-4 rounded-2xl border border-[#171B23]">
+<div class="flex items-center justify-between text-slate-400 mb-2">
+<span class="text-xs font-bold uppercase tracking-wider font-mono">Cobrado este Mes</span>
+<i class="w-4 h-4 text-emerald-400" data-lucide="check-circle-2"></i>
+</div>
+<div class="text-2xl font-black text-emerald-400 font-mono">$2.278,00</div>
+<div class="text-xs text-slate-400 font-mono mt-1">Bs. 2.018.809,16</div>
+<div class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-[#171B23]">Recaudado en caja y Zelle</div>
+</div>
+<div class="bg-[#0D0F14] p-4 rounded-2xl border border-[#171B23]">
+<div class="flex items-center justify-between text-slate-400 mb-2">
+<span class="text-xs font-bold uppercase tracking-wider font-mono">Clientes con Crédito</span>
+<i class="w-4 h-4 text-slate-300" data-lucide="users"></i>
+</div>
+<div class="text-2xl font-black text-[#F9FAFB] font-mono">3 / 4</div>
+<div class="text-xs text-slate-400 mt-1">Aliados comerciales activos</div>
+<div class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-[#171B23]">Límite de crédito verificado</div>
+</div>
+</div>
+<!-- Tabla CxC Terminal Oscura -->
+<div class="bg-[#0D0F14] border border-[#171B23] rounded-2xl overflow-hidden shadow-2xl">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="border-b border-[#171B23] bg-[#12151B] text-[11px] font-semibold text-slate-400 uppercase tracking-wider font-mono">
+<th class="py-3 px-4">Documento</th>
+<th class="py-3 px-3">Cliente Mayorista</th>
+<th class="py-3 px-3">Asesor</th>
+<th class="py-3 px-3">Vencimiento</th>
+<th class="py-3 px-3 text-right">Monto Original</th>
+<th class="py-3 px-3 text-right">Abonado ($)</th>
+<th class="py-3 px-3 text-right">Saldo Pendiente</th>
+<th class="py-3 px-3 text-center">Estado</th>
+<th class="py-3 pr-4 pl-2 text-right">Cobranza</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#171B23]">
+<!-- Factura Vencida -->
+<tr class="hover:bg-[#12151B]/80 transition">
+<td class="py-3 px-4 font-mono font-bold text-red-400">FAC-008423</td>
+<td class="py-3 px-3">
+<div class="font-bold text-[#F9FAFB]">Multiservicios y Repuestos Aragua, C.A.</div>
+<div class="text-[10px] font-mono text-slate-400">RIF: J-41029384-5 • Maracay</div>
+</td>
+<td class="py-3 px-3 text-slate-300">Carlos Méndez</td>
+<td class="py-3 px-3">
+<span class="text-red-400 font-bold flex items-center gap-1 font-mono">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                    17 Oct 2026 (Vencida)
+                  </span>
+</td>
+<td class="py-3 px-3 text-right font-mono text-slate-300">$882,00</td>
+<td class="py-3 px-3 text-right font-mono text-slate-400">$0,00</td>
+<td class="py-3 px-3 text-right font-mono font-extrabold text-red-400 text-sm">$882,00</td>
+<td class="py-3 px-3 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-red-950/80 text-red-400 border border-red-800">Vencida</span>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-[#0C1B14] hover:bg-emerald-950 border border-emerald-800 text-emerald-400 cursor-pointer" onclick="toast('Recordatorio de deuda enviado por WhatsApp al cliente')" title="Cobrar por WhatsApp">
+<i class="w-3.5 h-3.5" data-lucide="message-circle"></i>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-obsidian-950 font-extrabold text-xs cursor-pointer shadow-md" onclick="openPaymentModal('FAC-008423', 'Multiservicios Aragua', 882.0)" title="Registrar Abono">
+                      Abonar
+                    </button>
+</div>
+</td>
+</tr>
+<!-- Factura Parcial -->
+<tr class="hover:bg-[#12151B]/80 transition">
+<td class="py-3 px-4 font-mono font-bold text-emerald-400">FAC-008422</td>
+<td class="py-3 px-3">
+<div class="font-bold text-[#F9FAFB]">Inversiones Mecánica Carabobo, C.A.</div>
+<div class="text-[10px] font-mono text-slate-400">RIF: J-40192837-9 • Naguanagua</div>
+</td>
+<td class="py-3 px-3 text-slate-300">Gonzalo Sotomayor</td>
+<td class="py-3 px-3 text-slate-400 font-mono">29 Oct 2026</td>
+<td class="py-3 px-3 text-right font-mono text-slate-300">$2.369,30</td>
+<td class="py-3 px-3 text-right font-mono text-emerald-400 font-bold">$1.000,00</td>
+<td class="py-3 px-3 text-right font-mono font-extrabold text-emerald-400 text-sm">$1.369,30</td>
+<td class="py-3 px-3 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-gold-950/80 text-gold-500 border border-gold-800">Abono Parcial</span>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-[#0C1B14] hover:bg-emerald-950 border border-emerald-800 text-emerald-400 cursor-pointer" onclick="toast('Recordatorio de saldo enviado por WhatsApp')">
+<i class="w-3.5 h-3.5" data-lucide="message-circle"></i>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-obsidian-950 font-extrabold text-xs cursor-pointer shadow-md" onclick="openPaymentModal('FAC-008422', 'Inversiones Carabobo', 1369.30)">
+                      Abonar
+                    </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- ==========================================
+         MÓDULO: COMISIONES DE ASESORES (TAB)
+    =========================================== -->
+<main class="tab-pane hidden flex-1 p-6 flex flex-col gap-6 overflow-y-auto" id="tab-commissions">
+<div class="flex items-center justify-between">
+<div>
+<h1 class="text-lg font-bold text-[#F9FAFB] tracking-tight">Liquidación de Comisiones de Venta Mayorista</h1>
+<p class="text-xs text-slate-400">Corte mensual para asesores de calle y mostrador central en USD ($) y Bolívares (BCV)</p>
+</div>
+<button class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-obsidian-950 font-extrabold text-xs flex items-center gap-1.5 cursor-pointer glow-emerald" onclick="toast('Corte de comisiones generado con éxito')">
+<i class="w-4 h-4 stroke-[2.5]" data-lucide="check"></i>
+<span>Liquidar Periodo Octubre</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-[#0D0F14] p-4 rounded-2xl border border-emerald-900/40">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-[#0C1B14] text-emerald-400 border border-emerald-800 font-bold text-xs flex items-center justify-center font-mono">VR</div>
+<div>
+<h4 class="text-xs font-bold text-[#F9FAFB]">Víctor Reyes</h4>
+<p class="text-[10px] text-slate-400">Valencia Norte</p>
+</div>
+</div>
+<span class="text-[10px] font-mono font-bold bg-[#12151B] text-emerald-400 px-2 py-0.5 rounded border border-emerald-900/50">5.0%</span>
+</div>
+<div class="space-y-1.5 text-xs pt-3 border-t border-[#171B23]">
+<div class="flex justify-between text-slate-400"><span>Ventas:</span><span class="font-mono text-slate-200">$1.923,00</span></div>
+<div class="flex justify-between text-emerald-400 font-bold"><span>Comisión:</span><span class="font-mono text-emerald-400">+$96,15</span></div>
+</div>
+</div>
+<div class="bg-[#0D0F14] p-4 rounded-2xl border border-emerald-900/40">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-[#0C1B14] text-emerald-400 border border-emerald-800 font-bold text-xs flex items-center justify-center font-mono">GS</div>
+<div>
+<h4 class="text-xs font-bold text-[#F9FAFB]">Gonzalo Sotomayor</h4>
+<p class="text-[10px] text-slate-400">Cuentas Clave</p>
+</div>
+</div>
+<span class="text-[10px] font-mono font-bold bg-[#12151B] text-emerald-400 px-2 py-0.5 rounded border border-emerald-900/50">4.5%</span>
+</div>
+<div class="space-y-1.5 text-xs pt-3 border-t border-[#171B23]">
+<div class="flex justify-between text-slate-400"><span>Ventas:</span><span class="font-mono text-slate-200">$2.369,30</span></div>
+<div class="flex justify-between text-emerald-400 font-bold"><span>Comisión:</span><span class="font-mono text-emerald-400">+$106,62</span></div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- ==========================================
+       MODAL 1: CONFIGURACIÓN DE REPUESTO MAYORISTA
+  =========================================== -->
+<div class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" id="configModal">
+<div class="bg-[#0D0F14] rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-emerald-900/50 text-xs space-y-4">
+<div class="flex items-center justify-between pb-3 border-b border-[#171B23]">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-[#0C1B14] border border-emerald-800 text-emerald-400 flex items-center justify-center font-bold">
+<i class="w-4 h-4" data-lucide="sliders"></i>
+</div>
+<div>
+<h3 class="font-bold text-sm text-[#F9FAFB]">Configuración de Repuesto Mayorista</h3>
+<p class="text-[11px] text-slate-400 font-mono" id="modal-sku-subtitle">SKU: CLO-09485</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-white cursor-pointer" onclick="closeModal('configModal')"><i class="w-4 h-4" data-lucide="x"></i></button>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block font-bold text-slate-300 mb-1">Stock Mayorista (Unidades)</label>
+<input class="w-full bg-[#12151B] border border-[#1E232E] rounded-xl px-3 py-2 text-white font-mono font-bold focus:border-emerald-500 focus:outline-none" id="modal-w-stock" type="number" value="20"/>
+</div>
+<div>
+<label class="block font-bold text-slate-300 mb-1">Stock Mínimo (Alerta)</label>
+<input class="w-full bg-[#12151B] border border-[#1E232E] rounded-xl px-3 py-2 text-white font-mono focus:border-emerald-500 focus:outline-none" type="number" value="10"/>
+</div>
+<div>
+<label class="block font-bold text-slate-300 mb-1">Costo Real Mayorista ($ USD)</label>
+<input class="w-full bg-[#12151B] border border-[#1E232E] rounded-xl px-3 py-2 text-white font-mono font-bold focus:border-emerald-500 focus:outline-none" id="modal-w-cost" step="0.1" type="number" value="18.5"/>
+</div>
+<div>
+<label class="block font-bold text-slate-300 mb-1">Precio Mayorista ($ USD)</label>
+<input class="w-full bg-[#12151B] border border-emerald-700/60 rounded-xl px-3 py-2 text-emerald-400 font-mono font-bold focus:border-emerald-500 focus:outline-none" id="modal-w-price" step="0.1" type="number" value="29.0"/>
+</div>
+</div>
+<div class="bg-[#12151B] p-3 rounded-xl border border-emerald-900/40 flex justify-between items-center text-[11px]">
+<span class="text-slate-400">Margen Mayorista Estimado:</span>
+<span class="text-emerald-400 font-bold font-mono">+36,2% ($10,50 / und)</span>
+</div>
+<div class="flex justify-end gap-2 pt-3 border-t border-[#171B23]">
+<button class="px-4 py-2 rounded-xl bg-[#12151B] hover:bg-[#171B23] text-slate-300 font-semibold cursor-pointer" onclick="closeModal('configModal')">Cancelar</button>
+<button class="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 text-obsidian-950 font-extrabold cursor-pointer glow-emerald" onclick="saveWholesaleConfig()">Guardar Parámetros</button>
+</div>
+</div>
+</div>
+<!-- ==========================================
+       MODAL 2: TRANSFERENCIA ENTRE DETAL Y MAYOR
+  =========================================== -->
+<div class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" id="transferModal">
+<div class="bg-[#0D0F14] rounded-2xl max-w-md w-full p-6 shadow-2xl border border-emerald-900/50 text-xs space-y-4">
+<div class="flex items-center justify-between pb-3 border-b border-[#171B23]">
+<div class="flex items-center gap-2">
+<i class="w-4 h-4 text-emerald-400" data-lucide="arrow-left-right"></i>
+<h3 class="font-bold text-sm text-[#F9FAFB]">Transferir Stock entre Canales</h3>
+</div>
+<button class="text-slate-400 hover:text-white cursor-pointer" onclick="closeModal('transferModal')"><i class="w-4 h-4" data-lucide="x"></i></button>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="p-3 rounded-xl bg-[#12151B] border border-[#1E232E]">
+<span class="text-[10px] text-slate-400 font-bold uppercase block mb-1">Mostrador Detal</span>
+<span class="text-xl font-black text-white font-mono" id="transfer-detal-val">14</span> <span class="text-slate-400">unds.</span>
+</div>
+<div class="p-3 rounded-xl bg-[#12151B] border border-emerald-900/40">
+<span class="text-[10px] text-emerald-400 font-bold uppercase block mb-1">Depósito Mayorista</span>
+<span class="text-xl font-black text-white font-mono" id="transfer-mayor-val">20</span> <span class="text-slate-400">unds.</span>
+</div>
+</div>
+<div>
+<label class="block font-bold text-slate-300 mb-1">Dirección del Movimiento:</label>
+<select class="w-full bg-[#12151B] border border-[#1E232E] rounded-xl px-3 py-2 text-white font-semibold focus:outline-none focus:border-emerald-500">
+<option>Detal (Tienda) ➔ Mayorista (Galpón)</option>
+<option>Mayorista (Galpón) ➔ Detal (Tienda)</option>
+</select>
+</div>
+<div>
+<label class="block font-bold text-slate-300 mb-1">Cantidad a Mover:</label>
+<input class="w-full bg-[#12151B] border border-[#1E232E] rounded-xl px-3 py-2 text-white font-mono font-bold focus:border-emerald-500 focus:outline-none" min="1" type="number" value="5"/>
+</div>
+<div class="flex justify-end gap-2 pt-3 border-t border-[#171B23]">
+<button class="px-4 py-2 rounded-xl bg-[#12151B] text-slate-300 font-semibold cursor-pointer" onclick="closeModal('transferModal')">Cancelar</button>
+<button class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-obsidian-950 font-extrabold cursor-pointer" onclick="confirmTransfer()">Confirmar Transferencia</button>
+</div>
+</div>
+</div>
+<!-- ==========================================
+       MODAL 3: SCRIPT SQL SUPABASE
+  =========================================== -->
+<div class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" id="sqlModal">
+<div class="bg-[#0D0F14] rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-emerald-900/50 text-xs space-y-4">
+<div class="flex items-center justify-between pb-3 border-b border-[#171B23]">
+<div class="flex items-center gap-2">
+<i class="w-4 h-4 text-emerald-400" data-lucide="database"></i>
+<h3 class="font-bold text-sm text-[#F9FAFB]">Script SQL de Migración Supabase</h3>
+</div>
+<button class="text-slate-400 hover:text-white cursor-pointer" onclick="closeModal('sqlModal')"><i class="w-4 h-4" data-lucide="x"></i></button>
+</div>
+<p class="text-slate-400 text-[11px] leading-relaxed">
+        Sentencias para persistir campos de mayorista en tu esquema Supabase PostgreSQL sin alterar la operación detal:
+      </p>
+<pre class="bg-[#090A0D] p-4 rounded-xl border border-emerald-900/40 font-mono text-emerald-400 text-[11px] overflow-x-auto select-all leading-relaxed">ALTER TABLE products 
+ADD COLUMN IF NOT EXISTS is_wholesale BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS wholesale_stock INTEGER DEFAULT 0,
+ADD COLUMN IF NOT EXISTS wholesale_cost NUMERIC(10,2) DEFAULT 0.00,
+ADD COLUMN IF NOT EXISTS wholesale_price NUMERIC(10,2) DEFAULT 0.00,
+ADD COLUMN IF NOT EXISTS wholesale_min_stock INTEGER DEFAULT 2;</pre>
+<div class="flex justify-end gap-2 pt-2 border-t border-[#171B23]">
+<button class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 text-obsidian-950 font-extrabold flex items-center gap-1.5 cursor-pointer" onclick="copySql()">
+<i class="w-3.5 h-3.5 stroke-[2.5]" data-lucide="copy"></i>
+<span>Copiar al Portapapeles</span>
+</button>
+</div>
+</div>
+</div>
+<!-- NOTIFICACIÓN TOAST DINÁMICA -->
+<div class="hidden fixed bottom-5 right-5 z-50 bg-[#12151B] text-white border border-emerald-900/80 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 text-xs font-semibold animate-bounce" id="toast">
+<i class="w-4 h-4 text-emerald-400" data-lucide="check-circle"></i>
+<span class="text-slate-200" id="toast-text">Acción completada con éxito</span>
+</div>
+<!-- LOGIC SCRIPT -->
+<script>
+    // Inicializar Iconos Lucide
+    lucide.createIcons();
+
+    // Navegación de Pestañas
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('bg-[#12151B]', 'text-[#F9FAFB]', 'border', 'border-emerald-900/60', 'shadow-xs');
+        el.classList.add('text-slate-400');
+      });
+
+      const activePane = document.getElementById('tab-' + tabId);
+      const activeNav = document.getElementById('nav-' + tabId);
+
+      if (activePane) activePane.classList.remove('hidden');
+      if (activeNav) {
+        activeNav.classList.remove('text-slate-400');
+        activeNav.classList.add('bg-[#12151B]', 'text-[#F9FAFB]', 'border', 'border-emerald-900/60', 'shadow-xs');
+      }
+
+      const titles = {
+        inventory: 'Inventario Mayorista',
+        invoicing: 'Facturación Mayorista',
+        receiving: 'Recepción de Mercancía',
+        cxc: 'Cuentas por Cobrar (CxC)',
+        commissions: 'Comisiones de Asesores',
+        clients: 'Cartera de Clientes'
+      };
+      document.getElementById('current-module-title').innerText = titles[tabId] || 'Panel Mayorista';
+      lucide.createIcons();
+    }
+
+    // Modal Handlers
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Config Modal
+    function openConfigModal(sku, name, stock, cost, price, retail) {
+      document.getElementById('modal-sku-subtitle').innerText = `${sku} — ${name}`;
+      document.getElementById('modal-w-stock').value = stock;
+      document.getElementById('modal-w-cost').value = cost;
+      document.getElementById('modal-w-price').value = price;
+      openModal('configModal');
+    }
+
+    function saveWholesaleConfig() {
+      closeModal('configModal');
+      toast('Configuración mayorista guardada con éxito');
+    }
+
+    // Transfer Modal
+    function openTransferModal(sku, name, mayorStock, detalStock) {
+      document.getElementById('transfer-detal-val').innerText = detalStock;
+      document.getElementById('transfer-mayor-val').innerText = mayorStock;
+      openModal('transferModal');
+    }
+
+    function confirmTransfer() {
+      closeModal('transferModal');
+      toast('Transferencia de existencias efectuada correctamente');
+    }
+
+    // Toggle Wholesale Switch en Fila
+    function toggleRowWholesale(btn) {
+      const isWholesale = btn.innerText.includes('Mayorista');
+      if (isWholesale) {
+        btn.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#12151B] text-slate-400 border border-[#1E232E] hover:text-white transition cursor-pointer";
+        btn.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span>Solo Detal</span>`;
+        toast('Repuesto asignado exclusivamente a mostrador detal');
+      } else {
+        btn.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#0C1B14] text-emerald-300 border border-emerald-700/80 hover:bg-emerald-950 transition cursor-pointer";
+        btn.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>Mayorista</span>`;
+        toast('Repuesto habilitado para ventas al mayor');
+      }
+    }
+
+    // Carrito
+    function addPartToCart(sku, name, price) {
+      toast(`${sku} agregado al documento`);
+      switchTab('invoicing');
+    }
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-text').innerText = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3200);
+    }
+
+    // Tasa BCV
+    function refreshBcv() {
+      const icon = document.getElementById('bcv-icon');
+      icon.classList.add('animate-spin');
+      setTimeout(() => {
+        icon.classList.remove('animate-spin');
+        toast('Tasa oficial BCV sincronizada con DolarApi: Bs. 886,22');
+      }, 700);
+    }
+
+    // Búsqueda
+    function handleSearch(val) {
+      const q = val.toLowerCase();
+      const rows = document.querySelectorAll('#inventory-tbody tr');
+      let visible = 0;
+      rows.forEach(r => {
+        const text = r.innerText.toLowerCase();
+        if (text.includes(q)) {
+          r.style.display = '';
+          visible++;
+        } else {
+          r.style.display = 'none';
+        }
+      });
+      document.getElementById('results-count').innerText = visible;
+    }
+
+    // Atajo '/'
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        document.getElementById('global-search').focus();
+      }
+    });
+
+    // Copiar SQL
+    function copySql() {
+      navigator.clipboard.writeText("ALTER TABLE products ADD COLUMN IF NOT EXISTS is_wholesale BOOLEAN DEFAULT FALSE, ADD COLUMN IF NOT EXISTS wholesale_stock INTEGER DEFAULT 0, ADD COLUMN IF NOT EXISTS wholesale_cost NUMERIC(10,2) DEFAULT 0.00, ADD COLUMN IF NOT EXISTS wholesale_price NUMERIC(10,2) DEFAULT 0.00, ADD COLUMN IF NOT EXISTS wholesale_min_stock INTEGER DEFAULT 2;");
+      toast('Script SQL copiado al portapapeles');
+    }
+  </script>
+</body></html>

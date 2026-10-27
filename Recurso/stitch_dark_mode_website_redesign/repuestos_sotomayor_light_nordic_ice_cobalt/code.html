@@ -1,0 +1,1179 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Repuestos Sotomayor, C.A. - Modo Claro (Corporate Nordic Ice &amp; Deep Cobalt)</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Plus Jakarta Sans & JetBrains Mono Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            nordic: {
+              bg: '#F0F4F8',
+              card: '#FFFFFF',
+              surface: '#EBF1F6',
+              border: '#E2E8F0',
+              borderSubtle: '#CBD5E1',
+              hover: '#F8FAFC',
+              slate: '#64748B',
+            },
+            cobalt: {
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              200: '#BFDBFE',
+              500: '#3B82F6',
+              600: '#2563EB',
+              700: '#1D4ED8',
+              800: '#1E40AF',
+              900: '#1E3A8A',
+            },
+            brand: {
+              dark: '#0F172A', // Midnight Navy for primary text
+              alert: '#EA580C', // Warm burnt orange for critical alerts
+              mint: '#10B981', // Fresh mint green for BCV / live stock
+              cyan: '#0284C7', // Electric sapphire/cyan
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: #F0F4F8;
+      color: #0F172A;
+    }
+    /* Nordic Ice Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F0F4F8;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+    .glow-cobalt {
+      box-shadow: 0 4px 14px -1px rgba(37, 99, 235, 0.28);
+    }
+    .badge-nordic {
+      box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05);
+    }
+    @media print {
+      body * { visibility: hidden; }
+      .print-modal, .print-modal * { visibility: visible; }
+      .print-modal {
+        position: absolute; left: 0; top: 0; width: 100%;
+        background: white !important; color: #0F172A !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#F0F4F8] text-[#0F172A] min-h-screen flex selection:bg-blue-600/15 selection:text-blue-900" style="background-color: rgb(232, 240, 248);">
+<!-- ==========================================
+       SIDEBAR IZQUIERDO (LIGHT CORPORATE NORDIC)
+  =========================================== -->
+<aside class="w-16 hover:w-64 fixed top-0 bottom-0 left-0 bg-white border-r border-[#E2E8F0] flex flex-col justify-between py-4 px-2 transition-all duration-300 z-40 group shadow-lg shadow-slate-200/50" id="sidebar" style="background-color: rgb(237, 244, 249); border-color: rgb(216, 228, 238);">
+<div class="flex flex-col gap-4 w-full">
+<!-- Logo Repuestos Sotomayor -->
+<div class="flex items-center gap-3 px-1.5 py-1 rounded-xl cursor-pointer hover:bg-[#F0F4F8] transition">
+<div class="w-9 h-9 rounded-xl flex items-center justify-center bg-[#EFF6FF] border border-blue-200 relative shrink-0">
+<div class="w-6 h-6 rounded-full border-[2.5px] border-[#2563EB] flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-[#1D4ED8]"></div>
+</div>
+<span class="absolute -bottom-0.5 right-1 w-2 h-2 rounded-full bg-[#2563EB] animate-ping opacity-75"></span>
+</div>
+<div class="hidden group-hover:flex flex-col min-w-0 transition-opacity duration-200">
+<span class="font-extrabold text-xs text-[#0F172A] tracking-tight truncate">Repuestos Sotomayor</span>
+<span class="text-[10px] text-blue-600 font-semibold tracking-tight truncate">Distribución Mayorista</span>
+</div>
+</div>
+<!-- Botón Cobalto Acción Rápida -->
+<button class="w-10 group-hover:w-full h-10 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white flex items-center justify-center group-hover:justify-start group-hover:px-3 gap-2.5 transition-all duration-200 glow-cobalt font-bold text-xs cursor-pointer" onclick="openModal('newPartModal')" title="Nuevo Repuesto">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" aria-hidden="true" class="lucide lucide-plus w-4 h-4 shrink-0"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+<span class="hidden group-hover:inline whitespace-nowrap">Nuevo Repuesto</span>
+</button>
+<!-- Navegación Primaria -->
+<nav class="flex flex-col gap-1.5 w-full mt-1">
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-between px-2.5 bg-blue-50 text-[#1D4ED8] font-bold border border-blue-200 shadow-xs cursor-pointer" id="nav-inventory" onclick="switchTab('inventory')">
+<div class="flex items-center gap-3 min-w-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="package" aria-hidden="true" class="lucide lucide-package w-4 h-4 text-[#2563EB] shrink-0"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
+<span class="hidden group-hover:inline text-xs truncate">Inventario y Stock</span>
+</div>
+<span class="hidden group-hover:inline text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-white text-blue-700 border border-blue-200 font-semibold">5.396</span>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-between px-2.5 text-slate-600 hover:text-[#0F172A] hover:bg-[#F0F4F8] transition cursor-pointer" id="nav-invoicing" onclick="switchTab('invoicing')">
+<div class="flex items-center gap-3 min-w-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="file-text" aria-hidden="true" class="lucide lucide-file-text w-4 h-4 text-slate-500 shrink-0"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+<span class="hidden group-hover:inline text-xs truncate">Facturación Mayorista</span>
+</div>
+<span class="hidden group-hover:inline text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-100 text-[#1D4ED8] border border-blue-200">2 ítems</span>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-start px-2.5 text-slate-600 hover:text-[#0F172A] hover:bg-[#F0F4F8] transition cursor-pointer" id="nav-receiving" onclick="switchTab('receiving')">
+<div class="flex items-center gap-3 min-w-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="truck" aria-hidden="true" class="lucide lucide-truck w-4 h-4 text-slate-500 shrink-0"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg>
+<span class="hidden group-hover:inline text-xs truncate">Recepción de Lotes</span>
+</div>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-between px-2.5 text-slate-600 hover:text-[#0F172A] hover:bg-[#F0F4F8] transition cursor-pointer relative" id="nav-cxc" onclick="switchTab('cxc')">
+<div class="flex items-center gap-3 min-w-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clipboard-check" aria-hidden="true" class="lucide lucide-clipboard-check w-4 h-4 text-emerald-600 shrink-0"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg>
+<span class="hidden group-hover:inline text-xs truncate">Cuentas por Cobrar</span>
+</div>
+<span class="hidden group-hover:inline text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">3 pend.</span>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-start px-2.5 text-slate-600 hover:text-[#0F172A] hover:bg-[#F0F4F8] transition cursor-pointer" id="nav-commissions" onclick="switchTab('commissions')">
+<div class="flex items-center gap-3 min-w-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" aria-hidden="true" class="lucide lucide-users w-4 h-4 text-slate-500 shrink-0"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+<span class="hidden group-hover:inline text-xs truncate">Comisiones Asesores</span>
+</div>
+</button>
+<button class="nav-item w-full h-10 rounded-xl flex items-center justify-center group-hover:justify-start px-2.5 text-slate-600 hover:text-[#0F172A] hover:bg-[#F0F4F8] transition cursor-pointer" id="nav-clients" onclick="switchTab('clients')">
+<div class="flex items-center gap-3 min-w-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="store" aria-hidden="true" class="lucide lucide-store w-4 h-4 text-slate-500 shrink-0"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg>
+<span class="hidden group-hover:inline text-xs truncate">Cartera de Clientes</span>
+</div>
+</button>
+</nav>
+</div>
+<!-- Opciones Inferiores Sidebar -->
+<div class="flex flex-col gap-2 w-full pt-3 border-t border-[#E2E8F0]">
+<div class="w-10 group-hover:w-full h-10 rounded-xl text-blue-700 bg-blue-50 border border-blue-200 flex items-center justify-center group-hover:justify-start group-hover:px-3 gap-2.5" title="Tema Nórdico Corporativo">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sun" aria-hidden="true" class="lucide lucide-sun w-4 h-4 shrink-0 text-blue-600"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+<span class="hidden group-hover:inline text-xs font-semibold text-[#0F172A]">Modo Claro Nórdico</span>
+</div>
+<div class="hidden group-hover:flex items-center justify-between px-2 pt-2 text-[10px] text-slate-500 font-mono border-t border-[#E2E8F0]">
+<span class="">J-07590371-4</span>
+<span class="text-emerald-600 font-semibold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online</span>
+</div>
+</div>
+</aside>
+<!-- ==========================================
+       CONTENIDO PRINCIPAL
+  =========================================== -->
+<div class="flex-1 ml-16 flex flex-col min-w-0">
+<!-- TOP HEADER BAR MODO CLARO CORPORATIVO -->
+<header class="h-14 border-b border-[#E2E8F0] bg-white/95 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs" style="background-color: rgba(243, 247, 250, 0.95); border-color: rgb(216, 228, 238);">
+<div class="flex items-center gap-2 text-xs">
+<span class="font-bold text-[#0F172A]">Repuestos Sotomayor, C.A.</span>
+<span class="text-slate-400">/</span>
+<span class="font-bold text-[#2563EB]" id="current-module-title">Inventario Mayorista</span>
+<span class="hidden md:inline-block ml-2 text-[10px] text-slate-600 font-medium font-mono bg-[#EBF1F6] border border-[#E2E8F0] px-2 py-0.5 rounded-md">
+          Sucursal Valencia • Michelena
+        </span>
+</div>
+<!-- Buscador Global Estilo Command Palette -->
+<div class="flex-1 max-w-md mx-6">
+<div class="relative flex items-center">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" aria-hidden="true" class="lucide lucide-search w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+<input class="w-full bg-[#F0F4F8] hover:bg-[#EBF1F6] focus:bg-white text-xs text-[#0F172A] placeholder-slate-400 pl-9 pr-8 py-2 rounded-full border border-[#E2E8F0] focus:border-[#2563EB] focus:ring-2 focus:ring-blue-100 focus:outline-none transition font-medium" id="global-search" oninput="handleSearch(this.value)" placeholder="Buscar repuesto, OEM, marca o presiona '/' para atajo..." type="text">
+<span class="absolute right-3 text-[10px] font-mono text-slate-500 bg-white px-1.5 py-0.5 rounded border border-[#E2E8F0] shadow-2xs">/</span>
+</div>
+</div>
+<!-- Acciones Derechas: BCV Pill + Alertas + Perfil -->
+<div class="flex items-center gap-3">
+<!-- Píldora Tasa BCV Oficial en Vivo -->
+<div class="flex items-center gap-2 bg-[#EBF1F6] border border-[#E2E8F0] px-3 py-1 rounded-full text-xs shadow-2xs">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-bold text-slate-700">BCV: <span class="text-emerald-700 font-mono font-bold" id="bcv-val">Bs. 886,22</span></span>
+<div class="w-px h-3 bg-[#CBD5E1]"></div>
+<button class="text-slate-500 hover:text-blue-600 transition cursor-pointer" onclick="refreshBcv()" title="Actualizar Tasa BCV">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="refresh-cw" aria-hidden="true" class="lucide lucide-refresh-cw w-3 h-3" id="bcv-icon"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+</button>
+</div>
+<button class="relative w-8 h-8 rounded-lg bg-white hover:bg-[#F0F4F8] border border-[#E2E8F0] flex items-center justify-center text-slate-600 hover:text-[#0F172A] transition cursor-pointer shadow-2xs" onclick="filterCategory('Stock Crítico')" title="Alertas de Stock Crítico">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell" aria-hidden="true" class="lucide lucide-bell w-4 h-4"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#EA580C] ring-2 ring-white"></span>
+</button>
+<div class="h-4 w-px bg-[#E2E8F0]"></div>
+<div class="flex items-center gap-2 pl-1 cursor-pointer">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#2563EB] to-[#0284C7] text-white font-black text-xs flex items-center justify-center shadow-sm">
+            RS
+          </div>
+<div class="hidden lg:flex flex-col text-left">
+<span class="text-xs font-bold text-[#0F172A] leading-tight">Admin Sotomayor</span>
+<span class="text-[10px] text-blue-600 font-semibold">Master Mayorista</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ==========================================
+         MÓDULO: INVENTARIO MAYORISTA (TAB DEFAULT)
+    =========================================== -->
+<main class="tab-pane flex-1 p-6 flex flex-col gap-5 overflow-y-auto" id="tab-inventory">
+<!-- Header de Inventario + Conexión Supabase -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex flex-wrap items-center gap-3">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB]">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="boxes" aria-hidden="true" class="lucide lucide-boxes w-4 h-4"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"></path><path d="m7 16.5-4.74-2.85"></path><path d="m7 16.5 5-3"></path><path d="M7 16.5v5.17"></path><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"></path><path d="m17 16.5-5-3"></path><path d="m17 16.5 4.74-2.85"></path><path d="M17 16.5v5.17"></path><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"></path><path d="M12 8 7.26 5.15"></path><path d="m12 8 4.74-2.85"></path><path d="M12 13.5V8"></path></svg>
+</div>
+<div>
+<h1 class="text-lg font-bold text-[#0F172A] tracking-tight">Catálogo e Inventario Mayorista</h1>
+<p class="text-xs text-slate-500">Control de existencias bicanal, precios al mayor en USD y equivalentes BCV</p>
+</div>
+</div>
+<!-- Badge Supabase Conectado -->
+<div class="px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="database" aria-hidden="true" class="lucide lucide-database w-3.5 h-3.5 text-emerald-600"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg>
+<span class="">Supabase Conectado • 5.396 repuestos</span>
+</div>
+<button class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 border border-[#E2E8F0] text-[#2563EB] font-bold text-xs flex items-center gap-1.5 transition cursor-pointer shadow-2xs" onclick="openModal('sqlModal')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="code-2" aria-hidden="true" class="lucide lucide-code-2 w-3.5 h-3.5"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg>
+<span class="">Script SQL Mayorista</span>
+</button>
+</div>
+<div class="flex items-center gap-2.5">
+<button class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-[#E2E8F0] text-xs font-semibold text-slate-700 flex items-center gap-1.5 transition cursor-pointer shadow-2xs" onclick="switchTab('invoicing')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="file-plus" aria-hidden="true" class="lucide lucide-file-plus w-4 h-4 text-[#2563EB]"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M9 15h6"></path><path d="M12 18v-6"></path></svg>
+<span class="">Nueva Factura</span>
+</button>
+<button class="px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold flex items-center gap-1.5 transition glow-cobalt cursor-pointer" onclick="openModal('newPartModal')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" aria-hidden="true" class="lucide lucide-plus w-4 h-4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+<span class="">Ingresar Mercancía</span>
+</button>
+</div>
+</div>
+<!-- Segmento de Filtro Canal: Mayorista vs Todo -->
+<div class="flex flex-wrap items-center justify-between gap-3 bg-white p-2.5 rounded-2xl border border-[#E2E8F0] shadow-xs" style="background-color: #FCFDFF; border-color: #DDE7F0;">
+<div class="flex items-center gap-1.5 bg-[#F0F4F8] p-1 rounded-xl text-xs font-bold border border-[#E2E8F0]">
+<button class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer bg-[#2563EB] text-white shadow-sm" id="filter-btn-wholesale" onclick="setCatalogMode('wholesale')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="store" aria-hidden="true" class="lucide lucide-store w-3.5 h-3.5"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"></path><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"></path><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"></path></svg>
+<span class="">Disponibles en Mayorista</span>
+<span class="px-1.5 py-0.2 rounded-full bg-white/20 text-white text-[10px] font-mono">1.240</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer text-slate-600 hover:text-[#0F172A]" id="filter-btn-all" onclick="setCatalogMode('all')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="layers" aria-hidden="true" class="lucide lucide-layers w-3.5 h-3.5 text-blue-600"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg>
+<span class="">Catálogo General Sotomayor</span>
+<span class="px-1.5 py-0.2 rounded-full bg-white text-slate-700 border border-[#E2E8F0] text-[10px] font-mono">5.396</span>
+</button>
+</div>
+<!-- Categorías Pills -->
+<div class="flex items-center gap-2 overflow-x-auto text-xs">
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-[#2563EB] text-white font-semibold shadow-xs" onclick="filterCategory('Todos')">Todos</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-[#EA580C] font-semibold border border-orange-200 flex items-center gap-1" onclick="filterCategory('Stock Crítico')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-triangle" aria-hidden="true" class="lucide lucide-alert-triangle w-3.5 h-3.5 text-[#EA580C]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+<span class="">Stock Crítico</span>
+<span class="bg-[#EA580C] text-white text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold">4</span>
+</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-[#E2E8F0]" onclick="filterCategory('Tren Delantero')">Tren Delantero</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-[#E2E8F0]" onclick="filterCategory('Distribución')">Distribución</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-[#E2E8F0]" onclick="filterCategory('Motor y Enfriamiento')">Motor y Enfriamiento</button>
+<button class="cat-pill px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-[#E2E8F0]" onclick="filterCategory('Rodamientos')">Rodamientos</button>
+</div>
+</div>
+<!-- Barra de Filtros Secundaria -->
+<div class="flex flex-wrap items-center justify-between gap-3 text-xs">
+<div class="flex flex-wrap items-center gap-2">
+<!-- Dropdown Marca -->
+<select class="bg-white border border-[#E2E8F0] text-slate-700 rounded-lg px-3 py-1.5 focus:outline-none focus:border-[#2563EB] cursor-pointer shadow-2xs font-medium" id="supplier-select" onchange="filterSupplier(this.value)">
+<option value="Todos">Marca: Todas las Marcas</option>
+<option value="Cloyes USA">Cloyes USA</option>
+<option value="TRW Automotive">TRW Automotive</option>
+<option value="Timken Bearings">Timken Bearings</option>
+<option value="Monroe Shocks">Monroe Shocks</option>
+<option value="MOOG Chassis">MOOG Chassis</option>
+<option value="Denso Corp">Denso Corp</option>
+</select>
+<!-- Dropdown Nivel de Stock -->
+<select class="bg-white border border-[#E2E8F0] text-slate-700 rounded-lg px-3 py-1.5 focus:outline-none focus:border-[#2563EB] cursor-pointer shadow-2xs font-medium" id="stock-level-select" onchange="filterStockLevel(this.value)">
+<option value="Todos">Nivel de Stock: Todos</option>
+<option value="Alto">Stock Óptimo (&gt; Min)</option>
+<option value="Bajo">Stock Bajo (Reordenar)</option>
+<option value="Agotado">Agotado (0 und)</option>
+</select>
+<span class="text-slate-500 font-mono text-[11px] ml-2">Mostrando <b class="text-[#0F172A]" id="results-count">12</b> de 5.396 repuestos</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 border border-[#E2E8F0] text-slate-700 font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs" onclick="exportToCsv()">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="download" aria-hidden="true" class="lucide lucide-download w-3.5 h-3.5 text-slate-500"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg>
+<span class="">Exportar CSV</span>
+</button>
+</div>
+</div>
+<!-- TABLA PRINCIPAL DE INVENTARIO (NORDIC ICE & DEEP COBALT) -->
+<div class="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-xs" style="background-color: rgb(252, 253, 255); border-color: rgb(221, 231, 240);">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="border-b border-[#E2E8F0] bg-[#EBF1F6] text-[11px] font-semibold text-slate-600 uppercase tracking-wider" style="background-color: rgb(235, 242, 248); border-color: rgb(221, 231, 240);">
+<th class="py-3 px-4">Repuesto / Descripción</th>
+<th class="py-3 px-3">SKU / OEM</th>
+<th class="py-3 px-3">Categoría</th>
+<th class="py-3 px-3">Marca</th>
+<th class="py-3 px-3 text-center">Canal Mayorista</th>
+<th class="py-3 px-3">Stock Mayorista</th>
+<th class="py-3 px-3">Costo Real</th>
+<th class="py-3 px-3 text-right">Precio Mayorista</th>
+<th class="py-3 pr-4 pl-2 text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#E2E8F0]" id="inventory-tbody">
+<!-- Fila 1 -->
+<tr class="hover:bg-[#F8FAFC] transition group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center font-bold text-[#2563EB] text-xs shrink-0">
+                      CLO
+                    </div>
+<div>
+<div class="font-bold text-[#0F172A] group-hover:text-[#2563EB] transition">Kit de Tiempo Corsa / Aveo 1.6 (Correa + Tensor)</div>
+<div class="text-[11px] text-slate-500">Pasillo A-04 • Distribución Motor</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-bold text-[#2563EB]">CLO-09485</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-md bg-[#F0F4F8] text-slate-700 border border-[#E2E8F0] font-medium text-[11px]">Distribución</span>
+</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="font-semibold text-slate-800">Cloyes USA</span>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<button class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-[#1D4ED8] border border-blue-200 hover:bg-blue-100 transition cursor-pointer" onclick="toggleRowWholesale(this)">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse"></span>
+<span class="">Mayorista</span>
+</button>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 font-mono font-bold text-xs text-amber-700">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="boxes" aria-hidden="true" class="lucide lucide-boxes w-3 h-3 text-amber-600"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"></path><path d="m7 16.5-4.74-2.85"></path><path d="m7 16.5 5-3"></path><path d="M7 16.5v5.17"></path><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"></path><path d="m17 16.5-5-3"></path><path d="m17 16.5 4.74-2.85"></path><path d="M17 16.5v5.17"></path><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"></path><path d="M12 8 7.26 5.15"></path><path d="m12 8 4.74-2.85"></path><path d="M12 13.5V8"></path></svg> 20 unds. (Bajo)
+                    </span>
+<span class="text-[10px] text-slate-500">Detal: <b class="text-slate-800 font-mono">14</b> unds.</span>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-semibold text-slate-600">$18,50</td>
+<td class="py-3 px-3 text-right">
+<div class="font-extrabold text-[#0F172A] font-mono text-sm">$29,00</div>
+<div class="text-[10px] text-emerald-600 font-mono font-semibold">Bs. 25.700,38</div>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-white hover:bg-blue-50 border border-[#E2E8F0] text-[#2563EB] cursor-pointer shadow-2xs" onclick="openConfigModal('CLO-09485', 'Kit de Tiempo Corsa / Aveo 1.6', 20, 18.5, 29, 14)" title="Configurar Parámetros Mayoristas">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sliders" aria-hidden="true" class="lucide lucide-sliders w-3.5 h-3.5"><path d="M10 8h4"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M17 16h4"></path><path d="M19 12V3"></path><path d="M19 21v-5"></path><path d="M3 14h4"></path><path d="M5 10V3"></path><path d="M5 21v-7"></path></svg>
+</button>
+<button class="p-1.5 rounded-lg bg-white hover:bg-slate-50 border border-[#E2E8F0] text-slate-600 cursor-pointer shadow-2xs" onclick="openTransferModal('CLO-09485', 'Kit de Tiempo Corsa / Aveo 1.6', 20, 14)" title="Transferir Detal ↔ Mayorista">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left-right" aria-hidden="true" class="lucide lucide-arrow-left-right w-3.5 h-3.5"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="m16 21 4-4-4-4"></path><path d="M20 17H4"></path></svg>
+</button>
+<button class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 cursor-pointer shadow-2xs" onclick="addPartToCart('CLO-09485', 'Kit de Tiempo Corsa / Aveo 1.6', 29.0)" title="Añadir a Factura">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shopping-cart" aria-hidden="true" class="lucide lucide-shopping-cart w-3.5 h-3.5"><path d="m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18"></path><path d="M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25"></path><circle cx="18" cy="20" r="2"></circle><circle cx="8" cy="20" r="2"></circle></svg>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 2 -->
+<tr class="hover:bg-[#F8FAFC] transition group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center font-bold text-[#0284C7] text-xs shrink-0">
+                      TRW
+                    </div>
+<div>
+<div class="font-bold text-[#0F172A] group-hover:text-[#2563EB] transition">Punta de Tripoide Exterior Zotye Nómada / Lancer</div>
+<div class="text-[11px] text-slate-500">Pasillo B-12 • Tren Delantero</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-bold text-[#2563EB]">TRW-09484</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-md bg-[#F0F4F8] text-slate-700 border border-[#E2E8F0] font-medium text-[11px]">Tren Delantero</span>
+</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-blue-500"></span>
+<span class="font-semibold text-slate-800">TRW Auto</span>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<button class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-[#1D4ED8] border border-blue-200 hover:bg-blue-100 transition cursor-pointer" onclick="toggleRowWholesale(this)">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse"></span>
+<span class="">Mayorista</span>
+</button>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 font-mono font-bold text-xs text-emerald-700">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="boxes" aria-hidden="true" class="lucide lucide-boxes w-3 h-3 text-emerald-600"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"></path><path d="m7 16.5-4.74-2.85"></path><path d="m7 16.5 5-3"></path><path d="M7 16.5v5.17"></path><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"></path><path d="m17 16.5-5-3"></path><path d="m17 16.5 4.74-2.85"></path><path d="M17 16.5v5.17"></path><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"></path><path d="M12 8 7.26 5.15"></path><path d="m12 8 4.74-2.85"></path><path d="M12 13.5V8"></path></svg> 110 unds. (Óptimo)
+                    </span>
+<span class="text-[10px] text-slate-500">Detal: <b class="text-slate-800 font-mono">22</b> unds.</span>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-semibold text-slate-600">$14,00</td>
+<td class="py-3 px-3 text-right">
+<div class="font-extrabold text-[#0F172A] font-mono text-sm">$24,50</div>
+<div class="text-[10px] text-emerald-600 font-mono font-semibold">Bs. 21.712,39</div>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-white hover:bg-blue-50 border border-[#E2E8F0] text-[#2563EB] cursor-pointer shadow-2xs" onclick="openConfigModal('TRW-09484', 'Punta de Tripoide Exterior Zotye Nómada', 110, 14, 24.5, 22)">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sliders" aria-hidden="true" class="lucide lucide-sliders w-3.5 h-3.5"><path d="M10 8h4"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M17 16h4"></path><path d="M19 12V3"></path><path d="M19 21v-5"></path><path d="M3 14h4"></path><path d="M5 10V3"></path><path d="M5 21v-7"></path></svg>
+</button>
+<button class="p-1.5 rounded-lg bg-white hover:bg-slate-50 border border-[#E2E8F0] text-slate-600 cursor-pointer shadow-2xs" onclick="openTransferModal('TRW-09484', 'Punta de Tripoide Exterior Zotye Nómada', 110, 22)">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left-right" aria-hidden="true" class="lucide lucide-arrow-left-right w-3.5 h-3.5"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="m16 21 4-4-4-4"></path><path d="M20 17H4"></path></svg>
+</button>
+<button class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 cursor-pointer shadow-2xs" onclick="addPartToCart('TRW-09484', 'Punta de Tripoide Exterior Zotye Nómada', 24.5)">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shopping-cart" aria-hidden="true" class="lucide lucide-shopping-cart w-3.5 h-3.5"><path d="m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18"></path><path d="M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25"></path><circle cx="18" cy="20" r="2"></circle><circle cx="8" cy="20" r="2"></circle></svg>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 3 -->
+<tr class="hover:bg-[#F8FAFC] transition group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center font-bold text-amber-700 text-xs shrink-0">
+                      TIM
+                    </div>
+<div>
+<div class="font-bold text-[#0F172A] group-hover:text-[#2563EB] transition">Mozo Rodamiento Delantero Explorer / Ranger 4x4</div>
+<div class="text-[11px] text-slate-500">Pasillo C-02 • Rodamientos Pesados</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-bold text-[#2563EB]">TIM-09431</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-md bg-[#F0F4F8] text-slate-700 border border-[#E2E8F0] font-medium text-[11px]">Rodamientos</span>
+</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="font-semibold text-slate-800">Timken</span>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<button class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-[#1D4ED8] border border-blue-200 hover:bg-blue-100 transition cursor-pointer" onclick="toggleRowWholesale(this)">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse"></span>
+<span class="">Mayorista</span>
+</button>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 font-mono font-bold text-xs text-[#EA580C]">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-triangle" aria-hidden="true" class="lucide lucide-alert-triangle w-3 h-3 text-[#EA580C]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg> 18 unds. (Crítico)
+                    </span>
+<span class="text-[10px] text-slate-500">Detal: <b class="text-slate-800 font-mono">6</b> unds.</span>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-semibold text-slate-600">$42,00</td>
+<td class="py-3 px-3 text-right">
+<div class="font-extrabold text-[#0F172A] font-mono text-sm">$68,00</div>
+<div class="text-[10px] text-emerald-600 font-mono font-semibold">Bs. 60.262,96</div>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-white hover:bg-blue-50 border border-[#E2E8F0] text-[#2563EB] cursor-pointer shadow-2xs" onclick="openConfigModal('TIM-09431', 'Mozo Rodamiento Delantero Explorer', 18, 42, 68, 6)">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sliders" aria-hidden="true" class="lucide lucide-sliders w-3.5 h-3.5"><path d="M10 8h4"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M17 16h4"></path><path d="M19 12V3"></path><path d="M19 21v-5"></path><path d="M3 14h4"></path><path d="M5 10V3"></path><path d="M5 21v-7"></path></svg>
+</button>
+<button class="p-1.5 rounded-lg bg-white hover:bg-slate-50 border border-[#E2E8F0] text-slate-600 cursor-pointer shadow-2xs" onclick="openTransferModal('TIM-09431', 'Mozo Rodamiento Delantero Explorer', 18, 6)">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left-right" aria-hidden="true" class="lucide lucide-arrow-left-right w-3.5 h-3.5"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="m16 21 4-4-4-4"></path><path d="M20 17H4"></path></svg>
+</button>
+<button class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 cursor-pointer shadow-2xs" onclick="addPartToCart('TIM-09431', 'Mozo Rodamiento Delantero Explorer', 68.0)">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shopping-cart" aria-hidden="true" class="lucide lucide-shopping-cart w-3.5 h-3.5"><path d="m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18"></path><path d="M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25"></path><circle cx="18" cy="20" r="2"></circle><circle cx="8" cy="20" r="2"></circle></svg>
+</button>
+</div>
+</td>
+</tr>
+<!-- Fila 4 -->
+<tr class="hover:bg-[#F8FAFC] transition group">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center font-bold text-[#EA580C] text-xs shrink-0">
+                      SAB
+                    </div>
+<div>
+<div class="font-bold text-[#0F172A] group-hover:text-[#2563EB] transition">Estopera Cigüeñal Trasera Silverado 5.3 Vortec</div>
+<div class="text-[11px] text-slate-500">Estante F-11 • Empacaduras Motor</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-bold text-[#2563EB]">SAB-09477</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-md bg-[#F0F4F8] text-slate-700 border border-[#E2E8F0] font-medium text-[11px]">Empacaduras</span>
+</td>
+<td class="py-3 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-slate-400"></span>
+<span class="font-semibold text-slate-800">Sabó Brasil</span>
+</div>
+</td>
+<td class="py-3 px-3 text-center">
+<button class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#F0F4F8] text-slate-600 border border-[#E2E8F0] hover:text-[#0F172A] transition cursor-pointer" onclick="toggleRowWholesale(this)">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+<span class="">Solo Detal</span>
+</button>
+</td>
+<td class="py-3 px-3">
+<div class="flex flex-col gap-0.5">
+<span class="inline-flex items-center gap-1 font-mono font-bold text-xs text-[#EA580C]">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-circle" aria-hidden="true" class="lucide lucide-alert-circle w-3 h-3"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg> 0 unds. (Agotado)
+                    </span>
+<span class="text-[10px] text-slate-500">Detal: <b class="text-slate-800 font-mono">12</b> unds.</span>
+</div>
+</td>
+<td class="py-3 px-3 font-mono font-semibold text-slate-600">$9,80</td>
+<td class="py-3 px-3 text-right">
+<div class="font-extrabold text-[#0F172A] font-mono text-sm">$17,50</div>
+<div class="text-[10px] text-emerald-600 font-mono font-semibold">Bs. 15.508,85</div>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-white hover:bg-blue-50 border border-[#E2E8F0] text-[#2563EB] cursor-pointer shadow-2xs" onclick="openConfigModal('SAB-09477', 'Estopera Cigüeñal Silverado 5.3', 0, 9.8, 17.5, 12)">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sliders" aria-hidden="true" class="lucide lucide-sliders w-3.5 h-3.5"><path d="M10 8h4"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M17 16h4"></path><path d="M19 12V3"></path><path d="M19 21v-5"></path><path d="M3 14h4"></path><path d="M5 10V3"></path><path d="M5 21v-7"></path></svg>
+</button>
+<button class="p-1.5 rounded-lg bg-white hover:bg-slate-50 border border-[#E2E8F0] text-slate-600 cursor-pointer shadow-2xs" onclick="openTransferModal('SAB-09477', 'Estopera Cigüeñal Silverado 5.3', 0, 12)">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left-right" aria-hidden="true" class="lucide lucide-arrow-left-right w-3.5 h-3.5"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="m16 21 4-4-4-4"></path><path d="M20 17H4"></path></svg>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Paginación de Tabla -->
+<div class="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-t border-[#E2E8F0] bg-[#EBF1F6] text-xs text-slate-600" style="background-color: rgb(235, 242, 248); border-color: rgb(221, 231, 240);">
+<div class="">Mostrando <b class="text-[#0F172A]">1</b> a <b class="text-[#0F172A]">4</b> de <b class="text-[#0F172A]">5.396</b> repuestos sincronizados</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-white border border-[#CBD5E1] text-slate-400 cursor-not-allowed">Anterior</button>
+<span class="font-mono text-[#0F172A] px-2 font-bold">Página 1 de 216</span>
+<button class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 border border-[#CBD5E1] text-slate-800 font-semibold cursor-pointer shadow-2xs">Siguiente</button>
+</div>
+</div>
+</div>
+</main>
+<!-- ==========================================
+         MÓDULO: FACTURACIÓN MAYORISTA (TAB)
+    =========================================== -->
+<main class="tab-pane hidden flex-1 p-6 flex flex-col gap-6 overflow-y-auto" id="tab-invoicing">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div>
+<h1 class="text-lg font-bold text-[#0F172A] tracking-tight">Emisión de Facturas y Notas de Entrega Mayorista</h1>
+<p class="text-xs text-slate-500">Cálculo de impuestos SENIAT o Notas Exentas, comisiones comerciales e inventario al día</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 border border-[#E2E8F0] text-xs font-semibold text-slate-700 flex items-center gap-1.5 cursor-pointer shadow-2xs" onclick="switchTab('cxc')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clipboard-list" aria-hidden="true" class="lucide lucide-clipboard-list w-4 h-4 text-emerald-600"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg>
+<span class="">Ver Cuentas por Cobrar</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Izquierda: Formulario + Items -->
+<div class="lg:col-span-2 space-y-5">
+<div class="bg-white p-5 rounded-2xl border border-[#E2E8F0] grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-xs">
+<div>
+<label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Cliente Mayorista</label>
+<select class="w-full bg-[#F0F4F8] border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#0F172A] focus:outline-none focus:border-[#2563EB]" id="invoice-client">
+<option>Autorepuestos El Viñedo, C.A. (J-31294851-2) — Distribuidor (-10%)</option>
+<option>Inversiones Mecánica Carabobo, C.A. (J-40192837-9) — Mayorista Nivel 1 (-5%)</option>
+<option>Importadora Los Guayos Motor, C.A. (J-29847162-0) — Estándar</option>
+</select>
+</div>
+<div>
+<label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Asesor de Ventas (Comisión)</label>
+<select class="w-full bg-[#F0F4F8] border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#0F172A] focus:outline-none focus:border-[#2563EB]" id="invoice-seller">
+<option>Víctor Reyes — Comisión: 5.0% (Valencia / Zona Norte)</option>
+<option>Gonzalo Sotomayor — Comisión: 4.5% (Cuentas Clave)</option>
+<option>Carlos Méndez — Comisión: 5.0% (Aragua / Maracay)</option>
+</select>
+</div>
+<div>
+<label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Condición Comercial</label>
+<select class="w-full bg-[#F0F4F8] border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#0F172A] focus:outline-none focus:border-[#2563EB]" id="invoice-condition">
+<option>Contado (Divisas / Zelle)</option>
+<option>Pago Móvil / Transferencia (BCV)</option>
+<option>Crédito 15 Días</option>
+<option>Crédito 30 Días</option>
+</select>
+</div>
+<div>
+<label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Tipo de Documento Legal</label>
+<select class="w-full bg-[#F0F4F8] border border-[#E2E8F0] rounded-xl px-3 py-2 text-xs font-semibold text-[#0F172A] focus:outline-none focus:border-[#2563EB]" id="invoice-type">
+<option>Nota de Entrega Mayorista (Exenta)</option>
+<option>Factura Fiscal SENIAT (+16% IVA)</option>
+<option>Cotización Mayorista Proforma</option>
+</select>
+</div>
+</div>
+<!-- Carrito de Factura -->
+<div class="bg-white p-5 rounded-2xl border border-[#E2E8F0] shadow-xs">
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">Líneas de Repuestos en Documento</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="border-b border-[#E2E8F0] text-slate-500 uppercase font-semibold">
+<th class="py-2 px-2">SKU</th>
+<th class="py-2 px-2">Repuesto</th>
+<th class="py-2 px-2 text-center">Cant.</th>
+<th class="py-2 px-2 text-right">Precio ($)</th>
+<th class="py-2 px-2 text-right">Subtotal ($)</th>
+<th class="py-2 px-2 text-right"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#E2E8F0]" id="invoice-cart-body">
+<tr>
+<td class="py-3 px-2 font-mono font-bold text-[#2563EB]">CLO-09485</td>
+<td class="py-3 px-2 text-[#0F172A] font-medium">Kit de Tiempo Corsa / Aveo 1.6</td>
+<td class="py-3 px-2 text-center font-bold">
+<input class="w-16 bg-[#F0F4F8] border border-[#CBD5E1] rounded text-center text-[#0F172A] font-mono py-1" min="1" type="number" value="6">
+</td>
+<td class="py-3 px-2 text-right font-mono text-slate-700">$29,00</td>
+<td class="py-3 px-2 text-right font-mono font-bold text-[#0F172A]">$174,00</td>
+<td class="py-3 px-2 text-right">
+<button class="text-slate-400 hover:text-red-500 transition"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trash-2" aria-hidden="true" class="lucide lucide-trash-2 w-4 h-4"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+</td>
+</tr>
+<tr>
+<td class="py-3 px-2 font-mono font-bold text-[#2563EB]">MON-09482</td>
+<td class="py-3 px-2 text-[#0F172A] font-medium">Amortiguador Delantero Gas Cherokee</td>
+<td class="py-3 px-2 text-center font-bold">
+<input class="w-16 bg-[#F0F4F8] border border-[#CBD5E1] rounded text-center text-[#0F172A] font-mono py-1" min="1" type="number" value="4">
+</td>
+<td class="py-3 px-2 text-right font-mono text-slate-700">$42,00</td>
+<td class="py-3 px-2 text-right font-mono font-bold text-[#0F172A]">$168,00</td>
+<td class="py-3 px-2 text-right">
+<button class="text-slate-400 hover:text-red-500 transition"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trash-2" aria-hidden="true" class="lucide lucide-trash-2 w-4 h-4"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Derecha: Resumen de Pago Bimoneda -->
+<div class="space-y-4">
+<div class="bg-white p-5 rounded-2xl border border-[#E2E8F0] shadow-md space-y-4">
+<div class="flex items-center justify-between border-b border-[#E2E8F0] pb-3">
+<span class="text-xs font-bold uppercase tracking-wider text-slate-600">Liquidación y Totales</span>
+<span class="text-xs font-mono font-bold text-emerald-700">Tasa: Bs. 886,22</span>
+</div>
+<div class="space-y-2.5 text-xs">
+<div class="flex justify-between text-slate-600">
+<span class="">Subtotal Bruto:</span>
+<span class="font-mono font-bold text-[#0F172A]">$342,00 USD</span>
+</div>
+<div class="flex justify-between text-emerald-700 font-semibold">
+<span class="">Descuento Distribuidor (-10%):</span>
+<span class="font-mono">-$34,20 USD</span>
+</div>
+<div class="flex justify-between text-slate-600">
+<span class="">IVA (0% Exento):</span>
+<span class="font-mono text-slate-800">$0,00 USD</span>
+</div>
+<div class="pt-3 border-t border-[#E2E8F0] flex justify-between items-baseline">
+<span class="text-sm font-bold text-[#0F172A]">TOTAL A PAGAR:</span>
+<span class="text-2xl font-black text-[#2563EB] font-mono">$307,80</span>
+</div>
+<div class="bg-[#EBF1F6] p-3 rounded-xl border border-[#E2E8F0] flex justify-between items-center">
+<span class="text-[11px] text-slate-600 font-medium">Equivalente BCV:</span>
+<span class="font-mono font-bold text-emerald-700 text-sm">Bs. 272.778,51</span>
+</div>
+</div>
+<!-- Comisión Asesor -->
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs space-y-1">
+<div class="flex justify-between font-bold text-blue-900">
+<span class="">Comisión Asesor (Víctor Reyes)</span>
+<span class="">5.0%</span>
+</div>
+<div class="flex justify-between text-blue-700 text-[11px]">
+<span class="">Acreditar a liquidación:</span>
+<span class="font-bold font-mono">+$15,39 USD (Bs. 13.638,92)</span>
+</div>
+</div>
+<button class="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white py-3 rounded-xl font-bold text-xs glow-cobalt flex items-center justify-center gap-2 cursor-pointer transition" onclick="toast('Factura generada en formato imprimible')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="printer" aria-hidden="true" class="lucide lucide-printer w-4 h-4"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>
+<span class="">Emitir e Imprimir Documento</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- ==========================================
+         MÓDULO: CUENTAS POR COBRAR (CxC) (TAB)
+    =========================================== -->
+<main class="tab-pane hidden flex-1 p-6 flex flex-col gap-6 overflow-y-auto" id="tab-cxc">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div>
+<h1 class="text-lg font-bold text-[#0F172A] tracking-tight">Cuentas por Cobrar (CxC) &amp; Gestión de Abonos</h1>
+<p class="text-xs text-slate-500">Seguimiento de crédito comercial, abonos en divisas o bolívares y cobranza por WhatsApp</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 border border-[#E2E8F0] text-xs font-semibold text-slate-700 flex items-center gap-1.5 cursor-pointer shadow-2xs" onclick="toast('Reporte consolidado de cartera exportado')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="file-spreadsheet" aria-hidden="true" class="lucide lucide-file-spreadsheet w-4 h-4 text-emerald-600"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M8 13h2"></path><path d="M14 13h2"></path><path d="M8 17h2"></path><path d="M14 17h2"></path></svg>
+<span class="">Exportar Estado de Cartera</span>
+</button>
+</div>
+</div>
+<!-- KPI Cards CxC Nórdicos -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs">
+<div class="flex items-center justify-between text-slate-500 mb-2">
+<span class="text-xs font-bold uppercase tracking-wider">Total por Cobrar</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="dollar-sign" aria-hidden="true" class="lucide lucide-dollar-sign w-4 h-4 text-[#2563EB]"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+</div>
+<div class="text-2xl font-black text-[#0F172A] font-mono">$2.896,30</div>
+<div class="text-xs text-emerald-700 font-mono font-semibold mt-1">Bs. 2.566.757,98</div>
+<div class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-[#E2E8F0]">3 facturas con saldo activo</div>
+</div>
+<div class="bg-white p-4 rounded-2xl border border-orange-200 bg-gradient-to-br from-white to-orange-50/40 shadow-xs">
+<div class="flex items-center justify-between text-[#EA580C] mb-2">
+<span class="text-xs font-bold uppercase tracking-wider">Cartera Vencida</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-triangle" aria-hidden="true" class="lucide lucide-alert-triangle w-4 h-4 text-[#EA580C]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+</div>
+<div class="text-2xl font-black text-[#EA580C] font-mono">$882,00</div>
+<div class="text-xs text-orange-700 font-mono font-semibold mt-1">Bs. 781.646,04</div>
+<div class="text-[10px] text-[#EA580C] font-semibold mt-2 pt-2 border-t border-orange-200">⚠️ Requiere gestión de cobro inmediata</div>
+</div>
+<div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs">
+<div class="flex items-center justify-between text-slate-500 mb-2">
+<span class="text-xs font-bold uppercase tracking-wider">Cobrado este Mes</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-4 h-4 text-emerald-600"><circle cx="12" cy="12" r="10"></circle><path d="m16 9-5.5 5.5L8 12"></path></svg>
+</div>
+<div class="text-2xl font-black text-emerald-700 font-mono">$2.278,00</div>
+<div class="text-xs text-slate-600 font-mono mt-1">Bs. 2.018.809,16</div>
+<div class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-[#E2E8F0]">Recaudado en caja y Zelle</div>
+</div>
+<div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs">
+<div class="flex items-center justify-between text-slate-500 mb-2">
+<span class="text-xs font-bold uppercase tracking-wider">Clientes con Crédito</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" aria-hidden="true" class="lucide lucide-users w-4 h-4 text-[#0284C7]"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+</div>
+<div class="text-2xl font-black text-[#0F172A] font-mono">3 / 4</div>
+<div class="text-xs text-slate-600 mt-1">Aliados comerciales activos</div>
+<div class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-[#E2E8F0]">Límite de crédito verificado</div>
+</div>
+</div>
+<!-- Tabla CxC Nórdica -->
+<div class="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-xs">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="border-b border-[#E2E8F0] bg-[#EBF1F6] text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
+<th class="py-3 px-4">Documento</th>
+<th class="py-3 px-3">Cliente Mayorista</th>
+<th class="py-3 px-3">Asesor</th>
+<th class="py-3 px-3">Vencimiento</th>
+<th class="py-3 px-3 text-right">Monto Original</th>
+<th class="py-3 px-3 text-right">Abonado ($)</th>
+<th class="py-3 px-3 text-right">Saldo Pendiente</th>
+<th class="py-3 px-3 text-center">Estado</th>
+<th class="py-3 pr-4 pl-2 text-right">Cobranza</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#E2E8F0]">
+<!-- Factura Vencida -->
+<tr class="hover:bg-[#F8FAFC] transition">
+<td class="py-3 px-4 font-mono font-bold text-[#EA580C]">FAC-008423</td>
+<td class="py-3 px-3">
+<div class="font-bold text-[#0F172A]">Multiservicios y Repuestos Aragua, C.A.</div>
+<div class="text-[10px] font-mono text-slate-500">RIF: J-41029384-5 • Maracay</div>
+</td>
+<td class="py-3 px-3 text-slate-700">Carlos Méndez</td>
+<td class="py-3 px-3">
+<span class="text-[#EA580C] font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#EA580C] animate-pulse"></span>
+                    17 Oct 2026 (Vencida)
+                  </span>
+</td>
+<td class="py-3 px-3 text-right font-mono text-slate-700">$882,00</td>
+<td class="py-3 px-3 text-right font-mono text-slate-500">$0,00</td>
+<td class="py-3 px-3 text-right font-mono font-extrabold text-[#EA580C] text-sm">$882,00</td>
+<td class="py-3 px-3 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-orange-100 text-[#EA580C] border border-orange-200">Vencida</span>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 cursor-pointer shadow-2xs" onclick="toast('Recordatorio de deuda enviado por WhatsApp al cliente')" title="Cobrar por WhatsApp">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="message-circle" aria-hidden="true" class="lucide lucide-message-circle w-3.5 h-3.5"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs cursor-pointer shadow-xs" onclick="toast('Modal de abono abierto')" title="Registrar Abono">
+                      Abonar
+                    </button>
+</div>
+</td>
+</tr>
+<!-- Factura Parcial -->
+<tr class="hover:bg-[#F8FAFC] transition">
+<td class="py-3 px-4 font-mono font-bold text-[#2563EB]">FAC-008422</td>
+<td class="py-3 px-3">
+<div class="font-bold text-[#0F172A]">Inversiones Mecánica Carabobo, C.A.</div>
+<div class="text-[10px] font-mono text-slate-500">RIF: J-40192837-9 • Naguanagua</div>
+</td>
+<td class="py-3 px-3 text-slate-700">Gonzalo Sotomayor</td>
+<td class="py-3 px-3 text-slate-500">29 Oct 2026</td>
+<td class="py-3 px-3 text-right font-mono text-slate-700">$2.369,30</td>
+<td class="py-3 px-3 text-right font-mono text-emerald-700 font-bold">$1.000,00</td>
+<td class="py-3 px-3 text-right font-mono font-extrabold text-[#2563EB] text-sm">$1.369,30</td>
+<td class="py-3 px-3 text-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Abono Parcial</span>
+</td>
+<td class="py-3 pr-4 pl-2 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 cursor-pointer shadow-2xs" onclick="toast('Recordatorio de saldo enviado por WhatsApp')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="message-circle" aria-hidden="true" class="lucide lucide-message-circle w-3.5 h-3.5"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs cursor-pointer shadow-xs" onclick="toast('Modal de abono abierto')">
+                      Abonar
+                    </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- ==========================================
+         MÓDULO: COMISIONES DE ASESORES (TAB)
+    =========================================== -->
+<main class="tab-pane hidden flex-1 p-6 flex flex-col gap-6 overflow-y-auto" id="tab-commissions">
+<div class="flex items-center justify-between">
+<div>
+<h1 class="text-lg font-bold text-[#0F172A] tracking-tight">Liquidación de Comisiones de Venta Mayorista</h1>
+<p class="text-xs text-slate-500">Corte mensual para asesores de calle y mostrador central en USD ($) y Bolívares (BCV)</p>
+</div>
+<button class="px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer glow-cobalt" onclick="toast('Corte de comisiones generado con éxito')">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check" aria-hidden="true" class="lucide lucide-check w-4 h-4"><path d="M20 6 9 17l-5-5"></path></svg>
+<span class="">Liquidar Periodo Octubre</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-blue-100 text-[#1D4ED8] border border-blue-200 font-bold text-xs flex items-center justify-center">VR</div>
+<div>
+<h4 class="text-xs font-bold text-[#0F172A]">Víctor Reyes</h4>
+<p class="text-[10px] text-slate-500">Valencia Norte</p>
+</div>
+</div>
+<span class="text-[10px] font-mono font-bold bg-[#EBF1F6] text-[#0F172A] px-2 py-0.5 rounded">5.0%</span>
+</div>
+<div class="space-y-1.5 text-xs pt-3 border-t border-[#E2E8F0]">
+<div class="flex justify-between text-slate-500"><span class="">Ventas:</span><span class="font-mono text-slate-800">$1.923,00</span></div>
+<div class="flex justify-between text-emerald-700 font-bold"><span class="">Comisión:</span><span class="font-mono">+$96,15</span></div>
+</div>
+</div>
+<div class="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-cyan-100 text-cyan-800 border border-cyan-200 font-bold text-xs flex items-center justify-center">GS</div>
+<div>
+<h4 class="text-xs font-bold text-[#0F172A]">Gonzalo Sotomayor</h4>
+<p class="text-[10px] text-slate-500">Cuentas Clave</p>
+</div>
+</div>
+<span class="text-[10px] font-mono font-bold bg-[#EBF1F6] text-[#0F172A] px-2 py-0.5 rounded">4.5%</span>
+</div>
+<div class="space-y-1.5 text-xs pt-3 border-t border-[#E2E8F0]">
+<div class="flex justify-between text-slate-500"><span class="">Ventas:</span><span class="font-mono text-slate-800">$2.369,30</span></div>
+<div class="flex justify-between text-emerald-700 font-bold"><span class="">Comisión:</span><span class="font-mono">+$106,62</span></div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- ==========================================
+       MODAL 1: CONFIGURACIÓN DE REPUESTO MAYORISTA
+  =========================================== -->
+<div class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4" id="configModal">
+<div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-[#E2E8F0] text-xs space-y-4">
+<div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-blue-50 text-[#2563EB] border border-blue-200 flex items-center justify-center font-bold">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sliders" aria-hidden="true" class="lucide lucide-sliders w-4 h-4"><path d="M10 8h4"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M17 16h4"></path><path d="M19 12V3"></path><path d="M19 21v-5"></path><path d="M3 14h4"></path><path d="M5 10V3"></path><path d="M5 21v-7"></path></svg>
+</div>
+<div>
+<h3 class="font-bold text-sm text-[#0F172A]">Configuración de Repuesto Mayorista</h3>
+<p class="text-[11px] text-slate-500" id="modal-sku-subtitle">SKU: CLO-09485</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-700 cursor-pointer" onclick="closeModal('configModal')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" aria-hidden="true" class="lucide lucide-x w-4 h-4"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block font-bold text-slate-700 mb-1">Stock Mayorista (Unidades)</label>
+<input class="w-full bg-[#F0F4F8] border border-[#CBD5E1] rounded-xl px-3 py-2 text-[#0F172A] font-mono font-bold focus:border-[#2563EB] focus:outline-none" id="modal-w-stock" type="number" value="20">
+</div>
+<div>
+<label class="block font-bold text-slate-700 mb-1">Stock Mínimo (Alerta)</label>
+<input class="w-full bg-[#F0F4F8] border border-[#CBD5E1] rounded-xl px-3 py-2 text-[#0F172A] font-mono focus:border-[#2563EB] focus:outline-none" type="number" value="10">
+</div>
+<div>
+<label class="block font-bold text-slate-700 mb-1">Costo Real Mayorista ($ USD)</label>
+<input class="w-full bg-[#F0F4F8] border border-[#CBD5E1] rounded-xl px-3 py-2 text-[#0F172A] font-mono font-bold focus:border-[#2563EB] focus:outline-none" id="modal-w-cost" step="0.1" type="number" value="18.5">
+</div>
+<div>
+<label class="block font-bold text-slate-700 mb-1">Precio Mayorista ($ USD)</label>
+<input class="w-full bg-[#F0F4F8] border border-blue-400 rounded-xl px-3 py-2 text-[#1D4ED8] font-mono font-bold focus:border-[#2563EB] focus:outline-none" id="modal-w-price" step="0.1" type="number" value="29.0">
+</div>
+</div>
+<div class="bg-[#EBF1F6] p-3 rounded-xl border border-[#E2E8F0] flex justify-between items-center text-[11px]">
+<span class="text-slate-600">Margen Mayorista Estimado:</span>
+<span class="text-emerald-700 font-bold font-mono">+36,2% ($10,50 / und)</span>
+</div>
+<div class="flex justify-end gap-2 pt-3 border-t border-[#E2E8F0]">
+<button class="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 border border-[#CBD5E1] text-slate-700 font-semibold cursor-pointer" onclick="closeModal('configModal')">Cancelar</button>
+<button class="px-5 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold cursor-pointer glow-cobalt" onclick="saveWholesaleConfig()">Guardar Parámetros</button>
+</div>
+</div>
+</div>
+<!-- ==========================================
+       MODAL 2: TRANSFERENCIA ENTRE DETAL Y MAYOR
+  =========================================== -->
+<div class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4" id="transferModal">
+<div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-[#E2E8F0] text-xs space-y-4">
+<div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+<div class="flex items-center gap-2">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-left-right" aria-hidden="true" class="lucide lucide-arrow-left-right w-4 h-4 text-[#2563EB]"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="m16 21 4-4-4-4"></path><path d="M20 17H4"></path></svg>
+<h3 class="font-bold text-sm text-[#0F172A]">Transferir Stock entre Canales</h3>
+</div>
+<button class="text-slate-400 hover:text-slate-700 cursor-pointer" onclick="closeModal('transferModal')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" aria-hidden="true" class="lucide lucide-x w-4 h-4"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="p-3 rounded-xl bg-[#F0F4F8] border border-[#E2E8F0]">
+<span class="text-[10px] text-blue-700 font-bold uppercase block mb-1">Mostrador Detal</span>
+<span class="text-xl font-black text-[#0F172A] font-mono" id="transfer-detal-val">14</span> <span class="text-slate-500">unds.</span>
+</div>
+<div class="p-3 rounded-xl bg-[#F0F4F8] border border-[#E2E8F0]">
+<span class="text-[10px] text-blue-700 font-bold uppercase block mb-1">Depósito Mayorista</span>
+<span class="text-xl font-black text-[#0F172A] font-mono" id="transfer-mayor-val">20</span> <span class="text-slate-500">unds.</span>
+</div>
+</div>
+<div>
+<label class="block font-bold text-slate-700 mb-1">Dirección del Movimiento:</label>
+<select class="w-full bg-[#F0F4F8] border border-[#CBD5E1] rounded-xl px-3 py-2 text-[#0F172A] font-semibold">
+<option>Detal (Tienda) ➔ Mayorista (Galpón)</option>
+<option>Mayorista (Galpón) ➔ Detal (Tienda)</option>
+</select>
+</div>
+<div>
+<label class="block font-bold text-slate-700 mb-1">Cantidad a Mover:</label>
+<input class="w-full bg-[#F0F4F8] border border-[#CBD5E1] rounded-xl px-3 py-2 text-[#0F172A] font-mono font-bold" min="1" type="number" value="5">
+</div>
+<div class="flex justify-end gap-2 pt-3 border-t border-[#E2E8F0]">
+<button class="px-4 py-2 rounded-xl bg-white border border-[#CBD5E1] text-slate-700 font-semibold cursor-pointer" onclick="closeModal('transferModal')">Cancelar</button>
+<button class="px-5 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold cursor-pointer glow-cobalt" onclick="confirmTransfer()">Confirmar Transferencia</button>
+</div>
+</div>
+</div>
+<!-- ==========================================
+       MODAL 3: SCRIPT SQL SUPABASE
+  =========================================== -->
+<div class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-center justify-center p-4" id="sqlModal">
+<div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-[#E2E8F0] text-xs space-y-4">
+<div class="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+<div class="flex items-center gap-2">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="database" aria-hidden="true" class="lucide lucide-database w-4 h-4 text-emerald-600"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg>
+<h3 class="font-bold text-sm text-[#0F172A]">Script SQL de Migración Supabase</h3>
+</div>
+<button class="text-slate-400 hover:text-slate-700 cursor-pointer" onclick="closeModal('sqlModal')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" aria-hidden="true" class="lucide lucide-x w-4 h-4"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+</div>
+<p class="text-slate-600 text-[11px] leading-relaxed">
+        Ejecuta estas sentencias en el SQL Editor de tu proyecto Supabase para persistir permanentemente los campos de mayorista sin alterar las tablas detal:
+      </p>
+<pre class="bg-[#F0F4F8] p-4 rounded-xl border border-[#CBD5E1] font-mono text-[#1D4ED8] text-[11px] overflow-x-auto select-all leading-relaxed font-semibold">ALTER TABLE products 
+ADD COLUMN IF NOT EXISTS is_wholesale BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS wholesale_stock INTEGER DEFAULT 0,
+ADD COLUMN IF NOT EXISTS wholesale_cost NUMERIC(10,2) DEFAULT 0.00,
+ADD COLUMN IF NOT EXISTS wholesale_price NUMERIC(10,2) DEFAULT 0.00,
+ADD COLUMN IF NOT EXISTS wholesale_min_stock INTEGER DEFAULT 2;</pre>
+<div class="flex justify-end gap-2 pt-2 border-t border-[#E2E8F0]">
+<button class="px-4 py-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold flex items-center gap-1.5 cursor-pointer glow-cobalt" onclick="copySql()">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="copy" aria-hidden="true" class="lucide lucide-copy w-3.5 h-3.5"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+<span class="">Copiar al Portapapeles</span>
+</button>
+</div>
+</div>
+</div>
+<!-- NOTIFICACIÓN TOAST DINÁMICA -->
+<div class="hidden fixed bottom-5 right-5 z-50 bg-white text-[#0F172A] border border-[#CBD5E1] px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 text-xs font-semibold animate-bounce" id="toast">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" aria-hidden="true" class="lucide lucide-check-circle w-4 h-4 text-[#2563EB]"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
+<span id="toast-text" class="">Acción completada con éxito</span>
+</div>
+<!-- LOGIC SCRIPT -->
+<script>
+    // Inicializar Iconos Lucide
+    lucide.createIcons();
+
+    // Navegación de Pestañas
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('bg-blue-50', 'text-[#1D4ED8]', 'border-blue-200');
+        el.classList.add('text-slate-600');
+      });
+
+      const activePane = document.getElementById('tab-' + tabId);
+      const activeNav = document.getElementById('nav-' + tabId);
+
+      if (activePane) activePane.classList.remove('hidden');
+      if (activeNav) {
+        activeNav.classList.remove('text-slate-600');
+        activeNav.classList.add('bg-blue-50', 'text-[#1D4ED8]', 'border-blue-200');
+      }
+
+      const titles = {
+        inventory: 'Inventario Mayorista',
+        invoicing: 'Facturación Mayorista',
+        receiving: 'Recepción de Mercancía',
+        cxc: 'Cuentas por Cobrar (CxC)',
+        commissions: 'Comisiones de Asesores',
+        clients: 'Cartera de Clientes'
+      };
+      document.getElementById('current-module-title').innerText = titles[tabId] || 'Panel Mayorista';
+      lucide.createIcons();
+    }
+
+    // Modal Handlers
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Config Modal
+    function openConfigModal(sku, name, stock, cost, price, retail) {
+      document.getElementById('modal-sku-subtitle').innerText = `${sku} — ${name}`;
+      document.getElementById('modal-w-stock').value = stock;
+      document.getElementById('modal-w-cost').value = cost;
+      document.getElementById('modal-w-price').value = price;
+      openModal('configModal');
+    }
+
+    function saveWholesaleConfig() {
+      closeModal('configModal');
+      toast('Configuración mayorista guardada con éxito');
+    }
+
+    // Transfer Modal
+    function openTransferModal(sku, name, mayorStock, detalStock) {
+      document.getElementById('transfer-detal-val').innerText = detalStock;
+      document.getElementById('transfer-mayor-val').innerText = mayorStock;
+      openModal('transferModal');
+    }
+
+    function confirmTransfer() {
+      closeModal('transferModal');
+      toast('Transferencia de existencias efectuada correctamente');
+    }
+
+    // Toggle Wholesale Switch en Fila
+    function toggleRowWholesale(btn) {
+      const isWholesale = btn.innerText.includes('Mayorista');
+      if (isWholesale) {
+        btn.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-[#F0F4F8] text-slate-600 border border-[#E2E8F0] hover:text-[#0F172A] transition cursor-pointer";
+        btn.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span><span>Solo Detal</span>`;
+        toast('Repuesto asignado exclusivamente a mostrador detal');
+      } else {
+        btn.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-[#1D4ED8] border border-blue-200 hover:bg-blue-100 transition cursor-pointer";
+        btn.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-pulse"></span><span>Mayorista</span>`;
+        toast('Repuesto habilitado para ventas al mayor');
+      }
+    }
+
+    // Carrito
+    function addPartToCart(sku, name, price) {
+      toast(`${sku} agregado al documento`);
+      switchTab('invoicing');
+    }
+
+    // Toast
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-text').innerText = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3200);
+    }
+
+    // Tasa BCV
+    function refreshBcv() {
+      const icon = document.getElementById('bcv-icon');
+      icon.classList.add('animate-spin');
+      setTimeout(() => {
+        icon.classList.remove('animate-spin');
+        toast('Tasa oficial BCV sincronizada con DolarApi: Bs. 886,22');
+      }, 700);
+    }
+
+    // Búsqueda
+    function handleSearch(val) {
+      const q = val.toLowerCase();
+      const rows = document.querySelectorAll('#inventory-tbody tr');
+      let visible = 0;
+      rows.forEach(r => {
+        const text = r.innerText.toLowerCase();
+        if (text.includes(q)) {
+          r.style.display = '';
+          visible++;
+        } else {
+          r.style.display = 'none';
+        }
+      });
+      document.getElementById('results-count').innerText = visible;
+    }
+
+    // Atajo '/'
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+        e.preventDefault();
+        document.getElementById('global-search').focus();
+      }
+    });
+
+    // Copiar SQL
+    function copySql() {
+      navigator.clipboard.writeText("ALTER TABLE products ADD COLUMN IF NOT EXISTS is_wholesale BOOLEAN DEFAULT FALSE, ADD COLUMN IF NOT EXISTS wholesale_stock INTEGER DEFAULT 0, ADD COLUMN IF NOT EXISTS wholesale_cost NUMERIC(10,2) DEFAULT 0.00, ADD COLUMN IF NOT EXISTS wholesale_price NUMERIC(10,2) DEFAULT 0.00, ADD COLUMN IF NOT EXISTS wholesale_min_stock INTEGER DEFAULT 2;");
+      toast('Script SQL copiado al portapapeles');
+    }
+
+    // Selector de Modo Canal (Mayorista vs Catálogo General)
+    function setCatalogMode(mode) {
+      const btnW = document.getElementById('filter-btn-wholesale');
+      const btnAll = document.getElementById('filter-btn-all');
+      if (mode === 'wholesale') {
+        btnW.className = "px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer bg-[#2563EB] text-white shadow-sm";
+        btnAll.className = "px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer text-slate-600 hover:text-[#0F172A]";
+      } else {
+        btnAll.className = "px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer bg-[#2563EB] text-white shadow-sm";
+        btnW.className = "px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition cursor-pointer text-slate-600 hover:text-[#0F172A]";
+      }
+      toast(`Filtrado por: ${mode === 'wholesale' ? 'Canal Mayorista' : 'Catálogo General'}`);
+    }
+
+    function filterCategory(cat) {
+      toast(`Categoría seleccionada: ${cat}`);
+    }
+    function filterSupplier(sup) {
+      toast(`Marca filtrada: ${sup}`);
+    }
+    function filterStockLevel(lvl) {
+      toast(`Nivel de stock: ${lvl}`);
+    }
+  </script>
+
+
+</body></html>

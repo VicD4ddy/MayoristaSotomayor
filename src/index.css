@@ -1,0 +1,567 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+}
+
+/* Base Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #0B0F17;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #28354D;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3B4D6E;
+}
+
+html.dark body {
+  background-color: #0B0F17;
+  color: #F1F5F9;
+}
+
+/* Glow Utilities */
+.glow-orange {
+  box-shadow: 0 0 20px -2px rgba(255, 92, 27, 0.35);
+}
+.glow-badge {
+  box-shadow: 0 0 10px -1px rgba(16, 185, 129, 0.3);
+}
+.glow-cyan {
+  box-shadow: 0 0 20px -2px rgba(6, 182, 212, 0.35);
+}
+.glow-cobalt {
+  box-shadow: 0 0 24px -2px rgba(37, 99, 235, 0.45);
+}
+.glow-emerald {
+  box-shadow: 0 0 24px -4px rgba(16, 185, 129, 0.35);
+}
+.glow-amber {
+  box-shadow: 0 0 25px -4px rgba(245, 158, 11, 0.35);
+}
+
+/* ========================================================
+   1. TEMA: DEEP COBALT & TECH CYAN (DARK)
+======================================================== */
+[data-theme="deep-cobalt"] body {
+  background-color: #070B14 !important;
+  color: #E2E8F0 !important;
+  background-image: radial-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
+}
+[data-theme="deep-cobalt"] ::-webkit-scrollbar-track { background: #070B14 !important; }
+[data-theme="deep-cobalt"] ::-webkit-scrollbar-thumb { background: #182C4E !important; }
+[data-theme="deep-cobalt"] ::-webkit-scrollbar-thumb:hover { background: #2563EB !important; }
+
+/* Canvas background */
+[data-theme="deep-cobalt"] .dark\:bg-\[\#0B0F17\],
+[data-theme="deep-cobalt"] [class*="dark:bg-[#0B0F17]"] {
+  background-color: #070B14 !important;
+}
+
+/* Surfaces, Sidebar & Cards */
+[data-theme="deep-cobalt"] .dark\:bg-\[\#0E1422\],
+[data-theme="deep-cobalt"] [class*="dark:bg-[#0E1422]"],
+[data-theme="deep-cobalt"] aside#sidebar {
+  background-color: #0B1120 !important;
+}
+
+/* Table Headers & Section Bars */
+[data-theme="deep-cobalt"] .dark\:bg-\[\#12192B\],
+[data-theme="deep-cobalt"] [class*="dark:bg-[#12192B]"],
+[data-theme="deep-cobalt"] thead tr {
+  background-color: #0F1B30 !important;
+}
+
+/* Inputs, Pills & Secondary Badges */
+[data-theme="deep-cobalt"] .dark\:bg-\[\#161F33\],
+[data-theme="deep-cobalt"] [class*="dark:bg-[#161F33]"] {
+  background-color: #13223D !important;
+}
+
+/* Outer Borders */
+[data-theme="deep-cobalt"] .dark\:border-\[\#1E293B\],
+[data-theme="deep-cobalt"] [class*="dark:border-[#1E293B]"] {
+  border-color: rgba(30, 58, 138, 0.45) !important;
+}
+
+/* Inner Borders */
+[data-theme="deep-cobalt"] .dark\:border-\[\#28354D\],
+[data-theme="deep-cobalt"] [class*="dark:border-[#28354D]"] {
+  border-color: rgba(37, 99, 235, 0.35) !important;
+}
+
+/* Brand Primary Accents (Cyan / Cobalt) */
+[data-theme="deep-cobalt"] .bg-\[\#FF5C1B\] {
+  background-color: #06B6D4 !important;
+}
+[data-theme="deep-cobalt"] .hover\:bg-\[\#ff4600\]:hover,
+[data-theme="deep-cobalt"] .hover\:bg-\[\#e04d12\]:hover {
+  background-color: #0891B2 !important;
+}
+[data-theme="deep-cobalt"] .text-\[\#FF5C1B\] {
+  color: #38BDF8 !important;
+}
+[data-theme="deep-cobalt"] .border-\[\#FF5C1B\] {
+  border-color: #06B6D4 !important;
+}
+[data-theme="deep-cobalt"] .focus\:border-\[\#FF5C1B\]:focus {
+  border-color: #06B6D4 !important;
+}
+
+/* ========================================================
+   2. TEMA: STEALTH OBSIDIAN & EMERALD LUXE (DARK)
+======================================================== */
+[data-theme="emerald-stealth"] body {
+  background-color: #090A0D !important;
+  color: #F9FAFB !important;
+  background-image: none !important;
+}
+[data-theme="emerald-stealth"] ::-webkit-scrollbar-track { background: #090A0D !important; }
+[data-theme="emerald-stealth"] ::-webkit-scrollbar-thumb { background: #171B23 !important; }
+[data-theme="emerald-stealth"] ::-webkit-scrollbar-thumb:hover { background: #065F46 !important; }
+
+/* Canvas background */
+[data-theme="emerald-stealth"] .dark\:bg-\[\#0B0F17\],
+[data-theme="emerald-stealth"] [class*="dark:bg-[#0B0F17]"] {
+  background-color: #090A0D !important;
+}
+
+/* Surfaces, Sidebar & Cards */
+[data-theme="emerald-stealth"] .dark\:bg-\[\#0E1422\],
+[data-theme="emerald-stealth"] [class*="dark:bg-[#0E1422]"],
+[data-theme="emerald-stealth"] aside#sidebar {
+  background-color: #0D0F14 !important;
+}
+
+/* Table Headers & Section Bars */
+[data-theme="emerald-stealth"] .dark\:bg-\[\#12192B\],
+[data-theme="emerald-stealth"] [class*="dark:bg-[#12192B]"],
+[data-theme="emerald-stealth"] thead tr {
+  background-color: #12151B !important;
+}
+
+/* Inputs, Pills & Secondary Badges */
+[data-theme="emerald-stealth"] .dark\:bg-\[\#161F33\],
+[data-theme="emerald-stealth"] [class*="dark:bg-[#161F33]"] {
+  background-color: #171B23 !important;
+}
+
+/* Outer Borders */
+[data-theme="emerald-stealth"] .dark\:border-\[\#1E293B\],
+[data-theme="emerald-stealth"] [class*="dark:border-[#1E293B]"] {
+  border-color: rgba(6, 95, 70, 0.45) !important;
+}
+
+/* Inner Borders */
+[data-theme="emerald-stealth"] .dark\:border-\[\#28354D\],
+[data-theme="emerald-stealth"] [class*="dark:border-[#28354D]"] {
+  border-color: #1E232E !important;
+}
+
+/* Brand Primary Accents (Emerald) */
+[data-theme="emerald-stealth"] .bg-\[\#FF5C1B\] {
+  background-color: #10B981 !important;
+}
+[data-theme="emerald-stealth"] .hover\:bg-\[\#ff4600\]:hover,
+[data-theme="emerald-stealth"] .hover\:bg-\[\#e04d12\]:hover {
+  background-color: #059669 !important;
+}
+[data-theme="emerald-stealth"] .text-\[\#FF5C1B\] {
+  color: #34D399 !important;
+}
+[data-theme="emerald-stealth"] .border-\[\#FF5C1B\] {
+  border-color: #10B981 !important;
+}
+[data-theme="emerald-stealth"] .focus\:border-\[\#FF5C1B\]:focus {
+  border-color: #10B981 !important;
+}
+
+/* ========================================================
+   3. TEMA: INDUSTRIAL CHARCOAL & MIDNIGHT AMBER (DARK)
+======================================================== */
+[data-theme="midnight-amber"] body {
+  background-color: #111317 !important;
+  color: #F3F4F6 !important;
+  background-image: radial-gradient(#2A2F3A 0.75px, transparent 0.75px) !important;
+  background-size: 16px 16px !important;
+}
+[data-theme="midnight-amber"] ::-webkit-scrollbar-track { background: #111317 !important; }
+[data-theme="midnight-amber"] ::-webkit-scrollbar-thumb { background: #2A2F3A !important; }
+[data-theme="midnight-amber"] ::-webkit-scrollbar-thumb:hover { background: #F59E0B !important; }
+
+/* Canvas background */
+[data-theme="midnight-amber"] .dark\:bg-\[\#0B0F17\],
+[data-theme="midnight-amber"] [class*="dark:bg-[#0B0F17]"] {
+  background-color: #111317 !important;
+}
+
+/* Surfaces, Sidebar & Cards */
+[data-theme="midnight-amber"] .dark\:bg-\[\#0E1422\],
+[data-theme="midnight-amber"] [class*="dark:bg-[#0E1422]"],
+[data-theme="midnight-amber"] aside#sidebar {
+  background-color: #15181E !important;
+}
+
+/* Table Headers & Section Bars */
+[data-theme="midnight-amber"] .dark\:bg-\[\#12192B\],
+[data-theme="midnight-amber"] [class*="dark:bg-[#12192B]"],
+[data-theme="midnight-amber"] thead tr {
+  background-color: #1A1E25 !important;
+}
+
+/* Inputs, Pills & Secondary Badges */
+[data-theme="midnight-amber"] .dark\:bg-\[\#161F33\],
+[data-theme="midnight-amber"] [class*="dark:bg-[#161F33]"] {
+  background-color: #252B35 !important;
+}
+
+/* Outer Borders */
+[data-theme="midnight-amber"] .dark\:border-\[\#1E293B\],
+[data-theme="midnight-amber"] [class*="dark:border-[#1E293B]"] {
+  border-color: #2A2F3A !important;
+}
+
+/* Inner Borders */
+[data-theme="midnight-amber"] .dark\:border-\[\#28354D\],
+[data-theme="midnight-amber"] [class*="dark:border-[#28354D]"] {
+  border-color: #3D4452 !important;
+}
+
+/* Brand Primary Accents (Midnight Amber) */
+[data-theme="midnight-amber"] .bg-\[\#FF5C1B\] {
+  background-color: #F59E0B !important;
+}
+[data-theme="midnight-amber"] .hover\:bg-\[\#ff4600\]:hover,
+[data-theme="midnight-amber"] .hover\:bg-\[\#e04d12\]:hover {
+  background-color: #D97706 !important;
+}
+[data-theme="midnight-amber"] .text-\[\#FF5C1B\] {
+  color: #FBBF24 !important;
+}
+[data-theme="midnight-amber"] .border-\[\#FF5C1B\] {
+  border-color: #F59E0B !important;
+}
+[data-theme="midnight-amber"] .focus\:border-\[\#FF5C1B\]:focus {
+  border-color: #F59E0B !important;
+}
+
+/* ========================================================
+   4. TEMA: INDUSTRIAL WARM STONE & AMBER GOLD (LIGHT)
+======================================================== */
+[data-theme="warm-stone"] body {
+  background-color: #FAF4EE !important;
+  color: #1C1917 !important;
+  background-image: none !important;
+}
+[data-theme="warm-stone"] ::-webkit-scrollbar-track { background: #EAE6DF !important; }
+[data-theme="warm-stone"] ::-webkit-scrollbar-thumb { background: #D8D2C7 !important; }
+[data-theme="warm-stone"] ::-webkit-scrollbar-thumb:hover { background: #B8B0A2 !important; }
+
+/* Canvas */
+[data-theme="warm-stone"] .bg-\[\#F8F9FA\],
+[data-theme="warm-stone"] main {
+  background-color: #FAF4EE !important;
+}
+
+/* Sidebar & Header */
+[data-theme="warm-stone"] aside#sidebar {
+  background-color: #FAF4EE !important;
+  border-color: #EEDCD0 !important;
+}
+[data-theme="warm-stone"] header {
+  background-color: rgba(250, 244, 238, 0.95) !important;
+  border-color: #EEDCD0 !important;
+}
+
+/* Cards & Surfaces */
+[data-theme="warm-stone"] .bg-white {
+  background-color: #FFFFFF !important;
+}
+[data-theme="warm-stone"] .bg-gray-50,
+[data-theme="warm-stone"] thead tr {
+  background-color: #F5F3EF !important;
+}
+[data-theme="warm-stone"] .bg-gray-100 {
+  background-color: #EAE6DF !important;
+}
+
+/* Borders */
+[data-theme="warm-stone"] .border-gray-100,
+[data-theme="warm-stone"] .border-gray-200 {
+  border-color: #E5E0D8 !important;
+}
+[data-theme="warm-stone"] .border-gray-300 {
+  border-color: #D8D2C7 !important;
+}
+
+/* Text */
+[data-theme="warm-stone"] .text-gray-900,
+[data-theme="warm-stone"] .text-gray-800 {
+  color: #1C1917 !important;
+}
+[data-theme="warm-stone"] .text-gray-600,
+[data-theme="warm-stone"] .text-gray-500 {
+  color: #57534E !important;
+}
+
+/* Brand Primary Accents (Amber Gold) */
+[data-theme="warm-stone"] .bg-\[\#FF5C1B\] {
+  background-color: #D97706 !important;
+}
+[data-theme="warm-stone"] .hover\:bg-\[\#ff4600\]:hover,
+[data-theme="warm-stone"] .hover\:bg-\[\#e04d12\]:hover {
+  background-color: #B45309 !important;
+}
+[data-theme="warm-stone"] .text-\[\#FF5C1B\] {
+  color: #D97706 !important;
+}
+[data-theme="warm-stone"] .border-\[\#FF5C1B\] {
+  border-color: #D97706 !important;
+}
+[data-theme="warm-stone"] .focus\:border-\[\#FF5C1B\]:focus {
+  border-color: #D97706 !important;
+}
+
+/* ========================================================
+   5. TEMA: CORPORATE NORDIC ICE & DEEP COBALT (LIGHT)
+======================================================== */
+[data-theme="nordic-ice"] body {
+  background-color: #E8F0F8 !important;
+  color: #0F172A !important;
+  background-image: none !important;
+}
+[data-theme="nordic-ice"] ::-webkit-scrollbar-track { background: #F0F4F8 !important; }
+[data-theme="nordic-ice"] ::-webkit-scrollbar-thumb { background: #CBD5E1 !important; }
+[data-theme="nordic-ice"] ::-webkit-scrollbar-thumb:hover { background: #94A3B8 !important; }
+
+/* Canvas */
+[data-theme="nordic-ice"] .bg-\[\#F8F9FA\],
+[data-theme="nordic-ice"] main {
+  background-color: #E8F0F8 !important;
+}
+
+/* Sidebar & Header */
+[data-theme="nordic-ice"] aside#sidebar {
+  background-color: #EDF4F9 !important;
+  border-color: #D8E4EE !important;
+}
+[data-theme="nordic-ice"] header {
+  background-color: rgba(237, 244, 249, 0.95) !important;
+  border-color: #D8E4EE !important;
+}
+
+/* Cards & Surfaces */
+[data-theme="nordic-ice"] .bg-white {
+  background-color: #FFFFFF !important;
+}
+[data-theme="nordic-ice"] .bg-gray-50,
+[data-theme="nordic-ice"] thead tr {
+  background-color: #EFF6FF !important;
+}
+[data-theme="nordic-ice"] .bg-gray-100 {
+  background-color: #E2E8F0 !important;
+}
+
+/* Borders */
+[data-theme="nordic-ice"] .border-gray-100,
+[data-theme="nordic-ice"] .border-gray-200 {
+  border-color: #E2E8F0 !important;
+}
+[data-theme="nordic-ice"] .border-gray-300 {
+  border-color: #CBD5E1 !important;
+}
+
+/* Text */
+[data-theme="nordic-ice"] .text-gray-900,
+[data-theme="nordic-ice"] .text-gray-800 {
+  color: #0F172A !important;
+}
+[data-theme="nordic-ice"] .text-gray-600,
+[data-theme="nordic-ice"] .text-gray-500 {
+  color: #475569 !important;
+}
+
+/* Brand Primary Accents (Cobalt Blue) */
+[data-theme="nordic-ice"] .bg-\[\#FF5C1B\] {
+  background-color: #2563EB !important;
+}
+[data-theme="nordic-ice"] .hover\:bg-\[\#ff4600\]:hover,
+[data-theme="nordic-ice"] .hover\:bg-\[\#e04d12\]:hover {
+  background-color: #1D4ED8 !important;
+}
+[data-theme="nordic-ice"] .text-\[\#FF5C1B\] {
+  color: #2563EB !important;
+}
+[data-theme="nordic-ice"] .border-\[\#FF5C1B\] {
+  border-color: #2563EB !important;
+}
+[data-theme="nordic-ice"] .focus\:border-\[\#FF5C1B\]:focus {
+  border-color: #2563EB !important;
+}
+
+/* ========================================================
+   6. TEMA: PURE CLEAN ALABASTER & TANGERINE (LIGHT)
+======================================================== */
+[data-theme="pure-alabaster"] body {
+  background-color: #EBF2EC !important;
+  color: #19251E !important;
+  background-image: none !important;
+}
+[data-theme="pure-alabaster"] ::-webkit-scrollbar-track { background: #EEF4EE !important; }
+[data-theme="pure-alabaster"] ::-webkit-scrollbar-thumb { background: #CBD5E1 !important; }
+[data-theme="pure-alabaster"] ::-webkit-scrollbar-thumb:hover { background: #94A3B8 !important; }
+
+/* Canvas */
+[data-theme="pure-alabaster"] .bg-\[\#F8F9FA\],
+[data-theme="pure-alabaster"] main {
+  background-color: #EBF2EC !important;
+}
+
+/* Sidebar & Header */
+[data-theme="pure-alabaster"] aside#sidebar {
+  background-color: #EEF4EE !important;
+  border-color: #D5E4D8 !important;
+}
+[data-theme="pure-alabaster"] header {
+  background-color: rgba(238, 244, 238, 0.95) !important;
+  border-color: #D5E4D8 !important;
+}
+
+/* Cards & Surfaces */
+[data-theme="pure-alabaster"] .bg-white {
+  background-color: #F9FCF9 !important;
+}
+[data-theme="pure-alabaster"] .bg-gray-50,
+[data-theme="pure-alabaster"] thead tr {
+  background-color: #EEF4EE !important;
+}
+[data-theme="pure-alabaster"] .bg-gray-100 {
+  background-color: #E4EDE6 !important;
+}
+
+/* Borders */
+[data-theme="pure-alabaster"] .border-gray-100,
+[data-theme="pure-alabaster"] .border-gray-200 {
+  border-color: #DCE8DF !important;
+}
+[data-theme="pure-alabaster"] .border-gray-300 {
+  border-color: #D5E4D8 !important;
+}
+
+/* Text */
+[data-theme="pure-alabaster"] .text-gray-900,
+[data-theme="pure-alabaster"] .text-gray-800 {
+  color: #19251E !important;
+}
+[data-theme="pure-alabaster"] .text-gray-600,
+[data-theme="pure-alabaster"] .text-gray-500 {
+  color: #4A5B50 !important;
+}
+
+/* Brand Primary Accents (Tangerine Sotomayor) */
+[data-theme="pure-alabaster"] .bg-\[\#FF5C1B\] {
+  background-color: #F97316 !important;
+}
+[data-theme="pure-alabaster"] .hover\:bg-\[\#ff4600\]:hover,
+[data-theme="pure-alabaster"] .hover\:bg-\[\#e04d12\]:hover {
+  background-color: #EA580C !important;
+}
+[data-theme="pure-alabaster"] .text-\[\#FF5C1B\] {
+  color: #F97316 !important;
+}
+[data-theme="pure-alabaster"] .border-\[\#FF5C1B\] {
+  border-color: #F97316 !important;
+}
+[data-theme="pure-alabaster"] .focus\:border-\[\#FF5C1B\]:focus {
+  border-color: #F97316 !important;
+}
+
+/* ========================================================
+   7. TEMA: SOTOMAYOR OBSIDIAN CLÁSICO (DARK)
+======================================================== */
+[data-theme="classic-obsidian"] body {
+  background-color: #0B0F17 !important;
+  color: #F1F5F9 !important;
+  background-image: none !important;
+}
+
+/* Print optimizations for Factura / Nota de Entrega */
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 0 !important; /* Suprime automáticamente encabezados (título/fecha) y pies (URL/páginas) del navegador */
+  }
+  body {
+    background: white !important;
+    color: #111827 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-only,
+  .print-only * {
+    visibility: visible;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .print-only {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 10mm 14mm !important;
+    background: white !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+}
+
+/* Smooth fade in for expanding sidebar */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
