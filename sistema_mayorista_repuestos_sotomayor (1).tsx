@@ -3769,9 +3769,9 @@ export default function App() {
               )}
             </div>
 
-            {/* Botón Naranja '+' de Acción Rápida */}
+            {/* Botón Naranja de Acción Rápida: Iniciar Nueva Factura */}
             <UseAnimations
-              animation={plusToXAnimation}
+              animation={fileTextAnimation}
               size={18}
               strokeColor="#FFFFFF"
               interaction="hover-replay"
@@ -3780,9 +3780,9 @@ export default function App() {
                   {...eventProps}
                   onClick={(e) => {
                     eventProps.onClick?.(e);
-                    setNewProductModalOpen(true);
+                    setActiveModule('invoicing');
                   }}
-                  title="Crear Nuevo Repuesto Rápido"
+                  title="Iniciar Nueva Factura"
                   className={`group h-10 rounded-xl bg-[#FF5C1B] hover:bg-[#ff4600] text-white flex items-center transition-all duration-200 shadow-md shadow-orange-500/20 transform active:scale-95 cursor-pointer ${
                     sidebarHovered ? 'w-full px-3 gap-2.5 justify-start' : 'w-10 mx-auto justify-center'
                   }`}
@@ -3792,7 +3792,7 @@ export default function App() {
                   </div>
                   {sidebarHovered && (
                     <span className="text-xs font-bold whitespace-nowrap animate-fadeIn">
-                      Nuevo Repuesto
+                      Nueva Factura
                     </span>
                   )}
                 </button>
