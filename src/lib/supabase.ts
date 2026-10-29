@@ -445,6 +445,7 @@ export interface WholesaleClient {
   phone?: string;
   email?: string;
   tier?: string;
+  sellerId?: string;
   discount: number;
   creditLimit?: number;
   creditDays?: number;
@@ -542,6 +543,7 @@ export interface WholesaleReceipt {
 // MAPEOS BIDIRECCIONALES (CamelCase Frontend <-> Snake_Case DB)
 // ========================================================
 export function mapDbToWholesaleClient(row: any): WholesaleClient {
+  const sellerId = row.seller_id || (row.tier && row.tier.startsWith('vend-') ? row.tier : undefined);
   return {
     id: row.id,
     rif: row.rif || '',
@@ -549,7 +551,8 @@ export function mapDbToWholesaleClient(row: any): WholesaleClient {
     city: row.city || 'Valencia',
     address: row.address || '',
     phone: row.phone || '',
-    tier: row.tier || undefined,
+    tier: row.tier && !row.tier.startsWith('vend-') ? row.tier : undefined,
+    sellerId: sellerId,
     discount: Number(row.discount ?? 0),
     creditLimit: row.credit_limit !== null ? Number(row.credit_limit) : undefined,
     creditDays: row.credit_days !== null ? Number(row.credit_days) : undefined,
@@ -565,7 +568,7 @@ export function mapWholesaleClientToDb(c: WholesaleClient): any {
     city: c.city,
     address: c.address || null,
     phone: c.phone || null,
-    tier: c.tier || null,
+    tier: c.sellerId || c.tier || null,
     discount: c.discount ?? 0,
     credit_limit: c.creditLimit ?? 0,
     credit_days: c.creditDays ?? 0,

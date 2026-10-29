@@ -328,6 +328,7 @@ export interface WholesaleClient {
   phone?: string;
   email?: string;
   tier?: string;
+  sellerId?: string;
   discount: number;
   creditLimit?: number;
   creditDays?: number;
@@ -1982,13 +1983,20 @@ export default function App() {
     }
   }, [sellers, selectedSellerId]);
 
-  // Sincronizar dirección de despacho editable al cambiar cliente seleccionado
+  // Sincronizar dirección de despacho y vendedor asignado al cambiar cliente seleccionado
   useEffect(() => {
     const cl = clients.find(c => c.id === selectedClientId);
     if (cl) {
       setInvoiceDispatchAddress(cl.address || cl.city || 'Valencia, Edo. Carabobo');
+      // Autoseleccionar vendedor asignado al cliente si existe, manteniendo libre edición
+      if (cl.sellerId) {
+        const sellerExists = sellers.some(s => s.id === cl.sellerId && !s.isDeleted && s.isActive !== false);
+        if (sellerExists) {
+          setSelectedSellerId(cl.sellerId);
+        }
+      }
     }
-  }, [selectedClientId, clients]);
+  }, [selectedClientId, clients, sellers]);
   const [invoiceCart, setInvoiceCart] = useState<InvoiceLine[]>([]);
   const [partSearchInvoice, setPartSearchInvoice] = useState('');
   const [previewInvoice, setPreviewInvoice] = useState<Invoice | null>(null);
@@ -7701,6 +7709,14 @@ export default function App() {
                           <p className="text-xs text-gray-500 dark:text-slate-400 font-mono mt-0.5">
                             RIF: {c.rif} • {c.city}
                           </p>
+                          {c.sellerId && (
+                            <div className="mt-1">
+                              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gray-500 dark:text-slate-400 bg-gray-100 dark:bg-[#161F33] px-2 py-0.5 rounded-md border border-gray-200 dark:border-[#28354D]">
+                                <span>Asesor:</span>
+                                <b className="text-gray-800 dark:text-slate-200 font-bold">{sellers.find(s => s.id === c.sellerId)?.name || 'Asignado'}</b>
+                              </span>
+                            </div>
+                          )}
                           {c.phone && (
                             <p className="text-[11px] text-gray-400 dark:text-slate-500 font-mono mt-0.5">
                               Tel: {c.phone}
