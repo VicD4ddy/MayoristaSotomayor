@@ -2085,9 +2085,55 @@ export default function App() {
 
 
 
-  // Categorías y Proveedores únicos
-  const categoriesList = useMemo(() => ['Todas', ...Array.from(new Set(products.map(p => p.category)))], [products]);
-  const suppliersList = useMemo(() => ['Todos', ...Array.from(new Set(products.map(p => p.supplier)))], [products]);
+  // Categorías de productos mayoristas dinámicas ordenadas: 1° Motor, 2° Tren Delantero, 3° Alfabético
+  const wholesaleCategories = useMemo(() => {
+    const wholesaleProds = products.filter(p => Boolean(p.isWholesale));
+    const uniqueCats = Array.from(
+      new Set(wholesaleProds.map(p => (p.category || '').trim()).filter(Boolean))
+    );
+
+    return uniqueCats.sort((a, b) => {
+      const aLower = a.toLowerCase();
+      const bLower = b.toLowerCase();
+
+      const getRank = (cat: string) => {
+        if (cat.includes('motor')) return 1;
+        if (cat.includes('tren delantero')) return 2;
+        return 3;
+      };
+
+      const rankA = getRank(aLower);
+      const rankB = getRank(bLower);
+
+      if (rankA !== rankB) return rankA - rankB;
+      return a.localeCompare(b, 'es', { sensitivity: 'base' });
+    });
+  }, [products]);
+
+  // Pestañas (pills) para la barra de navegación del catálogo mayorista
+  const categoryTabs = useMemo(() => {
+    return ['Todos', 'Stock Crítico', ...wholesaleCategories];
+  }, [wholesaleCategories]);
+
+  // Lista para el dropdown de categorías
+  const categoriesList = useMemo(() => {
+    return ['Todas', ...wholesaleCategories];
+  }, [wholesaleCategories]);
+
+  const suppliersList = useMemo(() => {
+    const wholesaleProds = products.filter(p => Boolean(p.isWholesale));
+    const list = Array.from(new Set(wholesaleProds.map(p => (p.supplier || '').trim()).filter(Boolean))).sort((a, b) =>
+      a.localeCompare(b, 'es', { sensitivity: 'base' })
+    );
+    return ['Todos', ...list];
+  }, [products]);
+
+  // Resetear activeCategoryTab a 'Todos' si la categoría seleccionada ya no existe en el catálogo mayorista
+  useEffect(() => {
+    if (activeCategoryTab !== 'Todos' && activeCategoryTab !== 'Stock Crítico' && !wholesaleCategories.includes(activeCategoryTab)) {
+      setActiveCategoryTab('Todos');
+    }
+  }, [wholesaleCategories, activeCategoryTab]);
 
   // Filtrado de productos para la tabla de inventario
   const filteredProducts = useMemo(() => {
@@ -4588,7 +4634,7 @@ export default function App() {
 
             {/* Pills de Categorías con Stock Crítico destacado */}
             <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-4 text-xs">
-              {['Todos', 'Stock Crítico', 'Tren Delantero', 'Distribución', 'Motor y Enfriamiento', 'Rodamientos', 'Eléctrico'].map(
+              {categoryTabs.map(
                 (tab) => {
                   const isActive = activeCategoryTab === tab;
                   const isCritical = tab === 'Stock Crítico';
