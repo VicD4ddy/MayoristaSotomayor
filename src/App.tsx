@@ -4742,7 +4742,8 @@ export default function App() {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-[#1E293B] bg-gray-50/70 dark:bg-[#12192B] text-[11px] font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider">
-                      <th className="py-3.5 pl-4 pr-3">
+                      <th className="py-3.5 pl-4 pr-3">MARCA</th>
+                      <th className="py-3.5 px-3">
                         <div className="flex items-center gap-1.5">
                           <span>REPUESTO / DESCRIPCIÓN</span>
                           <ArrowUpDown className="w-3 h-3 text-gray-400" />
@@ -4755,7 +4756,6 @@ export default function App() {
                         </div>
                       </th>
                       <th className="py-3.5 px-3">CATEGORÍA</th>
-                      <th className="py-3.5 px-3">MARCA</th>
                       <th className="py-3.5 px-3 text-center" title="Habilitar o deshabilitar repuesto para el canal mayorista">
                         CANAL MAYORISTA
                       </th>
@@ -4800,8 +4800,35 @@ export default function App() {
                             key={product.id}
                             className="hover:bg-gray-50/80 dark:hover:bg-[#161F33]/80 transition group relative"
                           >
-                            {/* Columna 1: Miniatura + Nombre */}
-                            <td className="py-3 pl-4 pr-3">
+                            {/* Columna 1: Marca / Proveedor */}
+                            <td className="py-3 pl-4 pr-3 whitespace-nowrap">
+                              {product.supplierLogo ? (
+                                <div
+                                  title={product.supplier}
+                                  className="w-16 h-7 rounded-md bg-white border border-gray-200 dark:border-[#28354D] p-1 flex items-center justify-center shadow-2xs hover:shadow-xs transition shrink-0 cursor-default"
+                                >
+                                  <img
+                                    src={product.supplierLogo}
+                                    alt={product.supplier}
+                                    className="max-w-full max-h-full object-contain"
+                                    onError={(e) => {
+                                      (e.currentTarget as HTMLElement).style.display = 'none';
+                                      const fallback = (e.currentTarget.nextElementSibling as HTMLElement);
+                                      if (fallback) fallback.style.display = 'inline-block';
+                                    }}
+                                  />
+                                  <span className="hidden text-[10px] font-bold text-gray-700 truncate">{product.supplier}</span>
+                                </div>
+                              ) : (
+                                <div title={product.supplier} className="flex items-center gap-1.5 cursor-default">
+                                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                                  <span className="text-gray-800 dark:text-slate-200 font-semibold text-xs">{product.supplier}</span>
+                                </div>
+                              )}
+                            </td>
+
+                            {/* Columna 2: Miniatura + Nombre */}
+                            <td className="py-3 px-3">
                               <div className="flex items-center gap-3">
                                 {product.imageUrl ? (
                                   <img
@@ -4830,45 +4857,18 @@ export default function App() {
                               </div>
                             </td>
 
-                            {/* Columna 2: SKU */}
+                            {/* Columna 3: SKU */}
                             <td className="py-3 px-3 whitespace-nowrap">
                               <div className="font-mono font-bold text-xs text-gray-800 dark:text-orange-400">
                                 {product.sku}
                               </div>
                             </td>
 
-                            {/* Columna 3: Categoría */}
+                            {/* Columna 4: Categoría */}
                             <td className="py-3 px-3 whitespace-nowrap">
                               <span className="px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-[#161F33] border border-transparent dark:border-[#28354D] text-gray-700 dark:text-slate-300 font-medium text-[11px]">
                                 {product.category}
                               </span>
-                            </td>
-
-                            {/* Columna 4: Marca / Proveedor */}
-                            <td className="py-3 px-3 whitespace-nowrap">
-                              {product.supplierLogo ? (
-                                <div
-                                  title={product.supplier}
-                                  className="w-16 h-7 rounded-md bg-white border border-gray-200 dark:border-[#28354D] p-1 flex items-center justify-center shadow-2xs hover:shadow-xs transition shrink-0 cursor-default"
-                                >
-                                  <img
-                                    src={product.supplierLogo}
-                                    alt={product.supplier}
-                                    className="max-w-full max-h-full object-contain"
-                                    onError={(e) => {
-                                      (e.currentTarget as HTMLElement).style.display = 'none';
-                                      const fallback = (e.currentTarget.nextElementSibling as HTMLElement);
-                                      if (fallback) fallback.style.display = 'inline-block';
-                                    }}
-                                  />
-                                  <span className="hidden text-[10px] font-bold text-gray-700 truncate">{product.supplier}</span>
-                                </div>
-                              ) : (
-                                <div title={product.supplier} className="flex items-center gap-1.5 cursor-default">
-                                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-                                  <span className="text-gray-800 dark:text-slate-200 font-semibold text-xs">{product.supplier}</span>
-                                </div>
-                              )}
                             </td>
 
                             {/* Columna 5: SWITCH DISPONIBLE EN MAYORISTA */}
