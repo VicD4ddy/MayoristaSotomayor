@@ -84,7 +84,9 @@ import {
   HelpCircle,
   Compass,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  Save,
+  Clock
 } from 'lucide-react';
 import {
   supabase,
@@ -103,6 +105,8 @@ import {
   updateWholesaleInvoicePayment,
   insertWholesaleReceipt,
   updateProductWholesale,
+  deleteWholesaleInvoice,
+  insertNewProduct,
 } from './lib/supabase';
 
 // ==========================================
@@ -370,7 +374,7 @@ export interface WholesaleInvoice {
   sellerName: string;
   paymentCondition: string;
   documentType?: string;
-  status: 'Cobrada' | 'Pendiente' | 'Parcial' | 'Vencida';
+  status: 'Cobrada' | 'Pendiente' | 'Parcial' | 'Vencida' | 'Borrador';
   subtotalUsd: number;
   discountUsd: number;
   taxUsd: number;
@@ -1523,6 +1527,26 @@ export default function App() {
     getStoredWholesaleItem('sotomayor_wholesale_stock_history', 'sotomayor_stock_history', INITIAL_STOCK_HISTORY)
   );
 
+  // Estados de Facturas en Espera (Borradores)
+  const [drafts, setDrafts] = useState<WholesaleInvoice[]>(() =>
+    getStoredWholesaleItem('sotomayor_wholesale_drafts', 'sotomayor_drafts', [])
+  );
+  const [activeDraftId, setActiveDraftId] = useState<string | null>(null);
+  const [draftsModalOpen, setDraftsModalOpen] = useState(false);
+
+  // Estados de Creación de Repuesto desde Facturador
+  const [newProductFromInvoiceModalOpen, setNewProductFromInvoiceModalOpen] = useState(false);
+  const [newProductInvoiceForm, setNewProductInvoiceForm] = useState({
+    sku: '',
+    name: '',
+    category: 'Tren Delantero',
+    supplier: 'GENÉRICO',
+    cost: '',
+    price: '',
+    wholesaleStock: '10',
+    quantityToInvoice: '1',
+  });
+
   // Guardar en localStorage bajo convención Wholesale
   useEffect(() => { localStorage.setItem('sotomayor_rate_mode', JSON.stringify(rateMode)); }, [rateMode]);
   useEffect(() => { localStorage.setItem('sotomayor_bcv_official_rate', JSON.stringify(bcvOfficialRate)); }, [bcvOfficialRate]);
@@ -1539,6 +1563,7 @@ export default function App() {
   useEffect(() => { localStorage.setItem('sotomayor_wholesale_sellers', JSON.stringify(sellers)); }, [sellers]);
   useEffect(() => { localStorage.setItem('sotomayor_wholesale_clients', JSON.stringify(clients)); }, [clients]);
   useEffect(() => { localStorage.setItem('sotomayor_wholesale_invoices', JSON.stringify(invoices)); }, [invoices]);
+  useEffect(() => { localStorage.setItem('sotomayor_wholesale_drafts', JSON.stringify(drafts)); }, [drafts]);
   useEffect(() => { localStorage.setItem('sotomayor_wholesale_receipts', JSON.stringify(receipts)); }, [receipts]);
   useEffect(() => { localStorage.setItem('sotomayor_wholesale_stock_history', JSON.stringify(stockHistory)); }, [stockHistory]);
 
@@ -1764,7 +1789,8 @@ export default function App() {
           setSellers(dbSellers);
         }
         if (dbInvoices) {
-          setInvoices(dbInvoices);
+          setInvoices(dbInvoices.filter(i => i.status !== 'Borrador'));
+          setDrafts(dbInvoices.filter(i => i.status === 'Borrador'));
         }
         if (dbReceipts) {
           setReceipts(dbReceipts);
@@ -2850,6 +2876,13 @@ export default function App() {
     setInvoiceCart([]);
     setInvoiceCommissionRate('');
 
+    // Si provenía de un borrador / pedido en espera, eliminarlo
+    if (activeDraftId) {
+      deleteWholesaleInvoice(activeDraftId);
+      setDrafts(prev => prev.filter(d => d.id !== activeDraftId));
+      setActiveDraftId(null);
+    }
+
     // Persistencia en Supabase de la factura emitida
     setSupabaseSyncStatus('syncing');
     insertWholesaleInvoice(newInvoiceObj).then(ok => {
@@ -2862,6 +2895,208 @@ export default function App() {
     } else {
       showToast(`Documento ${newInvoiceNumber} emitido y sincronizado con Supabase. Comisión asignada a ${activeSeller.name}`);
     }
+  };
+
+  // Guardar Factura como Borrador / Pedido en Espera (no descuenta inventario)
+  const handleSaveDraft = () => {
+    if (invoiceCart.length === 0) {
+      showToast('Agrega al menos un repuesto a la factura para guardarla como borrador.');
+      return;
+    }
+
+    const draftId = activeDraftId || `BORR-${Date.now().toString().slice(-6)}`;
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+    const draftObj: WholesaleInvoice = {
+      id: draftId,
+      clientId: activeClient?.id || '',
+      date: todayStr,
+      dueDate: todayStr,
+      clientName: activeClient?.name || 'Cliente por definir',
+      clientRif: activeClient?.rif || '',
+      clientAddress: invoiceDispatchAddress.trim() || activeClient?.address || activeClient?.city || '',
+      clientPhone: activeClient?.phone || '',
+      sellerId: activeSeller?.id || '',
+      sellerName: activeSeller?.name || '',
+      paymentCondition: paymentCondition || 'Contado (Divisas / Zelle)',
+      documentType: documentType || 'Nota de Entrega Mayorista (Exenta)',
+      status: 'Borrador',
+      subtotalUsd: invoiceTotals.subtotal,
+      discountUsd: invoiceTotals.discount,
+      taxUsd: invoiceTotals.tax,
+      totalUsd: invoiceTotals.totalUsd,
+      amountPaidUsd: 0,
+      balancePendingUsd: invoiceTotals.totalUsd,
+      payments: [],
+      commissionRate: Number(invoiceCommissionRate) || 0,
+      commissionUsd: invoiceTotals.sellerCommissionUsd,
+      itemsCount: invoiceCart.reduce((a, b) => a + b.qty, 0),
+      lines: [...invoiceCart]
+    };
+
+    setDrafts(prev => {
+      const filtered = prev.filter(d => d.id !== draftId);
+      return [draftObj, ...filtered];
+    });
+    setActiveDraftId(draftId);
+
+    // Persistir en Supabase
+    setSupabaseSyncStatus('syncing');
+    insertWholesaleInvoice(draftObj).then(ok => {
+      setSupabaseSyncStatus(ok ? 'online' : 'offline');
+    });
+
+    showToast(`💾 Pedido en espera guardado (${draftId}). Puedes continuarlo en cualquier momento.`);
+  };
+
+  // Reanudar / Cargar un Borrador en el Facturador
+  const handleResumeDraft = (draft: WholesaleInvoice) => {
+    if (draft.clientId) {
+      const foundClient = clients.find(c => c.id === draft.clientId);
+      if (foundClient) setSelectedClientId(foundClient.id);
+    }
+    if (draft.sellerId) {
+      const foundSeller = sellers.find(s => s.id === draft.sellerId);
+      if (foundSeller) setSelectedSellerId(foundSeller.id);
+    }
+    if (draft.paymentCondition) {
+      setPaymentCondition(draft.paymentCondition);
+    }
+    if (draft.documentType) {
+      setDocumentType(draft.documentType);
+    }
+    if (draft.clientAddress) {
+      setInvoiceDispatchAddress(draft.clientAddress);
+    }
+    if (draft.commissionRate !== undefined) {
+      setInvoiceCommissionRate(draft.commissionRate.toString());
+    }
+    if (draft.lines && draft.lines.length > 0) {
+      setInvoiceCart([...draft.lines]);
+    }
+    setActiveDraftId(draft.id);
+    setDraftsModalOpen(false);
+    setActiveModule('invoicing');
+    showToast(`📂 Pedido en espera ${draft.id} cargado en el facturador.`);
+  };
+
+  // Eliminar un Borrador
+  const handleDeleteDraft = (draftId: string) => {
+    const confirmDelete = window.confirm(`¿Deseas eliminar el borrador ${draftId}? Esta acción no se puede deshacer.`);
+    if (!confirmDelete) return;
+
+    setDrafts(prev => prev.filter(d => d.id !== draftId));
+    if (activeDraftId === draftId) {
+      setActiveDraftId(null);
+    }
+    deleteWholesaleInvoice(draftId);
+    showToast(`Borrador ${draftId} eliminado.`);
+  };
+
+  // Abrir Modal de Creación de Repuesto desde Facturador
+  const handleOpenCreatePartFromInvoice = (searchQuery: string) => {
+    const trimmed = searchQuery.trim();
+    const isLikelySku = trimmed.length <= 15 && !trimmed.includes(' ');
+    setNewProductInvoiceForm({
+      sku: isLikelySku ? trimmed.toUpperCase() : `REP-${Date.now().toString().slice(-5)}`,
+      name: isLikelySku ? '' : trimmed,
+      category: 'Tren Delantero',
+      supplier: 'GENÉRICO',
+      cost: '',
+      price: '',
+      wholesaleStock: '10',
+      quantityToInvoice: '1',
+    });
+    setNewProductFromInvoiceModalOpen(true);
+  };
+
+  // Guardar Repuesto Nuevo e Insertar en Factura
+  const handleSaveNewProductFromInvoice = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const sku = newProductInvoiceForm.sku.trim().toUpperCase();
+    const name = newProductInvoiceForm.name.trim();
+    const cost = parseFloat(newProductInvoiceForm.cost) || 0;
+    const price = parseFloat(newProductInvoiceForm.price) || 0;
+    const stock = parseInt(newProductInvoiceForm.wholesaleStock, 10) || 0;
+    const billQty = parseInt(newProductInvoiceForm.quantityToInvoice, 10) || 1;
+
+    if (!sku) {
+      showToast('Por favor, ingresa el código SKU del repuesto.');
+      return;
+    }
+    if (!name) {
+      showToast('Por favor, ingresa el nombre o descripción del repuesto.');
+      return;
+    }
+    if (price <= 0) {
+      showToast('Por favor, ingresa un precio de venta mayorista válido mayor a 0.');
+      return;
+    }
+    if (stock < billQty) {
+      showToast('El stock inicial no puede ser inferior a la cantidad a facturar.');
+      return;
+    }
+
+    setSupabaseSyncStatus('syncing');
+    const createdProduct = await insertNewProduct({
+      sku,
+      name,
+      category: newProductInvoiceForm.category,
+      supplier: newProductInvoiceForm.supplier,
+      cost,
+      price,
+      wholesaleStock: stock,
+    });
+
+    const fallbackProduct: Product = createdProduct || {
+      id: `prod-${Date.now()}`,
+      sku,
+      name,
+      description: '',
+      category: newProductInvoiceForm.category,
+      supplier: newProductInvoiceForm.supplier,
+      supplierColor: 'border-orange-500 text-orange-600 bg-orange-50',
+      stock,
+      minStock: 2,
+      cost,
+      price,
+      location: '',
+      iconBg: 'bg-orange-50 text-[#FF5C1B]',
+      isWholesale: true,
+      wholesaleStock: stock,
+      wholesaleCost: cost,
+      wholesalePrice: price,
+      retailStock: 0,
+      retailCost: cost,
+      retailPrice: price,
+      isRetailActive: false,
+    };
+
+    setProducts(prev => [fallbackProduct, ...prev]);
+
+    // Añadir de inmediato a la factura
+    setInvoiceCart(prev => {
+      const exists = prev.find(i => i.productId === fallbackProduct.id);
+      if (exists) {
+        return prev.map(i => (i.productId === fallbackProduct.id ? { ...i, qty: i.qty + billQty } : i));
+      }
+      return [
+        ...prev,
+        {
+          productId: fallbackProduct.id,
+          name: fallbackProduct.name,
+          sku: fallbackProduct.sku,
+          qty: billQty,
+          price: fallbackProduct.wholesalePrice ?? fallbackProduct.price,
+        }
+      ];
+    });
+
+    setPartSearchInvoice('');
+    setNewProductFromInvoiceModalOpen(false);
+    setSupabaseSyncStatus('online');
+    showToast(`✓ Repuesto ${sku} creado en inventario y agregado a la factura (${billQty} und).`);
   };
 
   // Registrar Abono a Factura de Crédito en el Módulo CxC
@@ -4746,6 +4981,15 @@ export default function App() {
               </div>
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
+                  onClick={() => setDraftsModalOpen(true)}
+                  className="px-3.5 py-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-xs font-semibold text-amber-600 dark:text-amber-400 cursor-pointer flex items-center gap-1.5 transition"
+                  title="Ver facturas en espera y borradores guardados"
+                >
+                  <FileText className="w-4 h-4 text-amber-500" />
+                  <span>📂 Pedidos en Espera ({drafts.length})</span>
+                </button>
+                <button
                   onClick={() => setActiveModule('commissions')}
                   className="px-3.5 py-2 rounded-lg bg-white dark:bg-[#0E1422] border border-gray-200 dark:border-[#1E293B] text-xs font-semibold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-[#161F33] cursor-pointer flex items-center gap-1.5 transition"
                 >
@@ -4759,6 +5003,27 @@ export default function App() {
                 </button>
               </div>
             </div>
+
+            {activeDraftId && (
+              <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                  <span>Modo Borrador Activo: estás editando el pedido en espera <strong className="font-mono bg-amber-200/60 dark:bg-amber-900/60 px-1.5 py-0.5 rounded">{activeDraftId}</strong></span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveDraftId(null);
+                    setInvoiceCart([]);
+                    setInvoiceCommissionRate('');
+                    showToast('Facturador restablecido. Creando nueva factura desde cero.');
+                  }}
+                  className="px-2.5 py-1 text-xs font-bold text-amber-700 dark:text-amber-400 bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/70 rounded-lg cursor-pointer transition"
+                >
+                  ✕ Descartar y crear factura nueva
+                </button>
+              </div>
+            )}
 
             {clients.filter(c => !c.isDeleted).length === 0 || sellers.filter(s => !s.isDeleted && s.isActive !== false).length === 0 ? (
               <div className="bg-white dark:bg-[#0E1422] p-8 rounded-2xl border border-dashed border-gray-300 dark:border-[#28354D] text-center max-w-lg mx-auto my-8 shadow-2xs">
@@ -4955,81 +5220,106 @@ export default function App() {
                     />
                   </div>
 
-                  {partSearchInvoice.trim() !== '' && (
-                    <div className="mb-4 border border-gray-200 dark:border-[#28354D] rounded-lg divide-y divide-gray-100 dark:divide-[#1E293B] max-h-48 overflow-y-auto bg-gray-50/50 dark:bg-[#12192B]">
-                      {products
-                        .filter(
-                          p =>
-                            p.name.toLowerCase().includes(partSearchInvoice.toLowerCase()) ||
-                            p.sku.toLowerCase().includes(partSearchInvoice.toLowerCase())
-                        )
-                        .map(prod => {
-                          const isWholesale = Boolean(prod.isWholesale);
-                          const wStock = prod.wholesaleStock ?? prod.stock ?? 0;
-                          const hasWholesaleStock = wStock > 0;
-                          const formulaBPrice = getFormulaBPrice(prod);
-                          const displayPrice = isWholesale ? (prod.wholesalePrice ?? prod.price) : formulaBPrice;
+                  {partSearchInvoice.trim() !== '' && (() => {
+                    const filteredProducts = products.filter(
+                      p =>
+                        p.name.toLowerCase().includes(partSearchInvoice.toLowerCase()) ||
+                        p.sku.toLowerCase().includes(partSearchInvoice.toLowerCase())
+                    );
 
-                          return (
-                            <div
-                              key={prod.id}
-                              className="px-3 py-2 flex items-center justify-between text-xs hover:bg-white dark:hover:bg-[#161F33] transition"
-                            >
-                              <div>
-                                <span className="font-mono font-bold text-[#FF5C1B] mr-2">
-                                  {prod.sku}
-                                </span>
-                                <span className="text-gray-700 dark:text-slate-200">{prod.name}</span>
-                                {isWholesale ? (
-                                  hasWholesaleStock ? (
-                                    <span className="ml-2 text-[11px] font-bold text-emerald-800 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/40">
-                                      Mayor: {wStock} und
+                    return (
+                      <div className="mb-4 border border-gray-200 dark:border-[#28354D] rounded-xl overflow-hidden bg-gray-50/50 dark:bg-[#12192B] shadow-sm">
+                        <div className="max-h-52 overflow-y-auto divide-y divide-gray-100 dark:divide-[#1E293B]">
+                          {filteredProducts.length > 0 ? (
+                            filteredProducts.map(prod => {
+                              const isWholesale = Boolean(prod.isWholesale);
+                              const wStock = prod.wholesaleStock ?? prod.stock ?? 0;
+                              const hasWholesaleStock = wStock > 0;
+                              const formulaBPrice = getFormulaBPrice(prod);
+                              const displayPrice = isWholesale ? (prod.wholesalePrice ?? prod.price) : formulaBPrice;
+
+                              return (
+                                <div
+                                  key={prod.id}
+                                  className="px-3 py-2.5 flex items-center justify-between text-xs hover:bg-white dark:hover:bg-[#161F33] transition"
+                                >
+                                  <div>
+                                    <span className="font-mono font-bold text-[#FF5C1B] mr-2">
+                                      {prod.sku}
                                     </span>
+                                    <span className="text-gray-700 dark:text-slate-200 font-medium">{prod.name}</span>
+                                    {isWholesale ? (
+                                      hasWholesaleStock ? (
+                                        <span className="ml-2 text-[11px] font-bold text-emerald-800 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/40">
+                                          Mayor: {wStock} und
+                                        </span>
+                                      ) : (
+                                        <span className="ml-2 text-[11px] font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800/40">
+                                          Mayor: 0 und
+                                        </span>
+                                      )
+                                    ) : (
+                                      <span className="ml-2 text-[11px] font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/60 px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700">
+                                        No en Mayorista
+                                      </span>
+                                    )}
+                                    <span className="ml-1.5 text-[10px] text-gray-500 dark:text-slate-400">
+                                      (Detal: {prod.retailStock ?? 0})
+                                    </span>
+                                  </div>
+                                  {isWholesale ? (
+                                    <button
+                                      onClick={() => {
+                                        handleSendToInvoice(prod);
+                                        setPartSearchInvoice('');
+                                      }}
+                                      className="px-2.5 py-1 rounded bg-[#FF5C1B] hover:bg-[#ff4600] text-white font-semibold text-[11px] cursor-pointer flex items-center gap-1 group shadow-xs transition"
+                                    >
+                                      <UseAnimations
+                                        animation={plusToXAnimation}
+                                        size={12}
+                                        strokeColor="#FFFFFF"
+                                        interaction="hover-replay"
+                                      />
+                                      <span>Añadir (${displayPrice.toFixed(2)})</span>
+                                    </button>
                                   ) : (
-                                    <span className="ml-2 text-[11px] font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800/40">
-                                      Mayor: 0 und
-                                    </span>
-                                  )
-                                ) : (
-                                  <span className="ml-2 text-[11px] font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/60 px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700">
-                                    No en Mayorista
-                                  </span>
-                                )}
-                                <span className="ml-1.5 text-[10px] text-gray-500 dark:text-slate-400">
-                                  (Detal: {prod.retailStock ?? 0})
-                                </span>
-                              </div>
-                              {isWholesale ? (
-                                <button
-                                  onClick={() => {
-                                    handleSendToInvoice(prod);
-                                    setPartSearchInvoice('');
-                                  }}
-                                  className="px-2.5 py-1 rounded bg-[#FF5C1B] hover:bg-[#ff4600] text-white font-semibold text-[11px] cursor-pointer flex items-center gap-1 group shadow-xs transition"
-                                >
-                                  <UseAnimations
-                                    animation={plusToXAnimation}
-                                    size={12}
-                                    strokeColor="#FFFFFF"
-                                    interaction="hover-replay"
-                                  />
-                                  <span>Añadir (${displayPrice.toFixed(2)})</span>
-                                </button>
-                              ) : (
-                                <button
-                                  onClick={() => openExpressActivationModal(prod)}
-                                  className="px-2.5 py-1 rounded bg-amber-500 hover:bg-amber-600 text-white font-semibold text-[11px] cursor-pointer flex items-center gap-1.5 group shadow-xs transition"
-                                  title="No está en el catálogo mayorista. Clic para activar e incorporar a la factura."
-                                >
-                                  <Zap size={12} className="text-white fill-white" />
-                                  <span>+ Activar y Añadir (${displayPrice.toFixed(2)})</span>
-                                </button>
-                              )}
+                                    <button
+                                      onClick={() => openExpressActivationModal(prod)}
+                                      className="px-2.5 py-1 rounded bg-amber-500 hover:bg-amber-600 text-white font-semibold text-[11px] cursor-pointer flex items-center gap-1.5 group shadow-xs transition"
+                                      title="No está en el catálogo mayorista. Clic para activar e incorporar a la factura."
+                                    >
+                                      <Zap size={12} className="text-white fill-white" />
+                                      <span>+ Activar y Añadir (${displayPrice.toFixed(2)})</span>
+                                    </button>
+                                  )}
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <div className="p-3 text-center text-xs text-gray-500 dark:text-slate-400">
+                              No se encontraron repuestos con "{partSearchInvoice}"
                             </div>
-                          );
-                        })}
-                    </div>
-                  )}
+                          )}
+                        </div>
+
+                        {/* Opción rápida: Crear repuesto nuevo directamente y añadir a la factura */}
+                        <div className="p-2.5 bg-orange-50/70 dark:bg-orange-950/20 border-t border-orange-100 dark:border-orange-900/40 flex items-center justify-between gap-3">
+                          <span className="text-[11px] text-gray-600 dark:text-slate-300">
+                            ¿El repuesto no existe en el catálogo?
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenCreatePartFromInvoice(partSearchInvoice)}
+                            className="px-3 py-1.5 rounded-lg bg-[#FF5C1B] hover:bg-[#ff4600] text-white font-bold text-[11px] cursor-pointer flex items-center gap-1.5 shadow-xs transition"
+                          >
+                            <Plus size={13} />
+                            <span>+ Crear Repuesto Nuevo y Añadir a la Factura</span>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })()}
 
                   {/* Tabla de Ítems en la Factura */}
                   <div className="overflow-x-auto">
@@ -5168,19 +5458,32 @@ export default function App() {
                     </div>
                   </div>
 
-                  <button
-                    onClick={handleEmitInvoice}
-                    disabled={invoiceCart.length === 0}
-                    className="w-full bg-[#FF5C1B] hover:bg-[#ff4600] disabled:opacity-40 text-white py-3 rounded-xl font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 cursor-pointer group"
-                  >
-                    <UseAnimations
-                      animation={checkmarkAnimation}
-                      size={20}
-                      strokeColor="#FFFFFF"
-                      interaction="hover-replay"
-                    />
-                    <span>Emitir Factura y Descontar Stock</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleSaveDraft}
+                      disabled={invoiceCart.length === 0}
+                      className="w-1/2 bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white py-3 rounded-xl font-bold text-xs shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
+                      title="Guardar como borrador para continuar después. No descuenta stock."
+                    >
+                      <Save size={15} />
+                      <span>{activeDraftId ? 'Actualizar' : 'Borrador'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleEmitInvoice}
+                      disabled={invoiceCart.length === 0}
+                      className="w-1/2 bg-[#FF5C1B] hover:bg-[#ff4600] disabled:opacity-40 text-white py-3 rounded-xl font-bold text-xs shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer group"
+                    >
+                      <UseAnimations
+                        animation={checkmarkAnimation}
+                        size={18}
+                        strokeColor="#FFFFFF"
+                        interaction="hover-replay"
+                      />
+                      <span>Emitir Factura</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Historial reciente de facturas emitidas */}
@@ -9995,6 +10298,310 @@ export default function App() {
                 Cerrar Guía
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================
+          MODAL: PEDIDOS EN ESPERA Y BORRADORES DE FACTURAS
+      ============================================================ */}
+      {draftsModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-[#0E1422] border border-gray-200 dark:border-[#1E293B] rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            {/* Header */}
+            <div className="px-5 py-4 border-b border-gray-100 dark:border-[#1E293B] flex items-center justify-between bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                  <FileText size={20} className="text-amber-500" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    Pedidos en Espera y Borradores
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 font-mono">
+                      {drafts.length} {drafts.length === 1 ? 'borrador' : 'borradores'}
+                    </span>
+                  </h3>
+                  <p className="text-[11px] text-gray-500 dark:text-slate-400">
+                    Facturas guardadas en progreso. No descuentan inventario hasta su emisión definitiva.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDraftsModalOpen(false)}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F33] cursor-pointer transition"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Contenido / Listado */}
+            <div className="p-5 overflow-y-auto space-y-3 flex-1">
+              {drafts.length === 0 ? (
+                <div className="text-center py-12 px-4 border border-dashed border-gray-200 dark:border-[#1E293B] rounded-xl bg-gray-50/50 dark:bg-[#12192B]">
+                  <Clock className="w-10 h-10 text-amber-400 mx-auto mb-2 opacity-60" />
+                  <p className="font-bold text-sm text-gray-700 dark:text-slate-200">No hay pedidos en espera</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 max-w-sm mx-auto mt-1">
+                    Puedes guardar cualquier factura en progreso presionando el botón «Borrador» en el facturador.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2.5">
+                  {drafts.map(draft => (
+                    <div
+                      key={draft.id}
+                      className="p-3.5 rounded-xl border border-gray-200 dark:border-[#1E293B] bg-white dark:bg-[#12192B] hover:border-amber-400 dark:hover:border-amber-600 transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono font-bold text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800/40">
+                            {draft.id}
+                          </span>
+                          <span className="text-xs font-bold text-gray-900 dark:text-white">
+                            {draft.clientName || 'Cliente no definido'}
+                          </span>
+                          <span className="text-[10px] text-gray-400 dark:text-slate-500 font-mono">
+                            • {draft.date}
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-gray-500 dark:text-slate-400 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                          <span>Vendedor: <strong className="text-gray-700 dark:text-slate-300">{draft.sellerName || 'No asignado'}</strong></span>
+                          <span>•</span>
+                          <span>Ítems: <strong className="text-gray-700 dark:text-slate-300">{draft.itemsCount} repuesto(s)</strong></span>
+                          <span>•</span>
+                          <span>Total: <strong className="text-emerald-600 dark:text-emerald-400 font-mono font-bold">${draft.totalUsd.toFixed(2)}</strong></span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteDraft(draft.id)}
+                          className="p-2 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-transparent hover:border-rose-200 dark:hover:border-rose-900/60 cursor-pointer transition"
+                          title="Eliminar borrador permanentemente"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleResumeDraft(draft)}
+                          className="px-3 py-1.5 rounded-lg bg-[#FF5C1B] hover:bg-[#ff4600] text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition"
+                        >
+                          <span>Continuar Factura</span>
+                          <ChevronRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="px-5 py-3 bg-gray-50 dark:bg-[#12192B] border-t border-gray-100 dark:border-[#1E293B] flex items-center justify-between text-xs">
+              <span className="text-gray-500 dark:text-slate-400 text-[11px]">
+                Sincronizado con Supabase en la nube para acceso multidispositivo
+              </span>
+              <button
+                type="button"
+                onClick={() => setDraftsModalOpen(false)}
+                className="px-3.5 py-1.5 rounded-lg bg-gray-200/80 dark:bg-[#1E293B] text-gray-700 dark:text-slate-300 font-semibold cursor-pointer hover:bg-gray-300 dark:hover:bg-[#28354D] transition"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================
+          MODAL: CREAR REPUESTO DIRECTO DESDE FACTURADOR
+      ============================================================ */}
+      {newProductFromInvoiceModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-[#0E1422] border border-gray-200 dark:border-[#1E293B] rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className="px-5 py-4 border-b border-gray-100 dark:border-[#1E293B] flex items-center justify-between bg-gradient-to-r from-orange-500/10 via-amber-500/5 to-transparent">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#FF5C1B]/20 text-[#FF5C1B] flex items-center justify-center">
+                  <Plus size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-white">
+                    Crear Repuesto y Añadir a la Factura
+                  </h3>
+                  <p className="text-[11px] text-gray-500 dark:text-slate-400">
+                    Se registrará en Supabase con canal mayorista y se sumará a esta factura.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNewProductFromInvoiceModalOpen(false)}
+                className="p-1 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F33] cursor-pointer transition"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Formulario */}
+            <form onSubmit={handleSaveNewProductFromInvoice} className="p-5 space-y-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* SKU */}
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 dark:text-slate-300 mb-1">
+                    Código SKU / OEM *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={newProductInvoiceForm.sku}
+                    onChange={e => setNewProductInvoiceForm(prev => ({ ...prev, sku: e.target.value.toUpperCase() }))}
+                    placeholder="Ej. MOOG-ES3456"
+                    className="w-full px-3 py-2 text-xs font-mono font-bold uppercase border border-gray-200 dark:border-[#28354D] rounded-lg bg-white dark:bg-[#161F33] text-gray-900 dark:text-white focus:outline-none focus:border-[#FF5C1B]"
+                  />
+                </div>
+
+                {/* Categoría */}
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 dark:text-slate-300 mb-1">
+                    Categoría
+                  </label>
+                  <select
+                    value={newProductInvoiceForm.category}
+                    onChange={e => setNewProductInvoiceForm(prev => ({ ...prev, category: e.target.value }))}
+                    className="w-full px-3 py-2 text-xs border border-gray-200 dark:border-[#28354D] rounded-lg bg-white dark:bg-[#161F33] text-gray-900 dark:text-white focus:outline-none focus:border-[#FF5C1B]"
+                  >
+                    <option value="Tren Delantero">Tren Delantero</option>
+                    <option value="Distribución">Distribución</option>
+                    <option value="Motor y Enfriamiento">Motor y Enfriamiento</option>
+                    <option value="Rodamientos">Rodamientos</option>
+                    <option value="Eléctrico">Eléctrico</option>
+                    <option value="Suspensión y Frenos">Suspensión y Frenos</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Nombre / Descripción */}
+              <div>
+                <label className="block text-[11px] font-bold text-gray-700 dark:text-slate-300 mb-1">
+                  Nombre / Descripción del Repuesto *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newProductInvoiceForm.name}
+                  onChange={e => setNewProductInvoiceForm(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Ej. Terminal de Dirección Derecho Aveo"
+                  className="w-full px-3 py-2 text-xs border border-gray-200 dark:border-[#28354D] rounded-lg bg-white dark:bg-[#161F33] text-gray-900 dark:text-white focus:outline-none focus:border-[#FF5C1B]"
+                />
+              </div>
+
+              {/* Marca / Proveedor */}
+              <div>
+                <label className="block text-[11px] font-bold text-gray-700 dark:text-slate-300 mb-1">
+                  Marca / Fabricante
+                </label>
+                <input
+                  type="text"
+                  value={newProductInvoiceForm.supplier}
+                  onChange={e => setNewProductInvoiceForm(prev => ({ ...prev, supplier: e.target.value.toUpperCase() }))}
+                  placeholder="Ej. MOOG, TRW, CORONA, GENÉRICO"
+                  className="w-full px-3 py-2 text-xs uppercase border border-gray-200 dark:border-[#28354D] rounded-lg bg-white dark:bg-[#161F33] text-gray-900 dark:text-white focus:outline-none focus:border-[#FF5C1B]"
+                />
+              </div>
+
+              {/* Costo y Precio de Venta Mayorista */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 dark:text-slate-300 mb-1">
+                    Costo ($ USD)
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-2 text-xs text-gray-400 font-bold">$</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={newProductInvoiceForm.cost}
+                      onChange={e => setNewProductInvoiceForm(prev => ({ ...prev, cost: e.target.value }))}
+                      placeholder="0.00"
+                      className="w-full pl-7 pr-3 py-2 text-xs font-mono border border-gray-200 dark:border-[#28354D] rounded-lg bg-white dark:bg-[#161F33] text-gray-900 dark:text-white focus:outline-none focus:border-[#FF5C1B]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 dark:text-slate-300 mb-1">
+                    Precio Venta Mayor ($ USD) *
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-2 text-xs text-[#FF5C1B] font-bold">$</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      required
+                      value={newProductInvoiceForm.price}
+                      onChange={e => setNewProductInvoiceForm(prev => ({ ...prev, price: e.target.value }))}
+                      placeholder="0.00"
+                      className="w-full pl-7 pr-3 py-2 text-xs font-mono font-bold border border-gray-200 dark:border-[#28354D] rounded-lg bg-white dark:bg-[#161F33] text-gray-900 dark:text-white focus:outline-none focus:border-[#FF5C1B]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Stock Inicial y Cantidad a Facturar */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-gray-100 dark:border-[#1E293B]">
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 dark:text-slate-300 mb-1">
+                    Stock Inicial en Inventario
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    required
+                    value={newProductInvoiceForm.wholesaleStock}
+                    onChange={e => setNewProductInvoiceForm(prev => ({ ...prev, wholesaleStock: e.target.value }))}
+                    className="w-full px-3 py-2 text-xs font-mono font-bold text-center border border-gray-200 dark:border-[#28354D] rounded-lg bg-white dark:bg-[#161F33] text-gray-900 dark:text-white focus:outline-none focus:border-[#FF5C1B]"
+                  />
+                  <span className="block mt-0.5 text-[10px] text-gray-400">Existencias físicas iniciales</span>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-[#FF5C1B] mb-1">
+                    Cantidad a Facturar Ahora
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    required
+                    value={newProductInvoiceForm.quantityToInvoice}
+                    onChange={e => setNewProductInvoiceForm(prev => ({ ...prev, quantityToInvoice: e.target.value }))}
+                    className="w-full px-3 py-2 text-xs font-mono font-bold text-center border border-[#FF5C1B]/50 rounded-lg bg-orange-50/40 dark:bg-[#161F33] text-[#FF5C1B] focus:outline-none focus:border-[#FF5C1B]"
+                  />
+                  <span className="block mt-0.5 text-[10px] text-gray-400">Se agregará al carrito actual</span>
+                </div>
+              </div>
+
+              {/* Botones de acción */}
+              <div className="pt-3 border-t border-gray-100 dark:border-[#1E293B] flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setNewProductFromInvoiceModalOpen(false)}
+                  className="px-3.5 py-2 text-xs font-semibold text-gray-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-[#161F33] rounded-lg cursor-pointer transition"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-[#FF5C1B] hover:bg-[#ff4600] text-white text-xs font-bold rounded-lg cursor-pointer flex items-center gap-1.5 shadow-sm transition"
+                >
+                  <Plus size={14} />
+                  <span>Crear y Agregar a Factura</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

@@ -502,7 +502,7 @@ export interface WholesaleInvoice {
   sellerName: string;
   paymentCondition: string;
   documentType?: string;
-  status: 'Cobrada' | 'Pendiente' | 'Parcial' | 'Vencida';
+  status: 'Cobrada' | 'Pendiente' | 'Parcial' | 'Vencida' | 'Borrador';
   subtotalUsd: number;
   discountUsd: number;
   taxUsd: number;
@@ -894,5 +894,80 @@ export async function updateProductWholesale(
   } catch (e) {
     console.warn('Supabase updateProductWholesale exception:', e);
     return false;
+  }
+}
+
+export async function deleteWholesaleInvoice(invoiceId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from('wholesale_invoices').delete().eq('id', invoiceId);
+    if (error) {
+      console.warn('Supabase deleteWholesaleInvoice error:', error.message);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.warn('Supabase deleteWholesaleInvoice exception:', e);
+    return false;
+  }
+}
+
+export async function insertNewProduct(data: {
+  sku: string;
+  name: string;
+  category?: string;
+  supplier?: string;
+  cost: number;
+  price: number;
+  wholesaleStock: number;
+}): Promise<WholesaleProduct | null> {
+  try {
+    const newId = `prod-${Date.now()}`;
+    const dbPayload = {
+      id: newId,
+      code: data.sku,
+      name: data.name,
+      description: '',
+      cost: data.cost,
+      price_usd: data.price,
+      stock: 0,
+      min_stock: 2,
+      is_active: true,
+      is_wholesale: true,
+      wholesale_stock: data.wholesaleStock,
+      wholesale_cost: data.cost,
+      wholesale_price: data.price,
+      wholesale_min_stock: 2,
+    };
+    const { error } = await supabase.from('products').insert([dbPayload]);
+    if (error) {
+      console.warn('Supabase insertNewProduct error:', error.message);
+      return null;
+    }
+    return {
+      id: newId,
+      sku: data.sku,
+      name: data.name,
+      description: '',
+      category: data.category || 'Tren Delantero',
+      supplier: data.supplier || 'GENÉRICO',
+      supplierColor: 'border-orange-500 text-orange-600 bg-orange-50',
+      stock: data.wholesaleStock,
+      minStock: 2,
+      cost: data.cost,
+      price: data.price,
+      location: '',
+      iconBg: 'bg-orange-50 text-[#FF5C1B]',
+      isWholesale: true,
+      wholesaleStock: data.wholesaleStock,
+      wholesaleCost: data.cost,
+      wholesalePrice: data.price,
+      retailStock: 0,
+      retailCost: data.cost,
+      retailPrice: data.price,
+      isRetailActive: false,
+    };
+  } catch (e) {
+    console.warn('Supabase insertNewProduct exception:', e);
+    return null;
   }
 }
