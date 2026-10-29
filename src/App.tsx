@@ -1533,6 +1533,7 @@ export default function App() {
   );
   const [activeDraftId, setActiveDraftId] = useState<string | null>(null);
   const [draftsModalOpen, setDraftsModalOpen] = useState(false);
+  const [isInvoiceDrawerOpen, setIsInvoiceDrawerOpen] = useState(false);
 
   // Estados de Creación de Repuesto desde Facturador
   const [newProductFromInvoiceModalOpen, setNewProductFromInvoiceModalOpen] = useState(false);
@@ -2317,7 +2318,6 @@ export default function App() {
       initialStock: 1,
     });
     setExpressActivationModalProduct(product);
-    setActiveModule('invoicing');
   };
 
   // Confirmar activación express e incluir en el carrito de la factura
@@ -2365,6 +2365,7 @@ export default function App() {
     const sku = expressActivationModalProduct.sku;
     setExpressActivationModalProduct(null);
     setPartSearchInvoice('');
+    setIsInvoiceDrawerOpen(true);
     showToast(`⚡ ${sku} incorporado a la factura. Se activará en mayorista al emitir.`);
   };
 
@@ -2374,6 +2375,17 @@ export default function App() {
       openExpressActivationModal(product);
       return;
     }
+    const wCost = product.wholesaleCost ?? product.cost ?? 0;
+    const wPrice = product.wholesalePrice ?? product.price ?? 0;
+    if (wCost > 0 && wPrice <= wCost) {
+      const confirmAdd = window.confirm(
+        `⚠️ ADVERTENCIA DE RENTABILIDAD:\n\n` +
+        `El repuesto "${product.name}" (${product.sku}) tiene un Precio Mayorista ($${wPrice.toFixed(2)}) ` +
+        `menor o igual a su Costo ($${wCost.toFixed(2)}).\n\n` +
+        `Margen comercial negativo o nulo. ¿Estás seguro de que deseas agregarlo de todas formas a la factura?`
+      );
+      if (!confirmAdd) return;
+    }
     setInvoiceCart(prev => {
       const exists = prev.find(i => i.productId === product.id);
       if (exists) {
@@ -2382,8 +2394,8 @@ export default function App() {
       return [...prev, { productId: product.id, name: product.name, sku: product.sku, qty: 1, price: product.wholesalePrice ?? product.price }];
     });
     setOpenActionRowId(null);
-    setActiveModule('invoicing');
-    showToast(`${product.sku} agregado a la factura mayorista`);
+    setIsInvoiceDrawerOpen(true);
+    showToast(`${product.sku} agregado a la factura en curso`);
   };
 
   // Crear un nuevo repuesto en el catálogo
@@ -2921,6 +2933,7 @@ export default function App() {
     setPreviewInvoice(newInvoiceObj);
     setInvoiceCart([]);
     setInvoiceCommissionRate('');
+    setIsInvoiceDrawerOpen(false);
 
     // Si provenía de un borrador / pedido en espera, eliminarlo
     if (activeDraftId) {
@@ -4932,7 +4945,7 @@ export default function App() {
                             ) : (
                               /* Columna: Costo Mayorista */
                               <td className="py-3 px-3 whitespace-nowrap">
-                                <span className="font-mono font-bold text-xs text-gray-900 dark:text-white">
+                                <span className={`font-mono font-bold text-xs ${wCost > 0 && wPrice <= wCost ? 'text-amber-500 dark:text-amber-400 font-extrabold' : 'text-gray-900 dark:text-white'}`}>
                                   ${wCost.toFixed(2)}
                                 </span>
                               </td>
@@ -4940,8 +4953,19 @@ export default function App() {
 
                             {/* Columna 8: Precio Mayorista Dual con Comparativa Detal */}
                             <td className="py-3 px-3 text-right whitespace-nowrap">
-                              <div className="font-black text-sm text-gray-900 dark:text-white">
-                                ${wPrice.toFixed(2)}
+                              <div className="flex items-center justify-end gap-1.5">
+                                {wCost > 0 && wPrice <= wCost && (
+                                  <span
+                                    title={`⚠️ Margen negativo: Precio ($${wPrice.toFixed(2)}) menor o igual al Costo ($${wCost.toFixed(2)})`}
+                                    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-800 animate-pulse"
+                                  >
+                                    <AlertTriangle className="w-3 h-3 text-rose-500 shrink-0" />
+                                    Pérdida
+                                  </span>
+                                )}
+                                <div className={`font-black text-sm ${wCost > 0 && wPrice <= wCost ? 'text-rose-600 dark:text-rose-400' : 'text-gray-900 dark:text-white'}`}>
+                                  ${wPrice.toFixed(2)}
+                                </div>
                               </div>
                               <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-medium">
                                 Bs. {(wPrice * bcvRate).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -10649,6 +10673,257 @@ export default function App() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* ============================================================
+          DRAWER / PANEL LATERAL: FACTURA EN CREACIÓN EN TIEMPO REAL
+      ============================================================ */}
+      {isInvoiceDrawerOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end pointer-events-none animate-in fade-in duration-200">
+          {/* Backdrop sutil clicable para cerrar */}
+          <div
+            onClick={() => setIsInvoiceDrawerOpen(false)}
+            className="fixed inset-0 bg-black/40 backdrop-blur-[2px] pointer-events-auto transition-opacity"
+          />
+
+          {/* Panel Lateral Deslizante */}
+          <div className="relative w-full sm:w-[460px] h-full bg-white dark:bg-[#0E1422] border-l border-gray-200 dark:border-[#1E293B] shadow-2xl flex flex-col pointer-events-auto z-10 animate-in slide-in-from-right duration-300">
+            {/* Header del Panel */}
+            <div className="p-4 border-b border-gray-100 dark:border-[#1E293B] bg-gradient-to-r from-orange-500/10 via-amber-500/5 to-transparent flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-[#FF5C1B] text-white flex items-center justify-center shadow-xs">
+                  <ShoppingCart size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    Factura en Creación
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950/80 text-[#FF5C1B] font-mono">
+                      {invoiceCart.reduce((acc, i) => acc + i.qty, 0)} {invoiceCart.length === 1 && invoiceCart[0]?.qty === 1 ? 'ítem' : 'ítems'}
+                    </span>
+                  </h3>
+                  <p className="text-[11px] text-gray-500 dark:text-slate-400">
+                    Añade repuestos desde el inventario en tiempo real
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsInvoiceDrawerOpen(false)}
+                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#161F33] cursor-pointer transition"
+                title="Minimizar panel lateral"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Selectores Rápidos de Cliente y Vendedor */}
+            <div className="p-4 bg-gray-50/70 dark:bg-[#12192B] border-b border-gray-100 dark:border-[#1E293B] space-y-2.5 shrink-0">
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 dark:text-slate-400 uppercase mb-1">
+                    Cliente Mayorista
+                  </label>
+                  <select
+                    value={selectedClientId}
+                    onChange={e => setSelectedClientId(e.target.value)}
+                    className="w-full text-xs font-semibold px-2 py-1.5 rounded-lg border border-gray-200 dark:border-[#28354D] bg-white dark:bg-[#161F33] text-gray-900 dark:text-white focus:outline-none focus:border-[#FF5C1B] cursor-pointer"
+                  >
+                    {clients.map(c => (
+                      <option key={c.id} value={c.id} className="dark:bg-[#0E1422]">
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 dark:text-slate-400 uppercase mb-1">
+                    Asesor Comercial
+                  </label>
+                  <select
+                    value={selectedSellerId}
+                    onChange={e => setSelectedSellerId(e.target.value)}
+                    className="w-full text-xs font-semibold px-2 py-1.5 rounded-lg border border-gray-200 dark:border-[#28354D] bg-white dark:bg-[#161F33] text-gray-900 dark:text-white focus:outline-none focus:border-[#FF5C1B] cursor-pointer"
+                  >
+                    {sellers.filter(s => !s.isDeleted && s.isActive !== false).map(s => (
+                      <option key={s.id} value={s.id} className="dark:bg-[#0E1422]">
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Listado de Repuestos en el Carrito */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-2.5">
+              {invoiceCart.length === 0 ? (
+                <div className="py-16 text-center text-gray-400 dark:text-slate-500">
+                  <ShoppingCart className="w-10 h-10 mx-auto mb-2 opacity-40 text-gray-400" />
+                  <p className="text-xs font-bold text-gray-600 dark:text-slate-300">El carrito de la factura está vacío</p>
+                  <p className="text-[11px] text-gray-400 mt-1 max-w-xs mx-auto">
+                    Haz clic en el icono de carrito 🛒 en cualquier repuesto de la tabla para sumarlo a este documento.
+                  </p>
+                </div>
+              ) : (
+                invoiceCart.map((item, idx) => {
+                  const productInCatalog = products.find(p => p.id === item.productId);
+                  const isStockZero = (productInCatalog?.wholesaleStock ?? productInCatalog?.stock ?? 0) <= 0;
+
+                  return (
+                    <div
+                      key={item.productId + idx}
+                      className="p-3 rounded-xl border border-gray-200 dark:border-[#1E293B] bg-white dark:bg-[#161F33] flex items-center justify-between gap-3 shadow-2xs hover:border-orange-200 dark:hover:border-orange-900/50 transition"
+                    >
+                      <div className="min-w-0 flex-1 space-y-0.5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-mono font-bold text-[11px] text-[#FF5C1B] shrink-0">
+                            {item.sku}
+                          </span>
+                          {isStockZero && (
+                            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/40 shrink-0">
+                              Preventa (0 stock)
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs font-semibold text-gray-900 dark:text-white truncate" title={item.name}>
+                          {item.name}
+                        </p>
+                        <p className="text-[11px] text-gray-500 dark:text-slate-400">
+                          ${item.price.toFixed(2)} c/u • Subtotal: <strong className="text-gray-900 dark:text-slate-200">${(item.qty * item.price).toFixed(2)}</strong>
+                        </p>
+                      </div>
+
+                      {/* Controles de Cantidad (+ / -) y Eliminar */}
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center border border-gray-200 dark:border-[#28354D] rounded-lg bg-gray-50 dark:bg-[#12192B] overflow-hidden">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (item.qty <= 1) {
+                                setInvoiceCart(prev => prev.filter((_, i) => i !== idx));
+                              } else {
+                                setInvoiceCart(prev => prev.map((l, i) => (i === idx ? { ...l, qty: l.qty - 1 } : l)));
+                              }
+                            }}
+                            className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-[#1E293B] cursor-pointer transition"
+                            title="Disminuir cantidad"
+                          >
+                            <Minus size={12} />
+                          </button>
+                          <span className="w-8 text-center text-xs font-bold font-mono text-gray-900 dark:text-white">
+                            {item.qty}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setInvoiceCart(prev => prev.map((l, i) => (i === idx ? { ...l, qty: l.qty + 1 } : l)));
+                            }}
+                            className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-[#1E293B] cursor-pointer transition"
+                            title="Aumentar cantidad"
+                          >
+                            <Plus size={12} />
+                          </button>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setInvoiceCart(prev => prev.filter((_, i) => i !== idx))}
+                          className="p-1.5 text-gray-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg cursor-pointer transition"
+                          title="Eliminar de la factura"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* Footer con Totales y Botones de Emisión / Guardado */}
+            <div className="p-4 bg-gray-50 dark:bg-[#12192B] border-t border-gray-100 dark:border-[#1E293B] space-y-3 shrink-0">
+              {/* Total en USD y Bs */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-baseline">
+                  <span className="text-xs font-bold text-gray-600 dark:text-slate-400 uppercase">
+                    Total Factura ($):
+                  </span>
+                  <span className="text-xl font-extrabold text-gray-900 dark:text-white font-mono">
+                    ${invoiceTotals.totalUsd.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-baseline text-[11px] text-gray-500 dark:text-slate-400">
+                  <span>Equivalente en Bolívares:</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400 font-mono">
+                    Bs. {invoiceTotals.totalBs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </span>
+                </div>
+              </div>
+
+              {/* Botones de Acción */}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={handleSaveDraft}
+                  disabled={invoiceCart.length === 0}
+                  className="px-3 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition"
+                >
+                  <Save size={14} />
+                  <span>Guardar Borrador</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleEmitInvoice}
+                  disabled={invoiceCart.length === 0}
+                  className="px-3 py-2.5 rounded-xl bg-[#FF5C1B] hover:bg-[#ff4600] disabled:opacity-40 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition"
+                >
+                  <Check size={14} />
+                  <span>Emitir Factura</span>
+                </button>
+              </div>
+
+              {/* Botón Ver Facturador Completo */}
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveModule('invoicing');
+                  setIsInvoiceDrawerOpen(false);
+                }}
+                className="w-full py-1.5 text-center text-xs font-semibold text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:underline cursor-pointer transition"
+              >
+                Abrir en pantalla completa de Facturación →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Botón Flotante para reabrir la Factura en Creación */}
+      {invoiceCart.length > 0 && !isInvoiceDrawerOpen && activeModule !== 'invoicing' && (
+        <div className="fixed bottom-6 right-6 z-40 animate-in fade-in slide-in-from-bottom duration-300">
+          <button
+            type="button"
+            onClick={() => setIsInvoiceDrawerOpen(true)}
+            className="px-4 py-3 rounded-2xl bg-gradient-to-r from-[#FF5C1B] to-[#ff4600] text-white font-bold text-xs shadow-xl shadow-orange-500/30 flex items-center gap-3 cursor-pointer hover:scale-105 active:scale-95 transition"
+            title="Abrir factura en creación"
+          >
+            <div className="relative">
+              <ShoppingCart size={18} />
+              <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-white text-[#FF5C1B] font-extrabold text-[9px] flex items-center justify-center shadow-xs">
+                {invoiceCart.reduce((a, b) => a + b.qty, 0)}
+              </span>
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="leading-tight">Factura en Creación</span>
+              <span className="font-mono font-extrabold text-[11px] text-orange-100">
+                ${invoiceTotals.totalUsd.toFixed(2)}
+              </span>
+            </div>
+            <ChevronRight size={16} className="text-orange-200" />
+          </button>
         </div>
       )}
 

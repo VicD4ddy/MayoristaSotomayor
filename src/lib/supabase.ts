@@ -394,10 +394,10 @@ export function mapSupabaseToWholesaleProduct(row: SupabaseProductRow): Wholesal
 
   const minStockDefault = Number(row.wholesale_min_stock ?? row.min_stock ?? 2);
 
-  const isWholesale = overrides.isWholesale !== undefined ? overrides.isWholesale : isWholesaleDefault;
-  const wholesaleStock = overrides.wholesaleStock !== undefined ? overrides.wholesaleStock : wholesaleStockDefault;
-  const wholesaleCost = overrides.wholesaleCost !== undefined ? overrides.wholesaleCost : wholesaleCostDefault;
-  const wholesalePrice = overrides.wholesalePrice !== undefined ? overrides.wholesalePrice : wholesalePriceDefault;
+  const isWholesale = hasDbWholesaleFlag ? isWholesaleDefault : (overrides.isWholesale !== undefined ? overrides.isWholesale : isWholesaleDefault);
+  const wholesaleStock = row.wholesale_stock !== undefined && row.wholesale_stock !== null ? Number(row.wholesale_stock) : (overrides.wholesaleStock !== undefined ? overrides.wholesaleStock : wholesaleStockDefault);
+  const wholesaleCost = row.wholesale_cost !== undefined && row.wholesale_cost !== null && Number(row.wholesale_cost) > 0 ? Number(row.wholesale_cost) : (overrides.wholesaleCost !== undefined ? overrides.wholesaleCost : wholesaleCostDefault);
+  const wholesalePrice = row.wholesale_price !== undefined && row.wholesale_price !== null && Number(row.wholesale_price) > 0 ? Number(row.wholesale_price) : (overrides.wholesalePrice !== undefined ? overrides.wholesalePrice : wholesalePriceDefault);
   const minStock = overrides.minStock !== undefined ? overrides.minStock : minStockDefault;
 
   // Limpieza de ubicación: si no existe o dice "Almacén Principal Valencia", se deja vacía
