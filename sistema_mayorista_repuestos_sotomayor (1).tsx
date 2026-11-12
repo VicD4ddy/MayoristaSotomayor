@@ -390,6 +390,45 @@ export interface WholesaleInvoice {
 }
 export type Invoice = WholesaleInvoice;
 
+export const ORIGINAL_DOCUMENT_TITLE = 'Repuestos Sotomayor, C.A. — Sistema Mayorista & Facturación';
+
+// Sanitizar y obtener nombre limpio del cliente para nombres de archivo compatibles con Windows
+export const getCleanClientName = (clientName?: string): string => {
+  if (!clientName || !clientName.trim()) return 'CLIENTE MOSTRADOR - SOTOMAYOR';
+  let clean = clientName.trim();
+  // Si proviene de la jerarquía de QuickBooks tipo "VENDEDOR:Nombre Cliente"
+  if (clean.includes(':')) {
+    const parts = clean.split(':');
+    clean = parts[parts.length - 1].trim();
+  }
+  // Sanitizar caracteres inválidos en sistemas operativos / Windows: / \ : * ? " < > |
+  clean = clean.replace(/[/\\:*?"<>|]/g, '').trim();
+  if (!clean || clean.toUpperCase().includes('MOSTRADOR')) {
+    return 'CLIENTE MOSTRADOR - SOTOMAYOR';
+  }
+  return clean.toUpperCase();
+};
+
+// Generar nombre de documento oficial para impresión y guardado como PDF (Opción C)
+export const getDocumentPdfTitle = (invoice: Invoice): string => {
+  const clientName = getCleanClientName(invoice.clientName);
+  const docTypeStr = getDocumentTitle(invoice.documentType);
+  const docNumber = formatInvoiceDisplayNumber(invoice.id);
+
+  let docTypeName = 'NOTA DE ENTREGA';
+  let prefix = 'NE';
+
+  if (docTypeStr.toLowerCase().includes('cotización') || docTypeStr.toLowerCase().includes('cotizacion')) {
+    docTypeName = 'COTIZACIÓN MAYORISTA';
+    prefix = 'COT';
+  } else if (docTypeStr.toLowerCase().includes('factura')) {
+    docTypeName = 'FACTURA';
+    prefix = 'FAC';
+  }
+
+  return `${clientName} - ${docTypeName} #${prefix}-${docNumber}`;
+};
+
 export interface WholesaleReceiptItem {
   productId: string;
   sku: string;
@@ -2000,6 +2039,27 @@ export default function App() {
   const [invoiceCart, setInvoiceCart] = useState<InvoiceLine[]>([]);
   const [partSearchInvoice, setPartSearchInvoice] = useState('');
   const [previewInvoice, setPreviewInvoice] = useState<Invoice | null>(null);
+
+  // Sincronizar título de la pestaña con el documento activo para que al Guardar como PDF
+  // el navegador sugiera automáticamente: [CLIENTE] - [TIPO DOC] #[PREFIJO]-[NUMERO].pdf
+  useEffect(() => {
+    if (previewInvoice) {
+      document.title = getDocumentPdfTitle(previewInvoice);
+    } else {
+      document.title = ORIGINAL_DOCUMENT_TITLE;
+    }
+    return () => {
+      document.title = ORIGINAL_DOCUMENT_TITLE;
+    };
+  }, [previewInvoice]);
+
+  // Manejador centralizado para imprimir o guardar PDF garantizando el título del cliente
+  const handlePrintPdfDocument = () => {
+    if (previewInvoice) {
+      document.title = getDocumentPdfTitle(previewInvoice);
+    }
+    window.print();
+  };
   const [expressActivationModalProduct, setExpressActivationModalProduct] = useState<Product | null>(null);
   const [expressForm, setExpressForm] = useState({
     suggestedPrice: 0,
@@ -9346,7 +9406,8 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => window.print()}
+                  onClick={handlePrintPdfDocument}
+                  title={`Guardar como PDF: ${getDocumentPdfTitle(previewInvoice)}.pdf`}
                   className="px-3.5 py-1.5 rounded-xl border border-gray-200 font-bold text-gray-700 flex items-center gap-1.5 hover:bg-gray-50 cursor-pointer shadow-2xs transition"
                 >
                   <Printer className="w-3.5 h-3.5 text-gray-600" />
@@ -9578,7 +9639,8 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => window.print()}
+                  onClick={handlePrintPdfDocument}
+                  title={`Guardar como PDF: ${getDocumentPdfTitle(previewInvoice)}.pdf`}
                   className="px-4 py-2 rounded-xl bg-[#235836] hover:bg-[#1b442a] text-white font-bold flex items-center gap-1.5 cursor-pointer shadow-sm transition"
                 >
                   <Printer className="w-4 h-4 text-white" />
