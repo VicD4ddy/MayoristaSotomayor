@@ -68,6 +68,7 @@ import {
   Zap,
   Minus,
   BarChart2,
+  RotateCcw,
   PieChart,
   Award,
   ArrowUpRight,
@@ -107,6 +108,7 @@ import {
   updateProductWholesale,
   deleteWholesaleInvoice,
   insertNewProduct,
+  updateWholesaleInvoiceCommissionPaid,
 } from './lib/supabase';
 
 // ==========================================
@@ -385,6 +387,8 @@ export interface WholesaleInvoice {
   payments?: WholesalePaymentInstallment[];
   commissionRate: number;
   commissionUsd: number;
+  commissionPaid?: boolean;
+  commissionPaidAt?: string;
   itemsCount: number;
   lines?: WholesaleInvoiceLine[];
 }
@@ -1988,7 +1992,7 @@ export default function App() {
   // Estados para el visor de ventas concretadas por vendedor
   const [sellerSalesHistoryModal, setSellerSalesHistoryModal] = useState<Seller | null>(null);
   const [sellerSalesSearch, setSellerSalesSearch] = useState('');
-  const [sellerSalesStatusFilter, setSellerSalesStatusFilter] = useState<'Todas' | 'Cobrada' | 'Pendiente'>('Todas');
+  const [sellerSalesStatusFilter, setSellerSalesStatusFilter] = useState<'Todas' | 'PorPagar' | 'Pagada' | 'Credito'>('Todas');
 
   // Estados para el Tutorial y Recorrido Guiado en Vivo
   const [tutorialModalOpen, setTutorialModalOpen] = useState(false);
@@ -2750,6 +2754,32 @@ export default function App() {
     } else {
       setSupabaseSyncStatus('offline');
       showToast(`Cliente "${targetName}" marcado como inactivo localmente.`);
+    }
+  };
+
+  // Conmutar estado de pago de comisión a un vendedor (Comisión Pagada <-> Pendiente)
+  const handleToggleCommissionPaid = async (inv: Invoice) => {
+    const nextPaid = !inv.commissionPaid;
+    const paidAt = nextPaid ? new Date().toISOString() : undefined;
+
+    // Actualizar estado en memoria reactivo inmediatamente
+    setInvoices(prev =>
+      prev.map(item =>
+        item.id === inv.id
+          ? { ...item, commissionPaid: nextPaid, commissionPaidAt: paidAt }
+          : item
+      )
+    );
+
+    setSupabaseSyncStatus('syncing');
+    const ok = await updateWholesaleInvoiceCommissionPaid(inv.id, nextPaid, paidAt);
+    setSupabaseSyncStatus(ok ? 'online' : 'offline');
+
+    const amountFormatted = `$${(inv.commissionUsd || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
+    if (nextPaid) {
+      showToast(`✓ Comisión de ${amountFormatted} (Factura ${formatInvoiceDisplayNumber(inv.id)}) registrada como PAGADA a ${inv.sellerName || 'asesor'}`);
+    } else {
+      showToast(`Comisión (Factura ${formatInvoiceDisplayNumber(inv.id)}) revertida a PENDIENTE de pago`);
     }
   };
 
@@ -6836,12 +6866,21 @@ export default function App() {
                 {sellers.filter(s => !s.isDeleted).map(seller => {
                 const sellerInvoices = invoices.filter(i => i.sellerId === seller.id);
                 const totalSales = sellerInvoices.reduce((acc, i) => acc + i.totalUsd, 0);
-                const paidCommissions = sellerInvoices
-                  .filter(i => i.status === 'Cobrada')
-                  .reduce((acc, i) => acc + i.commissionUsd, 0);
-                const pendingCommissions = sellerInvoices
-                  .filter(i => i.status !== 'Cobrada')
-                  .reduce((acc, i) => acc + i.commissionUsd, 0);
+
+                // Comisiones ya pagadas/desembolsadas al vendedor
+                const commissionAlreadyPaid = sellerInvoices
+                  .filter(i => i.commissionPaid)
+                  .reduce((acc, i) => acc + (i.commissionUsd || 0), 0);
+
+                // Comisiones cobradas al cliente pendientes de transferir al vendedor
+                const commissionToPay = sellerInvoices
+                  .filter(i => !i.commissionPaid && i.status === 'Cobrada')
+                  .reduce((acc, i) => acc + (i.commissionUsd || 0), 0);
+
+                // Comisiones en facturas a crédito pendientes de cobro
+                const commissionInCredit = sellerInvoices
+                  .filter(i => !i.commissionPaid && i.status !== 'Cobrada')
+                  .reduce((acc, i) => acc + (i.commissionUsd || 0), 0);
 
                 return (
                   <div
@@ -6905,22 +6944,26 @@ export default function App() {
                             </span>
                           </span>
                         </div>
-                        <div className="flex justify-between text-emerald-700 dark:text-emerald-400 font-semibold">
-                          <span>Comisión Liquidable:</span>
-                          <span className="font-mono">${paidCommissions.toFixed(2)}</span>
+                        <div className="flex justify-between text-amber-600 dark:text-amber-400 font-bold">
+                          <span>Comisión Por Pagar:</span>
+                          <span className="font-mono">${commissionToPay.toFixed(2)}</span>
                         </div>
-                        <div className="flex justify-between text-amber-600 dark:text-amber-400 text-[11px]">
+                        <div className="flex justify-between text-emerald-600 dark:text-emerald-400 text-[11px] font-semibold">
+                          <span>Comisión Ya Pagada:</span>
+                          <span className="font-mono">${commissionAlreadyPaid.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-gray-500 dark:text-slate-400 text-[11px]">
                           <span>En facturas a crédito:</span>
-                          <span className="font-mono">${pendingCommissions.toFixed(2)}</span>
+                          <span className="font-mono">${commissionInCredit.toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="mt-3 pt-2.5 border-t border-gray-100 dark:border-[#1E293B] flex flex-col gap-2">
                       <div className="flex items-center justify-between text-[11px] text-gray-500 dark:text-slate-400">
-                        <span>Equiv. Liquidable BCV:</span>
-                        <span className="font-bold text-gray-800 dark:text-emerald-400 font-mono">
-                          Bs. {(paidCommissions * bcvRate).toFixed(2)}
+                        <span>Equiv. Por Pagar BCV:</span>
+                        <span className="font-bold text-gray-800 dark:text-amber-400 font-mono">
+                          Bs. {(commissionToPay * bcvRate).toFixed(2)}
                         </span>
                       </div>
 
@@ -8590,12 +8633,22 @@ export default function App() {
         const s = sellerSalesHistoryModal;
         const sellerInvoices = invoices.filter(inv => inv.sellerId === s.id);
         const totalSales = sellerInvoices.reduce((sum, inv) => sum + (inv.totalUsd || 0), 0);
-        const paidCommissions = sellerInvoices
-          .filter(inv => inv.status === 'Cobrada')
+
+        // Comisión Por Pagar: Facturas cobradas al cliente pero comisión aún no transferida al asesor
+        const commissionToPay = sellerInvoices
+          .filter(inv => !inv.commissionPaid && inv.status === 'Cobrada')
           .reduce((sum, inv) => sum + (inv.commissionUsd || 0), 0);
-        const pendingCommissions = sellerInvoices
-          .filter(inv => inv.status !== 'Cobrada')
+
+        // Comisión Ya Pagada: Transferidas / liquidadas al asesor
+        const commissionAlreadyPaid = sellerInvoices
+          .filter(inv => inv.commissionPaid)
           .reduce((sum, inv) => sum + (inv.commissionUsd || 0), 0);
+
+        // Comisión en Créditos: Facturas que el cliente aún debe
+        const commissionInCredit = sellerInvoices
+          .filter(inv => !inv.commissionPaid && inv.status !== 'Cobrada')
+          .reduce((sum, inv) => sum + (inv.commissionUsd || 0), 0);
+
         const averageTicket = sellerInvoices.length > 0 ? totalSales / sellerInvoices.length : 0;
 
         const filteredInvoices = sellerInvoices.filter(inv => {
@@ -8606,13 +8659,20 @@ export default function App() {
             inv.clientRif.toLowerCase().includes(sellerSalesSearch.toLowerCase());
           const matchStatus =
             sellerSalesStatusFilter === 'Todas' ||
-            (sellerSalesStatusFilter === 'Cobrada' && inv.status === 'Cobrada') ||
-            (sellerSalesStatusFilter === 'Pendiente' && inv.status !== 'Cobrada');
+            (sellerSalesStatusFilter === 'PorPagar' && !inv.commissionPaid && inv.status === 'Cobrada') ||
+            (sellerSalesStatusFilter === 'Pagada' && inv.commissionPaid) ||
+            (sellerSalesStatusFilter === 'Credito' && !inv.commissionPaid && inv.status !== 'Cobrada');
           return matchSearch && matchStatus;
         });
 
         const filteredTotal = filteredInvoices.reduce((sum, inv) => sum + (inv.totalUsd || 0), 0);
         const filteredCommissions = filteredInvoices.reduce((sum, inv) => sum + (inv.commissionUsd || 0), 0);
+        const filteredToPay = filteredInvoices
+          .filter(inv => !inv.commissionPaid && inv.status === 'Cobrada')
+          .reduce((sum, inv) => sum + (inv.commissionUsd || 0), 0);
+        const filteredPaid = filteredInvoices
+          .filter(inv => inv.commissionPaid)
+          .reduce((sum, inv) => sum + (inv.commissionUsd || 0), 0);
 
         return (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fadeIn">
@@ -8660,7 +8720,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* KPI Cards de Ventas Concretadas (100% USD según respuesta A3) */}
+              {/* KPI Cards de Ventas Concretadas y Estado de Comisiones */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 shrink-0">
                 <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#161F33] border border-gray-200 dark:border-[#28354D]">
                   <span className="text-[10px] font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider block">
@@ -8674,39 +8734,39 @@ export default function App() {
                   </span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40">
-                  <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider block">
-                    Comisión Liquidable ($)
+                <div className="p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40">
+                  <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider block">
+                    Comisión Por Pagar ($)
                   </span>
-                  <div className="text-base font-bold text-emerald-700 dark:text-emerald-400 font-mono mt-0.5">
-                    ${paidCommissions.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  <div className="text-base font-bold text-amber-700 dark:text-amber-400 font-mono mt-0.5">
+                    ${commissionToPay.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
-                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400">
-                    Facturas Cobradas
+                  <span className="text-[10px] text-amber-600 dark:text-amber-400">
+                    Cobradas al cliente (Pend. Asesor)
                   </span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40">
-                  <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider block">
-                    Comisión en Créditos ($)
+                <div className="p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40">
+                  <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider block">
+                    Comisión Ya Pagada ($)
                   </span>
-                  <div className="text-base font-bold text-amber-700 dark:text-amber-400 font-mono mt-0.5">
-                    ${pendingCommissions.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  <div className="text-base font-bold text-emerald-700 dark:text-emerald-400 font-mono mt-0.5">
+                    ${commissionAlreadyPaid.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
-                  <span className="text-[10px] text-amber-600 dark:text-amber-400">
-                    Pendientes de cobro
+                  <span className="text-[10px] text-emerald-600 dark:text-emerald-400">
+                    Transferidas al asesor
                   </span>
                 </div>
 
                 <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#161F33] border border-gray-200 dark:border-[#28354D]">
                   <span className="text-[10px] font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider block">
-                    Ticket Promedio ($)
+                    En Créditos ($)
                   </span>
                   <div className="text-base font-bold text-gray-900 dark:text-white font-mono mt-0.5">
-                    ${averageTicket.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    ${commissionInCredit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                   <span className="text-[10px] text-gray-400 dark:text-slate-500">
-                    Por venta cerrada
+                    Por cobrar al cliente
                   </span>
                 </div>
               </div>
@@ -8740,8 +8800,9 @@ export default function App() {
                     className="text-xs border border-gray-200 dark:border-[#28354D] bg-white dark:bg-[#161F33] text-gray-800 dark:text-white rounded-lg px-2.5 py-1.5 cursor-pointer"
                   >
                     <option value="Todas" className="dark:bg-[#0E1422]">Todas las Ventas</option>
-                    <option value="Cobrada" className="dark:bg-[#0E1422]">Cobradas (Liquidables)</option>
-                    <option value="Pendiente" className="dark:bg-[#0E1422]">Pendientes de Cobro</option>
+                    <option value="PorPagar" className="dark:bg-[#0E1422]">Por Pagar al Asesor</option>
+                    <option value="Pagada" className="dark:bg-[#0E1422]">Ya Pagadas al Asesor</option>
+                    <option value="Credito" className="dark:bg-[#0E1422]">En Facturas a Crédito</option>
                   </select>
                 </div>
               </div>
@@ -8759,13 +8820,14 @@ export default function App() {
                       <th className="py-2.5 px-3 text-center">% Com.</th>
                       <th className="py-2.5 px-3 text-right">Comisión ($)</th>
                       <th className="py-2.5 px-3 text-center">Estado Cobranza</th>
+                      <th className="py-2.5 px-3 text-center">Pago Comisión</th>
                       <th className="py-2.5 px-3 text-center">Acción</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-[#1E293B]">
                     {filteredInvoices.length === 0 ? (
                       <tr>
-                        <td colSpan={9} className="py-12 text-center text-gray-400 dark:text-slate-500">
+                        <td colSpan={10} className="py-12 text-center text-gray-400 dark:text-slate-500">
                           <FileText className="w-8 h-8 mx-auto mb-2 opacity-40" />
                           <p className="font-semibold text-xs">No se encontraron ventas para este criterio</p>
                         </td>
@@ -8806,8 +8868,45 @@ export default function App() {
                                   : 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400'
                               }`}
                             >
-                              {inv.status === 'Cobrada' ? '✓ Cobrada (Liquidable)' : '⏳ Crédito Pendiente'}
+                              {inv.status === 'Cobrada' ? '✓ Cobrada (Cliente)' : '⏳ Crédito Pendiente'}
                             </span>
+                          </td>
+                          <td className="py-3 px-3 text-center whitespace-nowrap">
+                            {inv.commissionPaid ? (
+                              <button
+                                type="button"
+                                onClick={() => handleToggleCommissionPaid(inv)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950/80 dark:hover:bg-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700/50 cursor-pointer transition shadow-2xs group"
+                                title={
+                                  inv.commissionPaidAt
+                                    ? `Pagada el ${new Date(inv.commissionPaidAt).toLocaleDateString()} a las ${new Date(inv.commissionPaidAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}. Clic para revertir a pendiente.`
+                                    : 'Comisión pagada. Clic para revertir a pendiente.'
+                                }
+                              >
+                                <span className="group-hover:hidden flex items-center gap-1">✓ Pagada</span>
+                                <span className="hidden group-hover:flex items-center gap-1 text-red-600 dark:text-red-400">
+                                  <RotateCcw className="w-2.5 h-2.5" /> Revertir
+                                </span>
+                              </button>
+                            ) : inv.status === 'Cobrada' ? (
+                              <button
+                                type="button"
+                                onClick={() => handleToggleCommissionPaid(inv)}
+                                className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold bg-amber-500 hover:bg-amber-600 text-white dark:bg-amber-600 dark:hover:bg-amber-500 cursor-pointer transition shadow-2xs active:scale-95"
+                                title="Registrar comisión como PAGADA al asesor"
+                              >
+                                <span>Pagar Comisión</span>
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => handleToggleCommissionPaid(inv)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-100 hover:bg-amber-100 text-gray-700 hover:text-amber-800 dark:bg-[#1E293B] dark:hover:bg-amber-950/60 dark:text-slate-300 dark:hover:text-amber-300 border border-gray-300 dark:border-gray-700 cursor-pointer transition active:scale-95"
+                                title="Adelantar pago de comisión (aún en factura a crédito)"
+                              >
+                                <span>Adelantar Pago</span>
+                              </button>
+                            )}
                           </td>
                           <td className="py-3 px-3 text-center whitespace-nowrap">
                             <button
@@ -8827,9 +8926,9 @@ export default function App() {
               </div>
 
               {/* Footer del Modal */}
-              <div className="pt-4 mt-4 border-t border-gray-100 dark:border-[#1E293B] flex items-center justify-between text-xs shrink-0">
+              <div className="pt-4 mt-4 border-t border-gray-100 dark:border-[#1E293B] flex items-center justify-between text-xs shrink-0 flex-wrap gap-2">
                 <span className="text-gray-500 dark:text-slate-400">
-                  Mostrando <strong className="text-gray-900 dark:text-white font-mono">{filteredInvoices.length}</strong> de <strong className="text-gray-900 dark:text-white font-mono">{sellerInvoices.length}</strong> ventas • Subtotal en lista: <strong className="text-gray-900 dark:text-white font-mono">${filteredTotal.toFixed(2)} USD</strong> (Comisión: <strong className="text-emerald-600 dark:text-emerald-400 font-mono">${filteredCommissions.toFixed(2)} USD</strong>)
+                  Mostrando <strong className="text-gray-900 dark:text-white font-mono">{filteredInvoices.length}</strong> de <strong className="text-gray-900 dark:text-white font-mono">{sellerInvoices.length}</strong> ventas • Subtotal en lista: <strong className="text-gray-900 dark:text-white font-mono">${filteredTotal.toFixed(2)} USD</strong> (Por Pagar: <strong className="text-amber-600 dark:text-amber-400 font-mono">${filteredToPay.toFixed(2)} USD</strong> • Ya Pagada: <strong className="text-emerald-600 dark:text-emerald-400 font-mono">${filteredPaid.toFixed(2)} USD</strong>)
                 </span>
                 <button
                   type="button"

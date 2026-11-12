@@ -83,6 +83,8 @@ CREATE TABLE IF NOT EXISTS public.wholesale_invoices (
   balance_pending_usd numeric(12,2) DEFAULT 0.00,
   commission_rate numeric(5,2) DEFAULT 5.00,
   commission_usd numeric(12,2) DEFAULT 0.00,
+  commission_paid boolean DEFAULT false,
+  commission_paid_at timestamptz,
   items_count integer DEFAULT 0,
   lines jsonb DEFAULT '[]'::jsonb,
   payments jsonb DEFAULT '[]'::jsonb,
@@ -197,6 +199,7 @@ const BRAND_COLORS: Record<string, string> = {
 };
 
 const LOCAL_STORAGE_WHOLESALE_OVERRIDES_KEY = 'sotomayor_wholesale_overrides';
+const LOCAL_STORAGE_COMMISSION_PAID_KEY = 'sotomayor_commission_paid_overrides';
 
 // Obtener sobreescrituras locales en caso de que las columnas en SQL aún no se hayan ejecutado
 function getLocalOverrides(): Record<string, Partial<WholesaleProduct>> {
@@ -215,6 +218,26 @@ export function saveLocalWholesaleOverride(id: string, override: Partial<Wholesa
     localStorage.setItem(LOCAL_STORAGE_WHOLESALE_OVERRIDES_KEY, JSON.stringify(current));
   } catch (e) {
     console.error('Error saving local override', e);
+  }
+}
+
+// Persistencia y respaldo local para pagos de comisiones a vendedores
+export function getLocalCommissionPaidOverrides(): Record<string, { commissionPaid: boolean; commissionPaidAt?: string }> {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_COMMISSION_PAID_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function saveLocalCommissionPaidOverride(invoiceId: string, commissionPaid: boolean, commissionPaidAt?: string) {
+  try {
+    const current = getLocalCommissionPaidOverrides();
+    current[invoiceId] = { commissionPaid, commissionPaidAt };
+    localStorage.setItem(LOCAL_STORAGE_COMMISSION_PAID_KEY, JSON.stringify(current));
+  } catch (e) {
+    console.error('Error saving local commission paid override', e);
   }
 }
 
@@ -513,6 +536,8 @@ export interface WholesaleInvoice {
   payments?: WholesalePaymentInstallment[];
   commissionRate: number;
   commissionUsd: number;
+  commissionPaid?: boolean;
+  commissionPaidAt?: string;
   itemsCount: number;
   lines?: WholesaleInvoiceLine[];
 }
@@ -610,6 +635,14 @@ export function mapWholesaleSellerToDb(s: WholesaleSeller): any {
 }
 
 export function mapDbToWholesaleInvoice(row: any): WholesaleInvoice {
+  const localMap = getLocalCommissionPaidOverrides();
+  const localComm = localMap[row.id];
+  const isCommPaid =
+    row.commission_paid !== undefined && row.commission_paid !== null
+      ? Boolean(row.commission_paid)
+      : Boolean(localComm?.commissionPaid);
+  const commPaidAt = row.commission_paid_at || localComm?.commissionPaidAt || undefined;
+
   return {
     id: row.id,
     date: row.date,
@@ -633,6 +666,8 @@ export function mapDbToWholesaleInvoice(row: any): WholesaleInvoice {
     balancePendingUsd: Number(row.balance_pending_usd ?? 0),
     commissionRate: Number(row.commission_rate ?? 5),
     commissionUsd: Number(row.commission_usd ?? 0),
+    commissionPaid: isCommPaid,
+    commissionPaidAt: commPaidAt,
     itemsCount: Number(row.items_count ?? 0),
     lines: Array.isArray(row.lines) ? row.lines : [],
     payments: Array.isArray(row.payments) ? row.payments : [],
@@ -663,6 +698,8 @@ export function mapWholesaleInvoiceToDb(inv: WholesaleInvoice): any {
     balance_pending_usd: inv.balancePendingUsd !== undefined ? inv.balancePendingUsd : inv.totalUsd,
     commission_rate: inv.commissionRate,
     commission_usd: inv.commissionUsd,
+    commission_paid: Boolean(inv.commissionPaid),
+    commission_paid_at: inv.commissionPaidAt || null,
     items_count: inv.itemsCount,
     lines: inv.lines || [],
     payments: inv.payments || [],
@@ -859,6 +896,33 @@ export async function updateWholesaleInvoicePayment(
   } catch (e) {
     console.warn('Supabase updateWholesaleInvoicePayment exception:', e);
     return false;
+  }
+}
+
+export async function updateWholesaleInvoiceCommissionPaid(
+  invoiceId: string,
+  commissionPaid: boolean,
+  commissionPaidAt?: string
+): Promise<boolean> {
+  saveLocalCommissionPaidOverride(invoiceId, commissionPaid, commissionPaidAt);
+  try {
+    const { error } = await supabase
+      .from('wholesale_invoices')
+      .update({
+        commission_paid: commissionPaid,
+        commission_paid_at: commissionPaidAt || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', invoiceId);
+    if (error) {
+      console.warn('Supabase updateWholesaleInvoiceCommissionPaid notice:', error.message);
+      // Persistencia local asegurada en overrides
+      return true;
+    }
+    return true;
+  } catch (e) {
+    console.warn('Supabase updateWholesaleInvoiceCommissionPaid exception:', e);
+    return true;
   }
 }
 
