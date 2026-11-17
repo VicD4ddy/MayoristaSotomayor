@@ -1458,7 +1458,6 @@ const TOUR_STEPS = [
 export default function App() {
   // Navegación principal (incluye CxC, Comisiones, Analítica y Clientes)
   const [activeModule, setActiveModule] = useState<'inventory' | 'invoicing' | 'receiving' | 'cxc' | 'commissions' | 'analytics' | 'clients'>('inventory');
-  const [sidebarHovered, setSidebarHovered] = useState(false);
 
   // Estados del Módulo de Analítica y Estadísticas
   const [analyticsTimeRange, setAnalyticsTimeRange] = useState<'today' | '7days' | 'month' | 'all'>('all');
@@ -3889,23 +3888,17 @@ export default function App() {
       )}
 
       {/* ============================================================
-          SIDEBAR IZQUIERDO CON EXPANSIÓN INTELIGENTE EN HOVER
+          SIDEBAR IZQUIERDO SIEMPRE EXTENDIDO FIJO (w-64)
       ============================================================ */}
-      <div className="w-16 shrink-0 relative z-30">
+      <div className="w-64 shrink-0 relative z-30">
         <aside
-          onMouseEnter={() => setSidebarHovered(true)}
-          onMouseLeave={() => setSidebarHovered(false)}
-          className={`fixed top-0 bottom-0 left-0 bg-white dark:bg-[#0E1422] border-r border-gray-200 dark:border-[#1E293B] flex flex-col justify-between py-4 z-40 transition-all duration-300 ease-in-out ${
-            sidebarHovered ? 'w-64 px-3 shadow-2xl' : 'w-16 px-2 shadow-xs'
-          }`}
+          className="fixed top-0 bottom-0 left-0 w-64 px-3 bg-white dark:bg-[#0E1422] border-r border-gray-200 dark:border-[#1E293B] flex flex-col justify-between py-4 z-40 transition-colors"
         >
           <div className="flex flex-col gap-4 w-full">
             {/* Logo Repuestos Sotomayor */}
             <div
               onClick={() => setActiveModule('inventory')}
-              className={`flex items-center gap-3 cursor-pointer group py-1 rounded-xl transition ${
-                sidebarHovered ? 'px-2 hover:bg-gray-50 dark:hover:bg-[#161F33]' : 'justify-center'
-              }`}
+              className="flex items-center gap-3 cursor-pointer group py-1 rounded-xl transition px-2 hover:bg-gray-50 dark:hover:bg-[#161F33]"
               title="Repuestos Sotomayor, C.A."
             >
               <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gray-50 dark:bg-[#161F33] group-hover:bg-orange-50 dark:group-hover:bg-[#1f293d] border border-transparent dark:border-[#28354D] transition relative shrink-0">
@@ -3914,16 +3907,14 @@ export default function App() {
                 </div>
                 <span className="absolute -bottom-0.5 right-1 w-2 h-2 rounded-full bg-gray-900 dark:bg-[#FF5C1B]" />
               </div>
-              {sidebarHovered && (
-                <div className="flex flex-col min-w-0 animate-fadeIn">
-                  <span className="font-extrabold text-xs text-gray-900 dark:text-white tracking-tight leading-tight truncate">
-                    Repuestos Sotomayor
-                  </span>
-                  <span className="text-[10px] text-gray-400 dark:text-slate-400 font-medium tracking-tight truncate">
-                    Mayorista & Distribución
-                  </span>
-                </div>
-              )}
+              <div className="flex flex-col min-w-0">
+                <span className="font-extrabold text-xs text-gray-900 dark:text-white tracking-tight leading-tight truncate">
+                  Repuestos Sotomayor
+                </span>
+                <span className="text-[10px] text-gray-400 dark:text-slate-400 font-medium tracking-tight truncate">
+                  Mayorista & Distribución
+                </span>
+              </div>
             </div>
 
             {/* Botón Naranja de Acción Rápida: Iniciar Nueva Factura */}
@@ -3940,18 +3931,14 @@ export default function App() {
                     setActiveModule('invoicing');
                   }}
                   title="Iniciar Nueva Factura"
-                  className={`group h-10 rounded-xl bg-[#FF5C1B] hover:bg-[#ff4600] text-white flex items-center transition-all duration-200 shadow-md shadow-orange-500/20 transform active:scale-95 cursor-pointer ${
-                    sidebarHovered ? 'w-full px-3 gap-2.5 justify-start' : 'w-10 mx-auto justify-center'
-                  }`}
+                  className="group h-10 rounded-xl bg-[#FF5C1B] hover:bg-[#ff4600] text-white flex items-center transition-all duration-200 shadow-md shadow-orange-500/20 transform active:scale-95 cursor-pointer w-full px-3 gap-2.5 justify-start"
                 >
                   <div className="shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
                     <span {...animationProps} />
                   </div>
-                  {sidebarHovered && (
-                    <span className="text-xs font-bold whitespace-nowrap animate-fadeIn">
-                      Nueva Factura
-                    </span>
-                  )}
+                  <span className="text-xs font-bold whitespace-nowrap">
+                    Nueva Factura
+                  </span>
                 </button>
               )}
             />
@@ -3972,9 +3959,7 @@ export default function App() {
                       setActiveModule('inventory');
                     }}
                     title="Inventario Mayorista"
-                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer ${
-                      sidebarHovered ? 'px-3 justify-between' : 'justify-center'
-                    } ${
+                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer px-3 justify-between ${
                       activeModule === 'inventory'
                         ? 'bg-gray-100 dark:bg-[#161F33] text-gray-900 dark:text-white border border-transparent dark:border-[#28354D] font-bold shadow-2xs'
                         : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#161F33]'
@@ -3984,17 +3969,13 @@ export default function App() {
                       <div className="shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
                         <span {...animationProps} />
                       </div>
-                      {sidebarHovered && (
-                        <span className="text-xs font-semibold truncate animate-fadeIn group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                          Inventario y Stock
-                        </span>
-                      )}
-                    </div>
-                    {sidebarHovered && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-gray-200 dark:bg-[#1E293B] text-gray-700 dark:text-slate-300 animate-fadeIn">
-                        {products.length}
+                      <span className="text-xs font-semibold truncate group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                        Inventario y Stock
                       </span>
-                    )}
+                    </div>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-gray-200 dark:bg-[#1E293B] text-gray-700 dark:text-slate-300">
+                      {products.length}
+                    </span>
                   </button>
                 )}
               />
@@ -4013,9 +3994,7 @@ export default function App() {
                       setActiveModule('invoicing');
                     }}
                     title="Emitir Facturas / Notas Mayoristas"
-                    className={`group w-full h-10 rounded-xl flex items-center transition relative cursor-pointer ${
-                      sidebarHovered ? 'px-3 justify-between' : 'justify-center'
-                    } ${
+                    className={`group w-full h-10 rounded-xl flex items-center transition relative cursor-pointer px-3 justify-between ${
                       activeModule === 'invoicing'
                         ? 'bg-gray-100 dark:bg-[#161F33] text-gray-900 dark:text-white border border-transparent dark:border-[#28354D] font-bold shadow-2xs'
                         : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#161F33]'
@@ -4024,18 +4003,13 @@ export default function App() {
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="shrink-0 relative flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
                         <span {...animationProps} />
-                        {!sidebarHovered && invoiceCart.length > 0 && (
-                          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#FF5C1B]" />
-                        )}
                       </div>
-                      {sidebarHovered && (
-                        <span className="text-xs font-semibold truncate animate-fadeIn group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                          Facturación Mayorista
-                        </span>
-                      )}
+                      <span className="text-xs font-semibold truncate group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                        Facturación Mayorista
+                      </span>
                     </div>
-                    {sidebarHovered && invoiceCart.length > 0 && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-[#FF5C1B] animate-fadeIn">
+                    {invoiceCart.length > 0 && (
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-[#FF5C1B]">
                         {invoiceCart.length} ítems
                       </span>
                     )}
@@ -4057,9 +4031,7 @@ export default function App() {
                       setActiveModule('receiving');
                     }}
                     title="Ingreso de Mercancía / Compras"
-                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer ${
-                      sidebarHovered ? 'px-3 justify-start' : 'justify-center'
-                    } ${
+                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer px-3 justify-start ${
                       activeModule === 'receiving'
                         ? 'bg-gray-100 dark:bg-[#161F33] text-gray-900 dark:text-white border border-transparent dark:border-[#28354D] font-bold shadow-2xs'
                         : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#161F33]'
@@ -4069,11 +4041,9 @@ export default function App() {
                       <div className="shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
                         <span {...animationProps} />
                       </div>
-                      {sidebarHovered && (
-                        <span className="text-xs font-semibold truncate animate-fadeIn group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                          Recepción de Lotes
-                        </span>
-                      )}
+                      <span className="text-xs font-semibold truncate group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                        Recepción de Lotes
+                      </span>
                     </div>
                   </button>
                 )}
@@ -4093,9 +4063,7 @@ export default function App() {
                       setActiveModule('cxc');
                     }}
                     title="Cuentas por Cobrar & Abonos"
-                    className={`group w-full h-10 rounded-xl flex items-center transition relative cursor-pointer ${
-                      sidebarHovered ? 'px-3 justify-between' : 'justify-center'
-                    } ${
+                    className={`group w-full h-10 rounded-xl flex items-center transition relative cursor-pointer px-3 justify-between ${
                       activeModule === 'cxc'
                         ? 'bg-gray-100 dark:bg-[#161F33] text-gray-900 dark:text-white border border-transparent dark:border-[#28354D] font-bold shadow-2xs'
                         : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#161F33]'
@@ -4104,18 +4072,13 @@ export default function App() {
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="shrink-0 relative flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
                         <span {...animationProps} />
-                        {!sidebarHovered && pendingInvoicesCount > 0 && (
-                          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                        )}
                       </div>
-                      {sidebarHovered && (
-                        <span className="text-xs font-semibold truncate animate-fadeIn group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                          Cuentas por Cobrar
-                        </span>
-                      )}
+                      <span className="text-xs font-semibold truncate group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                        Cuentas por Cobrar
+                      </span>
                     </div>
-                    {sidebarHovered && pendingInvoicesCount > 0 && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400 animate-fadeIn">
+                    {pendingInvoicesCount > 0 && (
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-400">
                         {pendingInvoicesCount} pend.
                       </span>
                     )}
@@ -4137,9 +4100,7 @@ export default function App() {
                       setActiveModule('commissions');
                     }}
                     title="Comisiones de Vendedores"
-                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer ${
-                      sidebarHovered ? 'px-3 justify-start' : 'justify-center'
-                    } ${
+                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer px-3 justify-start ${
                       activeModule === 'commissions'
                         ? 'bg-gray-100 dark:bg-[#161F33] text-gray-900 dark:text-white border border-transparent dark:border-[#28354D] font-bold shadow-2xs'
                         : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#161F33]'
@@ -4149,11 +4110,9 @@ export default function App() {
                       <div className="shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
                         <span {...animationProps} />
                       </div>
-                      {sidebarHovered && (
-                        <span className="text-xs font-semibold truncate animate-fadeIn group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                          Comisiones Vendedores
-                        </span>
-                      )}
+                      <span className="text-xs font-semibold truncate group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                        Comisiones Vendedores
+                      </span>
                     </div>
                   </button>
                 )}
@@ -4173,9 +4132,7 @@ export default function App() {
                       setActiveModule('analytics');
                     }}
                     title="Estadísticas y Analítica de Negocio"
-                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer ${
-                      sidebarHovered ? 'px-3 justify-start' : 'justify-center'
-                    } ${
+                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer px-3 justify-start ${
                       activeModule === 'analytics'
                         ? 'bg-gray-100 dark:bg-[#161F33] text-gray-900 dark:text-white border border-transparent dark:border-[#28354D] font-bold shadow-2xs'
                         : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#161F33]'
@@ -4185,11 +4142,9 @@ export default function App() {
                       <div className="shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
                         <span {...animationProps} />
                       </div>
-                      {sidebarHovered && (
-                        <span className="text-xs font-semibold truncate animate-fadeIn group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                          Estadísticas y Analítica
-                        </span>
-                      )}
+                      <span className="text-xs font-semibold truncate group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                        Estadísticas y Analítica
+                      </span>
                     </div>
                   </button>
                 )}
@@ -4209,9 +4164,7 @@ export default function App() {
                       setActiveModule('clients');
                     }}
                     title="Cartera de Clientes Mayoristas"
-                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer ${
-                      sidebarHovered ? 'px-3 justify-between' : 'justify-center'
-                    } ${
+                    className={`group w-full h-10 rounded-xl flex items-center transition cursor-pointer px-3 justify-between ${
                       activeModule === 'clients'
                         ? 'bg-gray-100 dark:bg-[#161F33] text-gray-900 dark:text-white border border-transparent dark:border-[#28354D] font-bold shadow-2xs'
                         : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#161F33]'
@@ -4221,17 +4174,13 @@ export default function App() {
                       <div className="shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
                         <span {...animationProps} />
                       </div>
-                      {sidebarHovered && (
-                        <span className="text-xs font-semibold truncate animate-fadeIn group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                          Cartera de Clientes
-                        </span>
-                      )}
-                    </div>
-                    {sidebarHovered && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#1E293B] text-gray-600 dark:text-slate-300 animate-fadeIn">
-                        {clients.length}
+                      <span className="text-xs font-semibold truncate group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                        Cartera de Clientes
                       </span>
-                    )}
+                    </div>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-[#1E293B] text-gray-600 dark:text-slate-300">
+                      {clients.length}
+                    </span>
                   </button>
                 )}
               />
@@ -4244,28 +4193,24 @@ export default function App() {
             <button
               onClick={() => setThemeModalOpen(true)}
               title="Personalizar Tema (6 temas disponibles)"
-              className={`group h-10 rounded-xl flex items-center transition cursor-pointer ${
-                sidebarHovered ? 'w-full px-3 gap-2.5 justify-start' : 'w-10 mx-auto justify-center'
-              } bg-gray-100 dark:bg-[#161F33] text-gray-700 dark:text-slate-200 hover:bg-gray-200 dark:hover:bg-[#1c2842] border border-gray-200 dark:border-[#28354D]`}
+              className="group h-10 rounded-xl flex items-center transition cursor-pointer w-full px-3 gap-2.5 justify-start bg-gray-100 dark:bg-[#161F33] text-gray-700 dark:text-slate-200 hover:bg-gray-200 dark:hover:bg-[#1c2842] border border-gray-200 dark:border-[#28354D]"
             >
               <div className="shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-115">
                 <Palette className="w-4 h-4 text-[#FF5C1B]" />
               </div>
-              {sidebarHovered && (
-                <div className="flex items-center justify-between w-full min-w-0 animate-fadeIn">
-                  <div className="flex flex-col text-left truncate">
-                    <span className="text-xs font-semibold text-gray-700 dark:text-slate-200 truncate">
-                      Temas del Sistema
-                    </span>
-                    <span className="text-[10px] text-gray-400 dark:text-slate-400 font-mono truncate">
-                      {activeTheme.name}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-200 dark:bg-[#1E293B] text-gray-700 dark:text-[#FF5C1B]">
-                    6
+              <div className="flex items-center justify-between w-full min-w-0">
+                <div className="flex flex-col text-left truncate">
+                  <span className="text-xs font-semibold text-gray-700 dark:text-slate-200 truncate">
+                    Temas del Sistema
+                  </span>
+                  <span className="text-[10px] text-gray-400 dark:text-slate-400 font-mono truncate">
+                    {activeTheme.name}
                   </span>
                 </div>
-              )}
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-200 dark:bg-[#1E293B] text-gray-700 dark:text-[#FF5C1B]">
+                  6
+                </span>
+              </div>
             </button>
 
             {/* Selector Rápido de Modo Oscuro / Modo Claro */}
@@ -4280,9 +4225,7 @@ export default function App() {
                 }
               }}
               title={isDarkMode ? 'Cambiar a Modo Claro (Nordic Ice)' : 'Cambiar a Modo Oscuro (Deep Cobalt)'}
-              className={`group h-10 rounded-xl flex items-center transition cursor-pointer ${
-                sidebarHovered ? 'w-full px-3 gap-2.5 justify-start' : 'w-10 mx-auto justify-center'
-              } ${
+              className={`group h-10 rounded-xl flex items-center transition cursor-pointer w-full px-3 gap-2.5 justify-start ${
                 isDarkMode
                   ? 'bg-[#161F33] text-amber-400 border border-[#28354D] hover:bg-[#1c2842]'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
@@ -4295,25 +4238,21 @@ export default function App() {
                   <Sun className="w-4 h-4 text-amber-500" />
                 )}
               </div>
-              {sidebarHovered && (
-                <div className="flex items-center justify-between w-full min-w-0 animate-fadeIn">
-                  <span className="text-xs font-semibold text-gray-700 dark:text-slate-200 truncate">
-                    {isDarkMode ? 'Modo Oscuro' : 'Modo Claro'}
-                  </span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-200 dark:bg-[#1E293B] text-gray-700 dark:text-amber-400">
-                    {isDarkMode ? 'ON' : 'OFF'}
-                  </span>
-                </div>
-              )}
+              <div className="flex items-center justify-between w-full min-w-0">
+                <span className="text-xs font-semibold text-gray-700 dark:text-slate-200 truncate">
+                  {isDarkMode ? 'Modo Oscuro' : 'Modo Claro'}
+                </span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-200 dark:bg-[#1E293B] text-gray-700 dark:text-amber-400">
+                  {isDarkMode ? 'ON' : 'OFF'}
+                </span>
+              </div>
             </button>
 
-            {/* Pie de Firma cuando está expandida */}
-            {sidebarHovered && (
-              <div className="mt-1 pt-2 border-t border-gray-100 dark:border-[#1E293B] px-2 text-[10px] text-gray-400 dark:text-slate-500 flex items-center justify-between animate-fadeIn">
-                <span className="font-mono">J-07590371-4</span>
-                <span>Valencia, VE</span>
-              </div>
-            )}
+            {/* Pie de Firma */}
+            <div className="mt-1 pt-2 border-t border-gray-100 dark:border-[#1E293B] px-2 text-[10px] text-gray-400 dark:text-slate-500 flex items-center justify-between">
+              <span className="font-mono">J-07590371-4</span>
+              <span>Valencia, VE</span>
+            </div>
           </div>
         </aside>
       </div>
