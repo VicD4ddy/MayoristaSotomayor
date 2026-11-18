@@ -3938,7 +3938,11 @@ export default function App() {
             {/* Logo Oficial Repuestos Sotomayor Mayorista */}
             <div
               onClick={() => setActiveModule('inventory')}
-              className="flex items-center justify-center cursor-pointer group py-1.5 px-2 rounded-xl transition hover:bg-gray-50 dark:hover:bg-[#161F33]"
+              className={`flex items-center justify-center cursor-pointer group py-2 px-3 rounded-xl transition ${
+                isDarkMode
+                  ? 'bg-[#F8FAFC] border border-slate-200/80 shadow-xs hover:bg-white'
+                  : 'hover:bg-gray-50'
+              }`}
               title="Repuestos Sotomayor, C.A. - Ir a Inventario"
             >
               <img
