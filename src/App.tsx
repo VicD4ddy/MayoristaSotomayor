@@ -3935,26 +3935,17 @@ export default function App() {
           className="fixed top-0 bottom-0 left-0 w-64 px-3 bg-white dark:bg-[#0E1422] border-r border-gray-200 dark:border-[#1E293B] flex flex-col justify-between py-4 z-40 transition-colors"
         >
           <div className="flex flex-col gap-4 w-full">
-            {/* Logo Repuestos Sotomayor */}
+            {/* Logo Oficial Repuestos Sotomayor Mayorista */}
             <div
               onClick={() => setActiveModule('inventory')}
-              className="flex items-center gap-3 cursor-pointer group py-1 rounded-xl transition px-2 hover:bg-gray-50 dark:hover:bg-[#161F33]"
-              title="Repuestos Sotomayor, C.A."
+              className="flex items-center justify-center cursor-pointer group py-1.5 px-2 rounded-xl transition hover:bg-gray-50 dark:hover:bg-[#161F33]"
+              title="Repuestos Sotomayor, C.A. - Ir a Inventario"
             >
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gray-50 dark:bg-[#161F33] group-hover:bg-orange-50 dark:group-hover:bg-[#1f293d] border border-transparent dark:border-[#28354D] transition relative shrink-0">
-                <div className="w-7 h-7 rounded-full border-[3px] border-[#FF5C1B] flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-gray-900 dark:bg-white group-hover:scale-125 transition" />
-                </div>
-                <span className="absolute -bottom-0.5 right-1 w-2 h-2 rounded-full bg-gray-900 dark:bg-[#FF5C1B]" />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="font-extrabold text-xs text-gray-900 dark:text-white tracking-tight leading-tight truncate">
-                  Repuestos Sotomayor
-                </span>
-                <span className="text-[10px] text-gray-400 dark:text-slate-400 font-medium tracking-tight truncate">
-                  Mayorista & Distribución
-                </span>
-              </div>
+              <img
+                src="/SOTOMAYORmayoristasinfondo.png"
+                alt="Repuestos Sotomayor Mayorista"
+                className="h-14 w-auto max-w-full object-contain transition-transform duration-200 group-hover:scale-105"
+              />
             </div>
 
             {/* Botón Naranja de Acción Rápida: Iniciar Nueva Factura */}
@@ -9553,8 +9544,8 @@ export default function App() {
                 {/* Columna Derecha: Logo Oficial Repuestos Sotomayor */}
                 <div className="col-span-3 flex justify-end items-center pt-1">
                   <img
-                    src="/sotomayor-logo.png"
-                    alt="Repuestos Sotomayor Logo"
+                    src="/SOTOMAYORmayoristasinfondo.png"
+                    alt="Repuestos Sotomayor Mayorista Logo"
                     className="h-12 sm:h-14 w-auto max-w-full object-contain"
                   />
                 </div>
