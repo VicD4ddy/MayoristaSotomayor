@@ -2040,6 +2040,46 @@ export default function App() {
     }
   }, [selectedClientId, clients, sellers]);
   const [invoiceCart, setInvoiceCart] = useState<InvoiceLine[]>([]);
+  const [editingInvoicePrices, setEditingInvoicePrices] = useState<Record<string, string>>({});
+
+  const handleInvoiceLinePriceChange = (productId: string, rawValue: string) => {
+    setEditingInvoicePrices(prev => ({ ...prev, [productId]: rawValue }));
+    const parsed = parseFloat(rawValue);
+    if (!isNaN(parsed) && parsed > 0) {
+      setInvoiceCart(prev =>
+        prev.map(line => (line.productId === productId ? { ...line, price: parsed } : line))
+      );
+    }
+  };
+
+  const handleInvoiceLinePriceBlur = (productId: string) => {
+    const rawValue = editingInvoicePrices[productId];
+    if (rawValue !== undefined) {
+      const parsed = parseFloat(rawValue);
+      if (isNaN(parsed) || parsed <= 0) {
+        const prod = products.find(p => p.id === productId);
+        const fallbackPrice =
+          prod?.wholesalePrice && prod.wholesalePrice > 0
+            ? prod.wholesalePrice
+            : prod?.price && prod.price > 0
+            ? prod.price
+            : 1;
+        setInvoiceCart(prev =>
+          prev.map(line => (line.productId === productId ? { ...line, price: Number(fallbackPrice.toFixed(2)) } : line))
+        );
+      } else {
+        setInvoiceCart(prev =>
+          prev.map(line => (line.productId === productId ? { ...line, price: Number(parsed.toFixed(2)) } : line))
+        );
+      }
+      setEditingInvoicePrices(prev => {
+        const next = { ...prev };
+        delete next[productId];
+        return next;
+      });
+    }
+  };
+
   const [partSearchInvoice, setPartSearchInvoice] = useState('');
   const [previewInvoice, setPreviewInvoice] = useState<Invoice | null>(null);
 
@@ -5477,10 +5517,26 @@ export default function App() {
                                   className="w-16 text-center border border-gray-200 dark:border-[#28354D] rounded py-1 font-semibold bg-white dark:bg-[#161F33] text-gray-900 dark:text-white"
                                 />
                               </td>
-                              <td className="py-3 text-right font-medium text-gray-700 dark:text-slate-300">
-                                ${item.price.toFixed(2)}
+                              <td className="py-3 text-right">
+                                <div className="inline-flex items-center justify-end relative">
+                                  <span className="text-gray-400 dark:text-slate-500 font-mono text-xs mr-1">$</span>
+                                  <input
+                                    type="number"
+                                    step="0.01"
+                                    min="0.01"
+                                    value={
+                                      editingInvoicePrices[item.productId] !== undefined
+                                        ? editingInvoicePrices[item.productId]
+                                        : item.price
+                                    }
+                                    onChange={(e) => handleInvoiceLinePriceChange(item.productId, e.target.value)}
+                                    onBlur={() => handleInvoiceLinePriceBlur(item.productId)}
+                                    className="w-24 text-right border border-gray-200 dark:border-[#28354D] focus:border-[#FF5C1B] focus:outline-none rounded px-2 py-1 font-mono tabular-nums font-semibold bg-white dark:bg-[#161F33] text-gray-900 dark:text-white transition"
+                                    title="Editar precio unitario para esta factura"
+                                  />
+                                </div>
                               </td>
-                              <td className="py-3 text-right font-bold text-gray-900 dark:text-white">
+                              <td className="py-3 text-right font-bold font-mono tabular-nums text-gray-900 dark:text-white">
                                 ${(item.qty * item.price).toFixed(2)}
                               </td>
                               <td className="py-3 text-right">
@@ -10906,9 +10962,30 @@ export default function App() {
                         <p className="text-xs font-semibold text-gray-900 dark:text-white truncate" title={item.name}>
                           {item.name}
                         </p>
-                        <p className="text-[11px] text-gray-500 dark:text-slate-400">
-                          ${item.price.toFixed(2)} c/u • Subtotal: <strong className="text-gray-900 dark:text-slate-200">${(item.qty * item.price).toFixed(2)}</strong>
-                        </p>
+                        <div className="flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-slate-400 pt-0.5 flex-wrap">
+                          <div className="inline-flex items-center">
+                            <span className="font-mono text-gray-400 dark:text-slate-500 mr-0.5">$</span>
+                            <input
+                              type="number"
+                              step="0.01"
+                              min="0.01"
+                              value={
+                                editingInvoicePrices[item.productId] !== undefined
+                                  ? editingInvoicePrices[item.productId]
+                                  : item.price
+                              }
+                              onChange={(e) => handleInvoiceLinePriceChange(item.productId, e.target.value)}
+                              onBlur={() => handleInvoiceLinePriceBlur(item.productId)}
+                              className="w-20 text-right border border-gray-200 dark:border-[#28354D] focus:border-[#FF5C1B] focus:outline-none rounded px-1.5 py-0.5 font-mono tabular-nums font-semibold text-[11px] bg-gray-50 dark:bg-[#12192B] text-gray-900 dark:text-white transition"
+                              title="Editar precio unitario"
+                            />
+                            <span className="ml-1">c/u</span>
+                          </div>
+                          <span>•</span>
+                          <span>
+                            Subtotal: <strong className="font-mono tabular-nums text-gray-900 dark:text-slate-200">${(item.qty * item.price).toFixed(2)}</strong>
+                          </span>
+                        </div>
                       </div>
 
                       {/* Controles de Cantidad (+ / -) y Eliminar */}
