@@ -147,7 +147,7 @@ export const BinanceIcon = ({ className = "w-4 h-4" }: { className?: string }) =
 );
 
 export const buildInvoiceWhatsAppText = (inv: Invoice, bcvRate: number, isQuote = false, rateLabel = "Tasa") => {
-  const docTitle = isQuote ? 'COTIZACIÓN MAYORISTA' : (inv.documentType || 'NOTA DE ENTREGA / FACTURA');
+  const docTitle = isQuote ? 'COTIZACIÓN' : (inv.documentType || 'NOTA DE ENTREGA / FACTURA');
   const itemsText = inv.lines && inv.lines.length > 0
     ? inv.lines.map(l => `• *${l.qty}x* ${l.name} (${l.sku}) → *$${(l.qty * l.price).toFixed(2)}*`).join('\n')
     : '• Repuestos al mayor según documento adjunto';
@@ -264,7 +264,7 @@ export const getDocumentTitle = (docType?: string): string => {
   if (!docType) return 'Nota De Entrega';
   const lower = docType.toLowerCase();
   if (lower.includes('cotización') || lower.includes('cotizacion')) {
-    return 'Cotización Mayorista';
+    return 'Cotización';
   }
   if (lower.includes('factura') || lower.includes('seniat') || lower.includes('fiscal')) {
     return 'Factura';
@@ -423,7 +423,7 @@ export const getDocumentPdfTitle = (invoice: Invoice): string => {
   let prefix = 'NE';
 
   if (docTypeStr.toLowerCase().includes('cotización') || docTypeStr.toLowerCase().includes('cotizacion')) {
-    docTypeName = 'COTIZACIÓN MAYORISTA';
+    docTypeName = 'COTIZACIÓN';
     prefix = 'COT';
   } else if (docTypeStr.toLowerCase().includes('factura')) {
     docTypeName = 'FACTURA';
@@ -9472,12 +9472,12 @@ export default function App() {
                   type="button"
                   onClick={() => setPreviewInvoice({ ...previewInvoice, documentType: 'Cotización Mayorista Formal' })}
                   className={`px-3 py-1.5 rounded-lg font-bold text-xs transition cursor-pointer ${
-                    getDocumentTitle(previewInvoice.documentType) === 'Cotización Mayorista'
+                    getDocumentTitle(previewInvoice.documentType) === 'Cotización'
                       ? 'bg-[#235836] text-white shadow-xs'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
-                  Cotización Mayorista
+                  Cotización
                 </button>
                 <button
                   type="button"
@@ -9548,8 +9548,8 @@ export default function App() {
                 {/* Columna Derecha: Logo Oficial Repuestos Sotomayor */}
                 <div className="col-span-3 flex justify-end items-center pt-1">
                   <img
-                    src="/SOTOMAYORmayoristasinfondo.png"
-                    alt="Repuestos Sotomayor Mayorista Logo"
+                    src="/LogoRepuestosSotomayor.png"
+                    alt="Repuestos Sotomayor Logo"
                     className="h-12 sm:h-14 w-auto max-w-full object-contain"
                   />
                 </div>
